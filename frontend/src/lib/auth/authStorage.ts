@@ -1,6 +1,8 @@
 const ACCESS_TOKEN_KEY = "kora.accessToken";
 const REFRESH_TOKEN_KEY = "kora.refreshToken";
 
+export const AUTH_SESSION_EXPIRED_EVENT = "kora:auth-session-expired";
+
 export const authStorage = {
   getAccessToken(): string | null {
     return localStorage.getItem(ACCESS_TOKEN_KEY);

@@ -1,4 +1,4 @@
-import { authStorage } from "../auth/authStorage";
+import { authStorage, AUTH_SESSION_EXPIRED_EVENT } from "../auth/authStorage";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,7 +21,49 @@ type RequestOptions = Omit<RequestInit, "body"> & {
   auth?: boolean;
 };
 
-async function request<TResponse>(path: string, { body, headers, auth, ...options }: RequestOptions = {}): Promise<TResponse> {
+interface RefreshTokenResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+let refreshPromise: Promise<string> | null = null;
+
+async function performRefresh(): Promise<string> {
+  const refreshToken = authStorage.getRefreshToken();
+  if (!refreshToken) {
+    authStorage.clearTokens();
+    window.dispatchEvent(new Event(AUTH_SESSION_EXPIRED_EVENT));
+    throw new Error("NO_REFRESH_TOKEN");
+  }
+
+  const response = await fetch(`${API_URL}/auth/refresh-token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken }),
+  });
+
+  if (!response.ok) {
+    authStorage.clearTokens();
+    window.dispatchEvent(new Event(AUTH_SESSION_EXPIRED_EVENT));
+    throw new Error("REFRESH_FAILED");
+  }
+
+  const data = (await response.json()) as RefreshTokenResponse;
+  authStorage.setTokens(data.accessToken, data.refreshToken);
+  return data.accessToken;
+}
+
+function refreshAccessToken(): Promise<string> {
+  if (!refreshPromise) {
+    refreshPromise = performRefresh().finally(() => {
+      refreshPromise = null;
+    });
+  }
+  return refreshPromise;
+}
+
+async function request<TResponse>(path: string, options: RequestOptions = {}, isRetry = false): Promise<TResponse> {
+  const { body, headers, auth, ...rest } = options;
   const authHeaders: Record<string, string> = {};
   if (auth) {
     const token = authStorage.getAccessToken();
@@ -29,7 +71,7 @@ async function request<TResponse>(path: string, { body, headers, auth, ...option
   }
 
   const response = await fetch(`${API_URL}${path}`, {
-    ...options,
+    ...rest,
     headers: {
       "Content-Type": "application/json",
       ...authHeaders,
@@ -45,6 +87,14 @@ async function request<TResponse>(path: string, { body, headers, auth, ...option
     const errorBody = data && typeof data === "object" ? (data as Record<string, unknown>) : undefined;
     const message = (errorBody?.message ? String(errorBody.message) : undefined) ?? `Request failed with status ${response.status}`;
     const code = errorBody?.code ? String(errorBody.code) : undefined;
+
+    if (auth && !isRetry && response.status === 401 && code === "TOKEN_EXPIRED") {
+      try {
+        await refreshAccessToken();
+        return request<TResponse>(path, options, true);
+      } catch {}
+    }
+
     throw new ApiError(response.status, message, code, data);
   }
 

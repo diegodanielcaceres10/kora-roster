@@ -1,7 +1,7 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { getMe } from "./account.api";
 import type { Me } from "./account.types";
-import { authStorage } from "../../lib/auth/authStorage";
+import { authStorage, AUTH_SESSION_EXPIRED_EVENT } from "../../lib/auth/authStorage";
 import { ApiError } from "../../lib/http/httpClient";
 
 interface AccountContextValue {
@@ -42,6 +42,11 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     authStorage.clearTokens();
     setAccount(null);
   }, []);
+
+  useEffect(() => {
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, logout);
+    return () => window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, logout);
+  }, [logout]);
 
   return <AccountContext.Provider value={{ account, isLoading, ensureLoaded, setAccount, logout }}>{children}</AccountContext.Provider>;
 }
