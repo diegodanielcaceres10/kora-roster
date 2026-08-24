@@ -13,6 +13,8 @@ import { ForgotPage } from "./pages/auth/forgot/ForgotPage";
 import { RegisterPage } from "./pages/auth/register/RegisterPage";
 import { SetPasswordPage } from "./pages/auth/set-password/SetPasswordPage";
 import { MePage } from "./pages/me/MePage";
+import { RequireAuth } from "./features/account/guards/RequireAuth";
+import { RequireGuest } from "./features/account/guards/RequireGuest";
 
 function DraftWizard() {
   const wizard = useDraftWizard();
@@ -64,11 +66,46 @@ function App() {
         <Route path="/tutorial" element={<TutorialPage />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/forgot" element={<ForgotPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/set-password" element={<SetPasswordPage />} />
-        <Route path="/me" element={<MePage />} />
+        <Route
+          path="/login"
+          element={
+            <RequireGuest>
+              <LoginPage />
+            </RequireGuest>
+          }
+        />
+        <Route
+          path="/forgot"
+          element={
+            <RequireGuest>
+              <ForgotPage />
+            </RequireGuest>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <RequireGuest>
+              <RegisterPage />
+            </RequireGuest>
+          }
+        />
+        <Route
+          path="/set-password"
+          element={
+            <RequireGuest>
+              <SetPasswordPage />
+            </RequireGuest>
+          }
+        />
+        <Route
+          path="/me"
+          element={
+            <RequireAuth>
+              <MePage />
+            </RequireAuth>
+          }
+        />
       </Route>
     </Routes>
   );

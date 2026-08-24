@@ -41,12 +41,12 @@ export function Header() {
         </nav>
 
         {account ? (
-          <Link key="Perfil" to="/login" className={styles.nav__user}>
+          <Link key="Perfil" to="/me" className={styles.nav__user}>
             <i className="fa-regular fa-circle-user"></i>
             <span>{account.name}</span>
           </Link>
         ) : (
-          <Link key="Ingresar" to="/me" className={styles.nav__login}>
+          <Link key="Ingresar" to="/login" className={styles.nav__login}>
             <i className="fa-regular fa-circle-user"></i>
             <span>Ingresar</span>
           </Link>
