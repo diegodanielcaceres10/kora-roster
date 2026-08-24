@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import type { DraftConfig, SetupSubStep } from "../../draft.types";
 import { StepTeamCount } from "./components/StepTeamCount";
 import { StepPlayersPerTeam } from "./components/StepPlayersPerTeam";
@@ -28,7 +28,10 @@ const GLOBAL_STEP_BY_SUB_STEP: Record<SetupSubStep, GlobalStep> = {
 };
 
 export function StepSetup({ config, setTeamCount, setPlayersPerTeam, addPlayer, addPlayers, removePlayer, removeAllPlayers, toggleGoalkeeper, onNext, onBack }: StepSetupProps) {
-  const [subStep, setSubStep] = useState<SetupSubStep>("teams");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const subStep = (location.state as { subStep?: SetupSubStep } | null)?.subStep ?? "teams";
   const subStepIndex = SUB_STEP_ORDER.indexOf(subStep);
 
   const goToNextSubStep = () => {
@@ -36,7 +39,7 @@ export function StepSetup({ config, setTeamCount, setPlayersPerTeam, addPlayer, 
       onNext();
       return;
     }
-    setSubStep(SUB_STEP_ORDER[subStepIndex + 1]);
+    navigate(".", { state: { step: "setup", subStep: SUB_STEP_ORDER[subStepIndex + 1] } });
   };
 
   const goToPrevSubStep = () => {
@@ -44,7 +47,7 @@ export function StepSetup({ config, setTeamCount, setPlayersPerTeam, addPlayer, 
       onBack();
       return;
     }
-    setSubStep(SUB_STEP_ORDER[subStepIndex - 1]);
+    navigate(-1);
   };
 
   return (

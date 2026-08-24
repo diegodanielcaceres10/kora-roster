@@ -51,6 +51,14 @@ img {
 }
 
 input {
+  height: 48px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(244, 246, 239, 0.25);
+  background: var(--kora-pitch);
+  color: var(--kora-chalk);
+  font-size: var(--font-size-base);
+
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus,
@@ -60,6 +68,20 @@ input {
     -webkit-text-fill-color: var(--kora-chalk);
     caret-color: var(--kora-chalk);
     transition: background-color 9999s ease-in-out 0s;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--kora-bib-gold);
+  }
+
+  &::placeholder {
+    color: var(--kora-chalk);
+    opacity: 0.4;
+  }
+
+  &:disabled {
+    opacity: 0.5;
   }
 }
 

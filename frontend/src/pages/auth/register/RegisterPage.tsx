@@ -36,51 +36,21 @@ export function RegisterPage() {
               <label className={styles.register__label} htmlFor="name">
                 Nombre
               </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                className={styles.register__input}
-                placeholder="Diego"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                disabled={isLoading}
-                required
-              />
+              <input id="name" name="name" type="text" placeholder="Diego" value={name} onChange={(event) => setName(event.target.value)} disabled={isLoading} required />
             </div>
 
             <div className={styles.register__field}>
               <label className={styles.register__label} htmlFor="lastname">
                 Apellido
               </label>
-              <input
-                id="lastname"
-                name="lastname"
-                type="text"
-                className={styles.register__input}
-                placeholder="Caceres"
-                value={lastname}
-                onChange={(event) => setLastname(event.target.value)}
-                disabled={isLoading}
-                required
-              />
+              <input id="lastname" name="lastname" type="text" placeholder="Caceres" value={lastname} onChange={(event) => setLastname(event.target.value)} disabled={isLoading} required />
             </div>
 
             <div className={styles.register__field}>
               <label className={styles.register__label} htmlFor="email">
                 Email
               </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className={styles.register__input}
-                placeholder="vos@email.com"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                disabled={isLoading}
-                required
-              />
+              <input id="email" name="email" type="email" placeholder="vos@email.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isLoading} required />
             </div>
 
             <button type="submit" className={styles.register__submit} disabled={isLoading}>

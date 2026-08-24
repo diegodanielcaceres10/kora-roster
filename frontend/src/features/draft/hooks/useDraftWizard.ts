@@ -1,6 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import type { WizardStep, DraftConfig, Player, Team, AssignmentMode } from "../draft.types";
 import { DEFAULT_TEAM_COUNT, DEFAULT_PLAYERS_PER_TEAM, TEAM_COLOR_PALETTE } from "../draft.constants";
+
+const STEP_ORDER: WizardStep[] = ["welcome", "setup", "draw", "export"];
 
 const buildTeams = (count: number): Team[] =>
   Array.from({ length: count }, (_, i) => ({
@@ -18,26 +21,28 @@ const createEmptyConfig = (): DraftConfig => ({
 });
 
 export function useDraftWizard() {
-  const [step, setStep] = useState<WizardStep>("welcome");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const step = (location.state as { step?: WizardStep } | null)?.step ?? "welcome";
+
+  useEffect(() => {
+    if (!(location.state as { step?: WizardStep } | null)?.step) {
+      navigate(".", { replace: true, state: { step: "welcome" } });
+    }
+  }, []);
+
   const [config, setConfig] = useState<DraftConfig>(createEmptyConfig());
 
   const goNext = useCallback(() => {
-    setStep((current) => {
-      if (current === "welcome") return "setup";
-      if (current === "setup") return "draw";
-      if (current === "draw") return "export";
-      return current;
-    });
-  }, []);
+    const currentIndex = STEP_ORDER.indexOf(step);
+    const next = STEP_ORDER[Math.min(currentIndex + 1, STEP_ORDER.length - 1)];
+    navigate(".", { state: { step: next } });
+  }, [step, navigate]);
 
   const goBack = useCallback(() => {
-    setStep((current) => {
-      if (current === "export") return "draw";
-      if (current === "draw") return "setup";
-      if (current === "setup") return "welcome";
-      return current;
-    });
-  }, []);
+    navigate(-1);
+  }, [navigate]);
 
   const setTeamCount = useCallback((count: number) => {
     setConfig((prev) => ({
@@ -206,8 +211,8 @@ export function useDraftWizard() {
 
   const reset = useCallback(() => {
     setConfig(createEmptyConfig());
-    setStep("welcome");
-  }, []);
+    navigate(".", { replace: true, state: { step: "welcome" } });
+  }, [navigate]);
 
   return {
     step,

@@ -33,34 +33,14 @@ export function LoginPage() {
             <label className={styles.login__label} htmlFor="email">
               Email
             </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              className={styles.login__input}
-              placeholder="vos@email.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              disabled={isLoading}
-              required
-            />
+            <input id="email" name="email" type="email" placeholder="vos@email.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isLoading} required />
           </div>
 
           <div className={styles.login__field}>
             <label className={styles.login__label} htmlFor="password">
               Contraseña
             </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              className={styles.login__input}
-              placeholder="••••••"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              disabled={isLoading}
-              required
-            />
+            <input id="password" name="password" type="password" placeholder="••••••" value={password} onChange={(event) => setPassword(event.target.value)} disabled={isLoading} required />
           </div>
 
           <button type="submit" className={styles.login__submit} disabled={isLoading}>

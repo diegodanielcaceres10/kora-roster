@@ -223,26 +223,9 @@
     display: flex;
     gap: var(--space-3);
     margin-top: var(--space-2);
-  }
 
-  &__input {
-    width: 1px;
-    flex: 1;
-    height: 48px;
-    padding: 0 var(--space-4);
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(244, 246, 239, 0.25);
-    background: var(--kora-pitch);
-    color: var(--kora-chalk);
-    font-size: var(--font-size-base);
-
-    &:focus {
-      outline: none;
-      border-color: var(--kora-turf);
-    }
-
-    &::placeholder {
-      color: rgba(244, 246, 239, 0.45);
+    & input {
+      flex: 1;
     }
   }
 

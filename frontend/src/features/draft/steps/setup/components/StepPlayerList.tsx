@@ -69,7 +69,6 @@ export function StepPlayerList({ players, totalNeeded, teamCount, onAdd, onAddMa
             <input
               name="player"
               type="text"
-              className={styles.setup__input}
               placeholder={canAdd ? "Nombre del jugador" : "Ya completaste la lista"}
               value={name}
               onChange={(event) => setName(event.target.value)}

@@ -52,25 +52,6 @@
     opacity: 0.75;
   }
 
-  &__input {
-    height: 48px;
-    padding: 0 var(--space-4);
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(244, 246, 239, 0.25);
-    background: var(--kora-pitch);
-    color: var(--kora-chalk);
-    font-size: var(--font-size-base);
-
-    &:disabled {
-      opacity: 0.5;
-    }
-
-    &::placeholder {
-      color: var(--kora-chalk);
-      opacity: 0.4;
-    }
-  }
-
   &__submit {
     display: flex;
     align-items: center;

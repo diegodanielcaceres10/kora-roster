@@ -37,17 +37,7 @@ export function ForgotPage() {
               <label className={styles.forgot__label} htmlFor="email">
                 Email
               </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className={styles.forgot__input}
-                placeholder="vos@email.com"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                disabled={isLoading}
-                required
-              />
+              <input id="email" name="email" type="email" placeholder="vos@email.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isLoading} required />
             </div>
 
             <button type="submit" className={styles.forgot__submit} disabled={isLoading}>

@@ -126,7 +126,6 @@ export function SetPasswordPage() {
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                className={styles.setPassword__input}
                 placeholder="••••••••"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
@@ -153,7 +152,6 @@ export function SetPasswordPage() {
                 id="confirmPassword"
                 name="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-                className={styles.setPassword__input}
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
