@@ -29,6 +29,7 @@ function DraftWizard() {
           addPlayer={wizard.addPlayer}
           addPlayers={wizard.addPlayers}
           removePlayer={wizard.removePlayer}
+          removeAllPlayers={wizard.removeAllPlayers}
           toggleGoalkeeper={wizard.toggleGoalkeeper}
           onNext={wizard.goNext}
           onBack={wizard.goBack}

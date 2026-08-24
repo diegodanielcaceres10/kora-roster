@@ -9,6 +9,7 @@ interface StepPlayerListProps {
   onAdd: (name: string) => void;
   onAddMany: (names: string[]) => void;
   onRemove: (id: string) => void;
+  onRemoveAll: () => void;
   onToggleGoalkeeper: (id: string) => void;
   onNext: () => void;
   onBack: () => void;
@@ -27,7 +28,7 @@ function parsePastedNames(raw: string): string[] {
     .filter(Boolean);
 }
 
-export function StepPlayerList({ players, totalNeeded, teamCount, onAdd, onAddMany, onRemove, onToggleGoalkeeper, onNext, onBack }: StepPlayerListProps) {
+export function StepPlayerList({ players, totalNeeded, teamCount, onAdd, onAddMany, onRemove, onRemoveAll, onToggleGoalkeeper, onNext, onBack }: StepPlayerListProps) {
   const [name, setName] = useState("");
   const [isPasteMode, setIsPasteMode] = useState(false);
   const [pasteText, setPasteText] = useState("");
@@ -79,7 +80,7 @@ export function StepPlayerList({ players, totalNeeded, teamCount, onAdd, onAddMa
             </button>
           </form>
 
-          <button type="button" className={styles.setup__pasteToggle} onClick={() => setIsPasteMode(true)}>
+          <button type="button" className={styles.setup__pasteToggle} onClick={() => setIsPasteMode(true)} disabled={!canAdd}>
             <i className="fa-solid fa-paste"></i>
             ¿Tenés una lista? Pegala acá
           </button>
@@ -144,6 +145,12 @@ export function StepPlayerList({ players, totalNeeded, teamCount, onAdd, onAddMa
             </button>
           </li>
         ))}
+        {players.length > 1 && (
+          <button type="button" className={styles.setup__clean} onClick={onRemoveAll}>
+            <i className="fa-solid fa-trash"></i>
+            Limpiar lista
+          </button>
+        )}
       </ul>
 
       <div className={styles.setup__actions}>

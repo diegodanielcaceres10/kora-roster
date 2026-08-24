@@ -3,10 +3,7 @@ import type { DraftConfig, SetupSubStep } from "../../draft.types";
 import { StepTeamCount } from "./components/StepTeamCount";
 import { StepPlayersPerTeam } from "./components/StepPlayersPerTeam";
 import { StepPlayerList } from "./components/StepPlayerList";
-import {
-  StepProgress,
-  type GlobalStep,
-} from "./components/step-progress/StepProgress";
+import { StepProgress, type GlobalStep } from "./components/step-progress/StepProgress";
 import styles from "./setup.module.scss";
 
 interface StepSetupProps {
@@ -16,6 +13,7 @@ interface StepSetupProps {
   addPlayer: (name: string) => void;
   addPlayers: (names: string[]) => void;
   removePlayer: (id: string) => void;
+  removeAllPlayers: () => void;
   toggleGoalkeeper: (id: string) => void;
   onNext: () => void;
   onBack: () => void;
@@ -29,17 +27,7 @@ const GLOBAL_STEP_BY_SUB_STEP: Record<SetupSubStep, GlobalStep> = {
   list: 3,
 };
 
-export function StepSetup({
-  config,
-  setTeamCount,
-  setPlayersPerTeam,
-  addPlayer,
-  addPlayers,
-  removePlayer,
-  toggleGoalkeeper,
-  onNext,
-  onBack,
-}: StepSetupProps) {
+export function StepSetup({ config, setTeamCount, setPlayersPerTeam, addPlayer, addPlayers, removePlayer, removeAllPlayers, toggleGoalkeeper, onNext, onBack }: StepSetupProps) {
   const [subStep, setSubStep] = useState<SetupSubStep>("teams");
   const subStepIndex = SUB_STEP_ORDER.indexOf(subStep);
 
@@ -67,32 +55,17 @@ export function StepSetup({
           config.teamCount
             ? {
                 1: `${config.teamCount} equipos`,
-                2: config.playersPerTeam
-                  ? `${config.playersPerTeam} jugadores por equipo`
-                  : undefined,
+                2: config.playersPerTeam ? `${config.playersPerTeam} jugadores por equipo` : undefined,
               }
             : undefined
         }
       />
 
       <div className={styles.setup__content}>
-        {subStep === "teams" && (
-          <StepTeamCount
-            teamCount={config.teamCount}
-            onChange={setTeamCount}
-            onNext={goToNextSubStep}
-            onBack={goToPrevSubStep}
-          />
-        )}
+        {subStep === "teams" && <StepTeamCount teamCount={config.teamCount} onChange={setTeamCount} onNext={goToNextSubStep} onBack={goToPrevSubStep} />}
 
         {subStep === "playersPerTeam" && (
-          <StepPlayersPerTeam
-            teamCount={config.teamCount}
-            playersPerTeam={config.playersPerTeam}
-            onChange={setPlayersPerTeam}
-            onNext={goToNextSubStep}
-            onBack={goToPrevSubStep}
-          />
+          <StepPlayersPerTeam teamCount={config.teamCount} playersPerTeam={config.playersPerTeam} onChange={setPlayersPerTeam} onNext={goToNextSubStep} onBack={goToPrevSubStep} />
         )}
 
         {subStep === "list" && (
@@ -103,6 +76,7 @@ export function StepSetup({
             onAdd={addPlayer}
             onAddMany={addPlayers}
             onRemove={removePlayer}
+            onRemoveAll={removeAllPlayers}
             onToggleGoalkeeper={toggleGoalkeeper}
             onNext={goToNextSubStep}
             onBack={goToPrevSubStep}

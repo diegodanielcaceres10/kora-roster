@@ -1,16 +1,6 @@
 import { useState, useCallback } from "react";
-import type {
-  WizardStep,
-  DraftConfig,
-  Player,
-  Team,
-  AssignmentMode,
-} from "../draft.types";
-import {
-  DEFAULT_TEAM_COUNT,
-  DEFAULT_PLAYERS_PER_TEAM,
-  TEAM_COLOR_PALETTE,
-} from "../draft.constants";
+import type { WizardStep, DraftConfig, Player, Team, AssignmentMode } from "../draft.types";
+import { DEFAULT_TEAM_COUNT, DEFAULT_PLAYERS_PER_TEAM, TEAM_COLOR_PALETTE } from "../draft.constants";
 
 const buildTeams = (count: number): Team[] =>
   Array.from({ length: count }, (_, i) => ({
@@ -103,25 +93,26 @@ export function useDraftWizard() {
     }));
   }, []);
 
+  const removeAllPlayers = useCallback(() => {
+    setConfig((prev) => ({
+      ...prev,
+      players: [],
+    }));
+  }, []);
+
   const toggleGoalkeeper = useCallback((id: string) => {
     setConfig((prev) => {
       const target = prev.players.find((player) => player.id === id);
       if (!target) return prev;
 
       if (!target.isGoalkeeper) {
-        const goalkeeperCount = prev.players.filter(
-          (player) => player.isGoalkeeper,
-        ).length;
+        const goalkeeperCount = prev.players.filter((player) => player.isGoalkeeper).length;
         if (goalkeeperCount >= prev.teamCount) return prev;
       }
 
       return {
         ...prev,
-        players: prev.players.map((player) =>
-          player.id === id
-            ? { ...player, isGoalkeeper: !player.isGoalkeeper }
-            : player,
-        ),
+        players: prev.players.map((player) => (player.id === id ? { ...player, isGoalkeeper: !player.isGoalkeeper } : player)),
       };
     });
   }, []);
@@ -142,81 +133,50 @@ export function useDraftWizard() {
     }));
   }, []);
 
-  const assignPlayerToTeam = useCallback(
-    (playerId: string, teamId: string, spotIndex?: number) => {
-      setConfig((prev) => {
-        const target = prev.players.find((p) => p.id === playerId);
-        if (!target) return prev;
+  const assignPlayerToTeam = useCallback((playerId: string, teamId: string, spotIndex?: number) => {
+    setConfig((prev) => {
+      const target = prev.players.find((p) => p.id === playerId);
+      if (!target) return prev;
 
-        const teammates = prev.players.filter(
-          (p) => p.teamId === teamId && p.id !== playerId,
-        );
-        const isMovingWithinTeam = target.teamId === teamId;
+      const teammates = prev.players.filter((p) => p.teamId === teamId && p.id !== playerId);
+      const isMovingWithinTeam = target.teamId === teamId;
 
-        if (
-          target.isGoalkeeper &&
-          spotIndex !== undefined &&
-          spotIndex !== 0
-        ) {
-          return prev;
-        }
+      if (target.isGoalkeeper && spotIndex !== undefined && spotIndex !== 0) {
+        return prev;
+      }
 
-        const requestedSpotIndex = target.isGoalkeeper ? 0 : spotIndex;
+      const requestedSpotIndex = target.isGoalkeeper ? 0 : spotIndex;
 
-        if (!isMovingWithinTeam && teammates.length >= prev.playersPerTeam) {
-          return prev;
-        }
+      if (!isMovingWithinTeam && teammates.length >= prev.playersPerTeam) {
+        return prev;
+      }
 
-        if (target.isGoalkeeper && teammates.some((p) => p.isGoalkeeper)) {
-          return prev;
-        }
+      if (target.isGoalkeeper && teammates.some((p) => p.isGoalkeeper)) {
+        return prev;
+      }
 
-        if (
-          requestedSpotIndex !== undefined &&
-          teammates.some((player) => player.spotIndex === requestedSpotIndex)
-        ) {
-          return prev;
-        }
+      if (requestedSpotIndex !== undefined && teammates.some((player) => player.spotIndex === requestedSpotIndex)) {
+        return prev;
+      }
 
-        const occupiedSpots = new Set(
-          teammates
-            .map((player) => player.spotIndex)
-            .filter((index): index is number => index !== null),
-        );
-        const nextFreeSpot = Array.from(
-          { length: prev.playersPerTeam },
-          (_, index) => index,
-        ).find((index) => !occupiedSpots.has(index));
+      const occupiedSpots = new Set(teammates.map((player) => player.spotIndex).filter((index): index is number => index !== null));
+      const nextFreeSpot = Array.from({ length: prev.playersPerTeam }, (_, index) => index).find((index) => !occupiedSpots.has(index));
 
-        const nextSpotIndex =
-          requestedSpotIndex ??
-          (isMovingWithinTeam && target.spotIndex !== null
-            ? target.spotIndex
-            : nextFreeSpot);
+      const nextSpotIndex = requestedSpotIndex ?? (isMovingWithinTeam && target.spotIndex !== null ? target.spotIndex : nextFreeSpot);
 
-        if (nextSpotIndex === undefined) return prev;
+      if (nextSpotIndex === undefined) return prev;
 
-        return {
-          ...prev,
-          players: prev.players.map((player) =>
-            player.id === playerId
-              ? { ...player, teamId, spotIndex: nextSpotIndex }
-              : player,
-          ),
-        };
-      });
-    },
-    [],
-  );
+      return {
+        ...prev,
+        players: prev.players.map((player) => (player.id === playerId ? { ...player, teamId, spotIndex: nextSpotIndex } : player)),
+      };
+    });
+  }, []);
 
   const unassignPlayer = useCallback((playerId: string) => {
     setConfig((prev) => ({
       ...prev,
-      players: prev.players.map((player) =>
-        player.id === playerId
-          ? { ...player, teamId: null, spotIndex: null }
-          : player,
-      ),
+      players: prev.players.map((player) => (player.id === playerId ? { ...player, teamId: null, spotIndex: null } : player)),
     }));
   }, []);
 
@@ -228,10 +188,7 @@ export function useDraftWizard() {
       const rest = shuffle(prev.players.filter((p) => !p.isGoalkeeper));
 
       let teamIndex = 0;
-      const nextSpotByTeam = prev.teams.reduce<Record<string, number>>(
-        (acc, team) => ({ ...acc, [team.id]: 0 }),
-        {},
-      );
+      const nextSpotByTeam = prev.teams.reduce<Record<string, number>>((acc, team) => ({ ...acc, [team.id]: 0 }), {});
       const assignRoundRobin = (list: Player[]): Player[] =>
         list.map((player) => {
           const team = prev.teams[teamIndex % prev.teams.length];
@@ -241,10 +198,7 @@ export function useDraftWizard() {
           return { ...player, teamId: team.id, spotIndex };
         });
 
-      const playersWithTeams = [
-        ...assignRoundRobin(goalkeepers),
-        ...assignRoundRobin(rest),
-      ];
+      const playersWithTeams = [...assignRoundRobin(goalkeepers), ...assignRoundRobin(rest)];
 
       return { ...prev, players: playersWithTeams };
     });
@@ -265,6 +219,7 @@ export function useDraftWizard() {
     addPlayer,
     addPlayers,
     removePlayer,
+    removeAllPlayers,
     toggleGoalkeeper,
     setAssignmentMode,
     resetAssignments,
