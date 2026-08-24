@@ -18,21 +18,16 @@ function parsePastedNames(raw: string): string[] {
   return raw
     .split(/\r?\n/)
     .flatMap((line) => line.split(/[,;]/))
-    .map((line) => line.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, "").trim())
+    .map((line) =>
+      line
+        .replace(/^[^\p{L}]+/u, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
     .filter(Boolean);
 }
 
-export function StepPlayerList({
-  players,
-  totalNeeded,
-  teamCount,
-  onAdd,
-  onAddMany,
-  onRemove,
-  onToggleGoalkeeper,
-  onNext,
-  onBack,
-}: StepPlayerListProps) {
+export function StepPlayerList({ players, totalNeeded, teamCount, onAdd, onAddMany, onRemove, onToggleGoalkeeper, onNext, onBack }: StepPlayerListProps) {
   const [name, setName] = useState("");
   const [isPasteMode, setIsPasteMode] = useState(false);
   const [pasteText, setPasteText] = useState("");
@@ -60,15 +55,11 @@ export function StepPlayerList({
   };
 
   return (
-    <section
-      className={[styles.setup__step, styles["setup__step--narrow"]].join(" ")}
-    >
+    <section className={[styles.setup__step, styles["setup__step--narrow"]].join(" ")}>
       <p className={styles.setup__eyebrow}>Paso 3 de 3</p>
       <h1 className={styles.setup__title}>Sumá a los jugadores</h1>
       <p className={styles.setup__description}>
-        Tocá el guante para marcar quién ataja. Máximo {teamCount}{" "}
-        {teamCount === 1 ? "arquero" : "arqueros"} ({goalkeeperCount}/
-        {teamCount}).
+        Tocá el guante para marcar quién ataja. Máximo {teamCount} {teamCount === 1 ? "arquero" : "arqueros"} ({goalkeeperCount}/{teamCount}).
       </p>
 
       {!isPasteMode && (
@@ -78,27 +69,17 @@ export function StepPlayerList({
               name="player"
               type="text"
               className={styles.setup__input}
-              placeholder={
-                canAdd ? "Nombre del jugador" : "Ya completaste la lista"
-              }
+              placeholder={canAdd ? "Nombre del jugador" : "Ya completaste la lista"}
               value={name}
               onChange={(event) => setName(event.target.value)}
               disabled={!canAdd}
             />
-            <button
-              type="submit"
-              className={styles.setup__add}
-              disabled={!canAdd}
-            >
+            <button type="submit" className={styles.setup__add} disabled={!canAdd}>
               Agregar
             </button>
           </form>
 
-          <button
-            type="button"
-            className={styles.setup__pasteToggle}
-            onClick={() => setIsPasteMode(true)}
-          >
+          <button type="button" className={styles.setup__pasteToggle} onClick={() => setIsPasteMode(true)}>
             <i className="fa-solid fa-paste"></i>
             ¿Tenés una lista? Pegala acá
           </button>
@@ -109,9 +90,7 @@ export function StepPlayerList({
         <form className={styles.setup__pasteForm} onSubmit={handlePasteSubmit}>
           <textarea
             className={styles.setup__textarea}
-            placeholder={
-              "Pegá los nombres, uno por línea\nJuan Pérez\nAna Gómez\nLuis Díaz"
-            }
+            placeholder={"Pegá los nombres, uno por línea\nJuan Pérez\nAna Gómez\nLuis Díaz"}
             value={pasteText}
             onChange={(event) => setPasteText(event.target.value)}
             rows={5}
@@ -135,22 +114,14 @@ export function StepPlayerList({
         </form>
       )}
 
-      <p
-        className={[
-          styles.setup__counter,
-          isComplete ? styles["setup__counter--complete"] : "",
-          overflowCount > 0 ? styles["setup__counter--overflow"] : "",
-        ].join(" ")}
-      >
+      <p className={[styles.setup__counter, isComplete ? styles["setup__counter--complete"] : "", overflowCount > 0 ? styles["setup__counter--overflow"] : ""].join(" ")}>
         {players.length} / {totalNeeded} jugadores
       </p>
 
       {overflowCount > 0 && (
         <p className={styles.setup__alert}>
           <i className="fa-solid fa-triangle-exclamation"></i>
-          Tenés {overflowCount}{" "}
-          {overflowCount === 1 ? "jugador de más" : "jugadores de más"}. Sacá a
-          los que sobran para poder continuar.
+          Tenés {overflowCount} {overflowCount === 1 ? "jugador de más" : "jugadores de más"}. Sacá a los que sobran para poder continuar.
         </p>
       )}
 
@@ -160,27 +131,15 @@ export function StepPlayerList({
             <span className={styles.setup__name}>{player.name}</span>
             <button
               type="button"
-              className={[
-                styles.setup__goalkeeper,
-                player.isGoalkeeper ? styles["setup__goalkeeper--active"] : "",
-              ].join(" ")}
+              className={[styles.setup__goalkeeper, player.isGoalkeeper ? styles["setup__goalkeeper--active"] : ""].join(" ")}
               onClick={() => onToggleGoalkeeper(player.id)}
               disabled={!player.isGoalkeeper && goalkeeperCapReached}
               aria-pressed={player.isGoalkeeper}
-              title={
-                !player.isGoalkeeper && goalkeeperCapReached
-                  ? `Ya marcaste el máximo de arqueros (${teamCount})`
-                  : "Marcar como arquero"
-              }
+              title={!player.isGoalkeeper && goalkeeperCapReached ? `Ya marcaste el máximo de arqueros (${teamCount})` : "Marcar como arquero"}
             >
               <i className={"fa-solid fa-mitten"}></i>
             </button>
-            <button
-              type="button"
-              className={styles.setup__remove}
-              onClick={() => onRemove(player.id)}
-              aria-label={`Quitar a ${player.name}`}
-            >
+            <button type="button" className={styles.setup__remove} onClick={() => onRemove(player.id)} aria-label={`Quitar a ${player.name}`}>
               ×
             </button>
           </li>
@@ -188,20 +147,11 @@ export function StepPlayerList({
       </ul>
 
       <div className={styles.setup__actions}>
-        <button
-          type="button"
-          className={styles.setup__secondaryButton}
-          onClick={onBack}
-        >
+        <button type="button" className={styles.setup__secondaryButton} onClick={onBack}>
           <i className="fa-solid fa-arrow-left"></i>
           Volver
         </button>
-        <button
-          type="button"
-          className={styles.setup__primaryButton}
-          onClick={onNext}
-          disabled={!isComplete}
-        >
+        <button type="button" className={styles.setup__primaryButton} onClick={onNext} disabled={!isComplete}>
           Continuar
           <i className="fa-solid fa-arrow-right"></i>
         </button>
