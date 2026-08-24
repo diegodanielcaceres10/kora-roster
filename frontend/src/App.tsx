@@ -12,6 +12,7 @@ import { LoginPage } from "./pages/auth/login/LoginPage";
 import { ForgotPage } from "./pages/auth/forgot/ForgotPage";
 import { RegisterPage } from "./pages/auth/register/RegisterPage";
 import { SetPasswordPage } from "./pages/auth/set-password/SetPasswordPage";
+import { MePage } from "./pages/me/MePage";
 
 function DraftWizard() {
   const wizard = useDraftWizard();
@@ -67,6 +68,7 @@ function App() {
         <Route path="/forgot" element={<ForgotPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/set-password" element={<SetPasswordPage />} />
+        <Route path="/me" element={<MePage />} />
       </Route>
     </Routes>
   );

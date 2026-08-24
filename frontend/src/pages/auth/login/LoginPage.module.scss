@@ -41,6 +41,7 @@
   }
 
   &__field {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -50,6 +51,27 @@
     font-size: var(--font-size-sm);
     color: var(--kora-chalk);
     opacity: 0.75;
+  }
+
+  &__toggleVisibility {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+
+    & i {
+      font-size: 20px;
+    }
+
+    &:hover {
+      color: #333;
+    }
   }
 
   &__submit {

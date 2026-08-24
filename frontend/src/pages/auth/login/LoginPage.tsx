@@ -6,6 +6,7 @@ import { useLogin } from "../../../features/account/hooks/useLogin";
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { submit, status, error } = useLogin();
   const navigate = useNavigate();
 
@@ -40,7 +41,25 @@ export function LoginPage() {
             <label className={styles.login__label} htmlFor="password">
               Contraseña
             </label>
-            <input id="password" name="password" type="password" placeholder="••••••" value={password} onChange={(event) => setPassword(event.target.value)} disabled={isLoading} required />
+            <input
+              id="password"
+              name="password"
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="••••••"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              disabled={isLoading}
+              required
+            />
+            <button
+              type="button"
+              className={styles.login__toggleVisibility}
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              tabIndex={-1}
+            >
+              {showConfirmPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i>}
+            </button>
           </div>
 
           <button type="submit" className={styles.login__submit} disabled={isLoading}>
