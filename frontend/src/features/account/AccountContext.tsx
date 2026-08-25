@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { toast } from "sonner";
 import { getMe } from "./account.api";
 import type { Me } from "./account.types";
 import { authStorage, AUTH_SESSION_EXPIRED_EVENT } from "../../lib/auth/authStorage";
@@ -43,9 +44,19 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     setAccount(null);
   }, []);
 
+  // httpClient fires this event whenever a token refresh fails for good,
+  // regardless of which screen triggered the request. This clears the
+  // account state even if the failure happened on a fetch that doesn't go
+  // through getMe(), and since RequireAuth re-renders when `account`/the
+  // token changes, the redirect (to "/") happens on its own, no manual
+  // navigate() needed here.
   useEffect(() => {
-    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, logout);
-    return () => window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, logout);
+    function handleSessionExpired() {
+      logout();
+      toast.info("Tu sesión finalizó. Iniciá sesión nuevamente.");
+    }
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+    return () => window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
   }, [logout]);
 
   return <AccountContext.Provider value={{ account, isLoading, ensureLoaded, setAccount, logout }}>{children}</AccountContext.Provider>;

@@ -1,6 +1,10 @@
 const ACCESS_TOKEN_KEY = "kora.accessToken";
 const REFRESH_TOKEN_KEY = "kora.refreshToken";
 
+// Fired by httpClient when a token refresh fails for good (expired/used
+// refresh token, or none stored). AccountContext listens for this to clear
+// the session from anywhere in the app, not just from screens that call
+// getMe().
 export const AUTH_SESSION_EXPIRED_EVENT = "kora:auth-session-expired";
 
 export const authStorage = {

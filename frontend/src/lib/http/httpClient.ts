@@ -27,6 +27,13 @@ interface RefreshTokenResponse {
   refreshToken: string;
 }
 
+// The backend rotates the refresh token: every time it's used, it gets
+// invalidated and a new one is issued. If two requests run out of a valid
+// access token at the same time and each triggers its own refresh, the
+// second one would arrive with an already-used refresh token
+// (TOKEN_ALREADY_USED) and force an unnecessary logout. So every request
+// that comes in while a refresh is in flight awaits the same promise
+// instead of starting a new one.
 let refreshPromise: Promise<string> | null = null;
 
 async function performRefresh(): Promise<string> {
@@ -63,6 +70,13 @@ function refreshAccessToken(): Promise<string> {
   return refreshPromise;
 }
 
+// Single choke point for every request with auth: true. If the access token
+// is expired or less than 10s from expiring, refresh BEFORE sending the
+// request instead of waiting for the backend to respond 401. Saves the
+// round trip of "request fails -> refresh -> retry" in the common case.
+// Reuses the same refreshPromise as the reactive handling below, so if a
+// refresh is already in flight (triggered by another request) this doesn't
+// start a duplicate one.
 async function getValidAccessToken(): Promise<string | null> {
   const token = authStorage.getAccessToken();
   if (!token) return null;
@@ -72,6 +86,11 @@ async function getValidAccessToken(): Promise<string | null> {
   try {
     return await refreshAccessToken();
   } catch {
+    // The refresh also failed (or there was no refresh token): let the
+    // request go out without an Authorization header. The backend will
+    // reject it with 401 UNAUTHORIZED, which is a consistent outcome
+    // already handled by the rest of the app (see AccountContext /
+    // AUTH_SESSION_EXPIRED_EVENT).
     return null;
   }
 }
@@ -102,11 +121,19 @@ async function request<TResponse>(path: string, options: RequestOptions = {}, is
     const message = (errorBody?.message ? String(errorBody.message) : undefined) ?? `Request failed with status ${response.status}`;
     const code = errorBody?.code ? String(errorBody.code) : undefined;
 
+    // Access token expired: try to refresh once and retry the original
+    // request with the new token. Only for TOKEN_EXPIRED (not for a generic
+    // UNAUTHORIZED, which means the token is missing/invalid/tampered and a
+    // refresh won't fix that).
     if (auth && !isRetry && response.status === 401 && code === "TOKEN_EXPIRED") {
       try {
         await refreshAccessToken();
         return request<TResponse>(path, options, true);
-      } catch {}
+      } catch {
+        // The refresh token is also invalid or expired: fall through with
+        // the original error so the caller handles it the same way as
+        // today (see AccountContext.ensureLoaded).
+      }
     }
 
     throw new ApiError(response.status, message, code, data);
