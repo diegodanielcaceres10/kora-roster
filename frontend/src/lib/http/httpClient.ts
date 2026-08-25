@@ -1,4 +1,5 @@
 import { authStorage, AUTH_SESSION_EXPIRED_EVENT } from "../auth/authStorage";
+import { isJwtExpiringSoon } from "../auth/jwt";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -62,11 +63,24 @@ function refreshAccessToken(): Promise<string> {
   return refreshPromise;
 }
 
+async function getValidAccessToken(): Promise<string | null> {
+  const token = authStorage.getAccessToken();
+  if (!token) return null;
+
+  if (!isJwtExpiringSoon(token)) return token;
+
+  try {
+    return await refreshAccessToken();
+  } catch {
+    return null;
+  }
+}
+
 async function request<TResponse>(path: string, options: RequestOptions = {}, isRetry = false): Promise<TResponse> {
   const { body, headers, auth, ...rest } = options;
   const authHeaders: Record<string, string> = {};
   if (auth) {
-    const token = authStorage.getAccessToken();
+    const token = await getValidAccessToken();
     if (token) authHeaders.Authorization = `Bearer ${token}`;
   }
 
