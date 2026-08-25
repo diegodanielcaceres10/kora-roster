@@ -18,8 +18,6 @@ export function RequireAuth({ children }: { children: ReactNode }) {
 
   const hasToken = Boolean(authStorage.getAccessToken());
 
-  console.log("3");
-
   if (!hasToken) {
     return <Navigate to="/" replace />;
   }

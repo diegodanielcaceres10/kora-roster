@@ -2,6 +2,8 @@ export interface RegisterAccountPayload {
   email: string;
   name: string;
   lastname: string;
+  acceptedTerms: boolean;
+  acceptedMarketing: boolean;
 }
 
 export interface Account {

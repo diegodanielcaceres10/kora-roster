@@ -8,6 +8,8 @@ import { StepExport } from "./features/draft/steps/export/export";
 import { TutorialPage } from "./pages/tutorial/TutorialPage";
 import { FAQPage } from "./pages/faq/FAQPage";
 import { AboutPage } from "./pages/about/AboutPage";
+import { TermsPage } from "./pages/terms/TermsPage";
+import { PrivacyPage } from "./pages/privacy/PrivacyPage";
 import { LoginPage } from "./pages/auth/login/LoginPage";
 import { ForgotPage } from "./pages/auth/forgot/ForgotPage";
 import { RegisterPage } from "./pages/auth/register/RegisterPage";
@@ -66,6 +68,8 @@ function App() {
         <Route path="/tutorial" element={<TutorialPage />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route
           path="/login"
           element={

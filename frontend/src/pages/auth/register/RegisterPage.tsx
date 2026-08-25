@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
 
@@ -6,6 +7,8 @@ export function RegisterPage() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [acceptedMarketing, setAcceptedMarketing] = useState(false);
   const { submit, status, error } = useRegisterAccount();
 
   const isLoading = status === "loading";
@@ -13,8 +16,8 @@ export function RegisterPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isLoading) return;
-    submit({ email, name, lastname });
+    if (isLoading || !acceptedTerms) return;
+    submit({ email, name, lastname, acceptedTerms, acceptedMarketing });
   };
 
   return (
@@ -53,7 +56,35 @@ export function RegisterPage() {
               <input id="email" name="email" type="email" placeholder="vos@email.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isLoading} required />
             </div>
 
-            <button type="submit" className={styles.register__submit} disabled={isLoading}>
+            <div className={styles.register__checkboxes}>
+              <label className={styles.register__checkboxField}>
+                <input
+                  type="checkbox"
+                  checked={acceptedTerms}
+                  onChange={(event) => setAcceptedTerms(event.target.checked)}
+                  disabled={isLoading}
+                  required
+                />
+                <span>
+                  Leí y acepto los{" "}
+                  <Link to="/terms" target="_blank" rel="noreferrer" className={styles.register__inlineLink}>
+                    Términos y Condiciones
+                  </Link>{" "}
+                  y la{" "}
+                  <Link to="/privacy" target="_blank" rel="noreferrer" className={styles.register__inlineLink}>
+                    Política de Privacidad
+                  </Link>
+                  .
+                </span>
+              </label>
+
+              <label className={styles.register__checkboxField}>
+                <input type="checkbox" checked={acceptedMarketing} onChange={(event) => setAcceptedMarketing(event.target.checked)} disabled={isLoading} />
+                <span>Quiero recibir novedades y comunicaciones de marketing de Kora por email (opcional).</span>
+              </label>
+            </div>
+
+            <button type="submit" className={styles.register__submit} disabled={isLoading || !acceptedTerms}>
               {isLoading && <span className={styles.register__spinner} aria-hidden="true" />}
               <span>{isLoading ? "Creando cuenta..." : "Crear cuenta"}</span>
             </button>
@@ -69,3 +100,4 @@ export function RegisterPage() {
     </section>
   );
 }
+
