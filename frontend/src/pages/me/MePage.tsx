@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./MePage.module.scss";
 import { useAccount } from "../../features/account/AccountContext";
@@ -10,33 +9,20 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 export function MePage() {
-  const { account, isLoading, ensureLoaded, logout } = useAccount();
+  // RequireAuth already guarantees `account` is loaded and valid before
+  // this component renders, so there's no need to re-validate the session
+  // here or handle a loading/missing-account state.
+  const { account, logout } = useAccount();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    ensureLoaded();
-  }, [ensureLoaded]);
+  if (!account) {
+    return null;
+  }
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
-
-  if (isLoading && !account) {
-    return (
-      <section className={styles.me}>
-        <p className={styles.me__status}>Cargando datos...</p>
-      </section>
-    );
-  }
-
-  if (!account) {
-    return (
-      <section className={styles.me}>
-        <p className={styles.me__status}>No pudimos cargar tu cuenta. Iniciá sesión nuevamente.</p>
-      </section>
-    );
-  }
 
   const createdAt = new Date(account.createdAt).toLocaleDateString("es-AR", {
     year: "numeric",
