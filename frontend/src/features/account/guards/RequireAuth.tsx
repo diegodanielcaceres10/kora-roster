@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useAccount } from "../AccountContext";
 import { authStorage } from "../../../lib/auth/authStorage";
-import styles from "./AuthGuards.module.scss";
+import { Spinner } from "../../../components/spinner/spinner";
 
 /**
  * Wrap routes that require an authenticated session (e.g. /me).
@@ -23,7 +23,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   }
 
   if (!account) {
-    return <p className={styles.guard}>Verificando sesión...</p>;
+    return <Spinner size="lg" label="Verificando sesión..." />;
   }
 
   return <>{children}</>;

@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useAccount } from "../AccountContext";
 import { authStorage } from "../../../lib/auth/authStorage";
-import styles from "./AuthGuards.module.scss";
+import { Spinner } from "../../../components/spinner/spinner";
 
 /**
  * Wrap routes meant for logged-out visitors (login, register, forgot,
@@ -18,7 +18,7 @@ export function RequireGuest({ children }: { children: ReactNode }) {
   const hasToken = Boolean(authStorage.getAccessToken());
 
   if (hasToken && !account) {
-    return <p className={styles.guard}>Verificando sesión...</p>;
+    return <Spinner size="lg" label="Verificando sesión..." />;
   }
 
   if (account) {
