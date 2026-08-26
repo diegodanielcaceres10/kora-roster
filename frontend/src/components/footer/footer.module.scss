@@ -12,7 +12,8 @@
   opacity: 0.7;
 
   @include ds.md {
-    height: 50px;
+    height: auto;
+    padding: var(--space-4) 0;
   }
 
   &__links {

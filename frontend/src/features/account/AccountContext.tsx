@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { getMe } from "./account.api";
 import type { Me } from "./account.types";
 import { authStorage, AUTH_SESSION_EXPIRED_EVENT } from "../../lib/auth/authStorage";
+import { isJwtExpiringSoon } from "../../lib/auth/jwt";
 import { ApiError } from "../../lib/http/httpClient";
 
 interface AccountContextValue {
@@ -20,10 +21,13 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const ensureLoaded = useCallback(async () => {
-    if (account) return;
-
     const token = authStorage.getAccessToken();
-    if (!token) return;
+    if (!token) {
+      if (account) setAccount(null);
+      return;
+    }
+
+    if (account && !isJwtExpiringSoon(token)) return;
 
     setIsLoading(true);
     try {
