@@ -20,3 +20,7 @@ export function setPassword(payload: SetPasswordPayload) {
 export function getMe() {
   return httpClient.get<Me>("/auth/me", { auth: true });
 }
+
+export function logoutAccount(refreshToken: string) {
+  return httpClient.post<{ message: string; code: string }>("/auth/logout", { refreshToken });
+}

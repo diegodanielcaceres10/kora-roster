@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./MePage.module.scss";
 import { useAccount } from "../../features/account/AccountContext";
+import { authStorage } from "../../lib/auth/authStorage";
+import { logoutAccount } from "../../features/account/account.api";
 
 const STATUS_LABEL: Record<string, string> = {
   ACTIVE: "Activo",
@@ -20,8 +22,22 @@ export function MePage() {
   }
 
   const handleLogout = () => {
+    // Read the refresh token before clearing it locally.
+    const refreshToken = authStorage.getRefreshToken();
+
+    // Local logout is immediate and unconditional: clear the session and
+    // navigate away without waiting for the network. The user is leaving
+    // this screen either way, so there's nothing to block on.
     logout();
     navigate("/login");
+
+    // Invalidating the token server-side is best-effort cleanup, not
+    // something the user needs to know about: they've already been logged
+    // out locally, and if this call fails the token just sits unused until
+    // it expires on its own (or gets rejected if anyone tries to reuse it).
+    if (refreshToken) {
+      logoutAccount(refreshToken).catch(() => {});
+    }
   };
 
   const createdAt = new Date(account.createdAt).toLocaleDateString("es-AR", {
