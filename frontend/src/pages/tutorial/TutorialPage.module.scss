@@ -1,4 +1,4 @@
-.faq {
+.tutorial {
   width: 100%;
   max-width: 600px;
   display: flex;
@@ -42,13 +42,9 @@
   }
 
   &__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: var(--space-4);
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
   }
 
   &__item {
