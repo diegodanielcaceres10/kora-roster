@@ -8,7 +8,7 @@ export function RegisterPage() {
   const [name, setName] = useState("");
   const [lastname, setLastname] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [acceptedMarketing, setAcceptedMarketing] = useState(false);
+  const [marketingConsent, setmarketingConsent] = useState(false);
   const { submit, status, error } = useRegisterAccount();
 
   const isLoading = status === "loading";
@@ -17,7 +17,7 @@ export function RegisterPage() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isLoading || !acceptedTerms) return;
-    submit({ email, name, lastname, acceptedTerms, acceptedMarketing });
+    submit({ email, name, lastname, acceptedTerms, marketingConsent });
   };
 
   return (
@@ -58,13 +58,7 @@ export function RegisterPage() {
 
             <div className={styles.register__checkboxes}>
               <label className={styles.register__checkboxField}>
-                <input
-                  type="checkbox"
-                  checked={acceptedTerms}
-                  onChange={(event) => setAcceptedTerms(event.target.checked)}
-                  disabled={isLoading}
-                  required
-                />
+                <input type="checkbox" checked={acceptedTerms} onChange={(event) => setAcceptedTerms(event.target.checked)} disabled={isLoading} required />
                 <span>
                   Leí y acepto los{" "}
                   <Link to="/terms" target="_blank" rel="noreferrer" className={styles.register__inlineLink}>
@@ -79,7 +73,7 @@ export function RegisterPage() {
               </label>
 
               <label className={styles.register__checkboxField}>
-                <input type="checkbox" checked={acceptedMarketing} onChange={(event) => setAcceptedMarketing(event.target.checked)} disabled={isLoading} />
+                <input type="checkbox" checked={marketingConsent} onChange={(event) => setmarketingConsent(event.target.checked)} disabled={isLoading} />
                 <span>Quiero recibir novedades y comunicaciones de marketing de Kora por email (opcional).</span>
               </label>
             </div>
@@ -100,4 +94,3 @@ export function RegisterPage() {
     </section>
   );
 }
-

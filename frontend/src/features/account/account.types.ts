@@ -3,7 +3,7 @@ export interface RegisterAccountPayload {
   name: string;
   lastname: string;
   acceptedTerms: boolean;
-  acceptedMarketing: boolean;
+  marketingConsent: boolean;
 }
 
 export interface Account {
