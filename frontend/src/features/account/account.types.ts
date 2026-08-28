@@ -38,3 +38,11 @@ export interface SetPasswordPayload {
 }
 
 export type Me = Account;
+
+export interface GoogleAuthPayload {
+  idToken: string;
+}
+
+export interface GoogleAuthResponse extends LoginResponse {
+  linkedAccount?: boolean;
+}

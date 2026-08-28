@@ -1,5 +1,5 @@
 import { httpClient } from "../../lib/http/httpClient";
-import type { Account, ForgotPasswordPayload, LoginPayload, LoginResponse, RegisterAccountPayload, SetPasswordPayload, Me } from "./account.types";
+import type { Account, ForgotPasswordPayload, LoginPayload, LoginResponse, RegisterAccountPayload, SetPasswordPayload, Me, GoogleAuthPayload, GoogleAuthResponse } from "./account.types";
 
 export function registerAccount(payload: RegisterAccountPayload) {
   return httpClient.post<Account>("/auth/register", payload);
@@ -23,4 +23,8 @@ export function getMe() {
 
 export function logoutAccount(refreshToken: string) {
   return httpClient.post<{ message: string; code: string }>("/auth/logout", { refreshToken });
+}
+
+export function googleAuth(payload: GoogleAuthPayload) {
+  return httpClient.post<GoogleAuthResponse>("/auth/google", payload);
 }

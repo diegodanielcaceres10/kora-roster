@@ -4,6 +4,8 @@ import { createRoot } from "react-dom/client";
 import { Toaster } from "sonner";
 import App from "./App";
 import { AccountProvider } from "./features/account/AccountContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import "./styles/global.scss";
 
 // Maps sonner's CSS variables to the app's own design tokens (see
@@ -33,7 +35,9 @@ const toastStyle = {
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter basename="/kora-roster/">
     <AccountProvider>
-      <App />
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <App />
+      </GoogleOAuthProvider>
       <Toaster richColors position="top-right" style={toastStyle} />
     </AccountProvider>
   </BrowserRouter>,
