@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "./header.module.scss";
 import kRosterLogo from "../../assets/logo/k-roster-logo.png";
 import { useAccount } from "../../features/account/AccountContext";
+import { useApiHealth } from "../../features/account/hooks/useApiHealth";
 
 const NAV_LINKS = [
   { label: "Inicio", to: "/" },
@@ -15,6 +16,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const { account, ensureLoaded } = useAccount();
+  const { isHealthy } = useApiHealth();
 
   useEffect(() => {
     ensureLoaded();
@@ -40,17 +42,18 @@ export function Header() {
           ))}
         </nav>
 
-        {account ? (
-          <Link key="Perfil" to="/me" className={styles.nav__user}>
-            <i className="fa-regular fa-circle-user"></i>
-            <span>{account.name}</span>
-          </Link>
-        ) : (
-          <Link key="Ingresar" to="/login" className={styles.nav__login}>
-            <i className="fa-regular fa-circle-user"></i>
-            <span>Ingresar</span>
-          </Link>
-        )}
+        {isHealthy &&
+          (account ? (
+            <Link key="Perfil" to="/me" className={styles.nav__user}>
+              <i className="fa-regular fa-circle-user"></i>
+              <span>{account.name}</span>
+            </Link>
+          ) : (
+            <Link key="Ingresar" to="/login" className={styles.nav__login}>
+              <i className="fa-regular fa-circle-user"></i>
+              <span>Ingresar</span>
+            </Link>
+          ))}
       </div>
     </header>
   );

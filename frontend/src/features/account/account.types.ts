@@ -46,3 +46,8 @@ export interface GoogleAuthPayload {
 export interface GoogleAuthResponse extends LoginResponse {
   linkedAccount?: boolean;
 }
+
+export interface ApiHealth {
+  status: string;
+  env: string;
+}
