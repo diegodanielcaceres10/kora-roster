@@ -1,9 +1,9 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
 import styles from "./RegisterPage.module.scss";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
 import { useGoogleAuth } from "../../../features/account/hooks/useGoogleAuth";
+import { GoogleAuthButton } from "../../../features/account/components/GoogleAuthButton";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ export function RegisterPage() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [marketingConsent, setmarketingConsent] = useState(false);
   const { submit, status, error } = useRegisterAccount();
-  const { submit: submitGoogle, status: googleStatus, error: googleError } = useGoogleAuth();
+  const { status: googleStatus } = useGoogleAuth();
 
   const isLoading = status === "loading" || googleStatus === "loading";
   const isSuccess = status === "success" || googleStatus === "success";
@@ -87,18 +87,7 @@ export function RegisterPage() {
               <span>{isLoading ? "Creando cuenta..." : "Crear cuenta"}</span>
             </button>
 
-            <GoogleLogin
-              onSuccess={(res) => {
-                if (res.credential) submitGoogle(res.credential);
-              }}
-              onError={() => console.error("Google login failed")}
-            />
-
-            {googleStatus === "error" && (
-              <p className={styles.register__error} role="alert">
-                {googleError}
-              </p>
-            )}
+            <GoogleAuthButton text="continue_with" redirectTo="/" />
 
             {status === "error" && (
               <p className={styles.register__error} role="alert">

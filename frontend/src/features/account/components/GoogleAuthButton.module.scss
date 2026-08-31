@@ -1,0 +1,53 @@
+.google {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 48px;
+  margin-top: var(--space-2);
+  border: 1px solid rgba(244, 246, 239, 0.25);
+  background: transparent;
+  color: var(--kora-chalk);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 150ms ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  &__auth {
+    position: absolute;
+    overflow: hidden;
+    opacity: 0;
+    inset: 0;
+  }
+
+  &__name {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  &__spinner {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(244, 246, 239, 0.35);
+    border-top-color: var(--kora-chalk);
+    animation: spin 700ms linear infinite;
+  }
+
+  &__error {
+    color: var(--kora-error);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

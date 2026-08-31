@@ -113,7 +113,9 @@
     display: flex;
     justify-content: space-between;
     gap: var(--space-4);
-    max-width: 420px;
+    margin-top: var(--space-4);
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--kora-turf);
   }
 
   &__link {

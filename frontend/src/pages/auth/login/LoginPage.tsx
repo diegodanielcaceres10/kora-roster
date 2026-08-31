@@ -1,16 +1,16 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
 import styles from "./LoginPage.module.scss";
 import { useLogin } from "../../../features/account/hooks/useLogin";
 import { useGoogleAuth } from "../../../features/account/hooks/useGoogleAuth";
+import { GoogleAuthButton } from "../../../features/account/components/GoogleAuthButton";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { submit, status, error } = useLogin();
-  const { submit: submitGoogle, status: googleStatus, error: googleError } = useGoogleAuth();
+  const { status: googleStatus } = useGoogleAuth();
   const navigate = useNavigate();
 
   const isLoading = status === "loading" || googleStatus === "loading";
@@ -19,13 +19,6 @@ export function LoginPage() {
     event.preventDefault();
     if (isLoading) return;
     const result = await submit({ email, password });
-    if (result) {
-      navigate("/");
-    }
-  };
-
-  const handleGoogleSuccess = async (credential: string) => {
-    const result = await submitGoogle(credential);
     if (result) {
       navigate("/");
     }
@@ -62,18 +55,7 @@ export function LoginPage() {
             <span>{isLoading ? "Ingresando..." : "Iniciar sesión"}</span>
           </button>
 
-          <GoogleLogin
-            onSuccess={(res) => {
-              if (res.credential) handleGoogleSuccess(res.credential);
-            }}
-            onError={() => console.error("Google login failed")}
-          />
-
-          {googleStatus === "error" && (
-            <p className={styles.login__error} role="alert">
-              {googleError}
-            </p>
-          )}
+          <GoogleAuthButton text="continue_with" redirectTo="/" />
 
           {status === "error" && (
             <p className={styles.login__error} role="alert">
