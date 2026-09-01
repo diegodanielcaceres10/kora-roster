@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { Toaster } from "sonner";
 import App from "./App";
 import { AccountProvider } from "./features/account/AccountContext";
+import { LocaleProvider } from "./i18n/LocaleContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import "./styles/global.scss";
@@ -34,11 +35,13 @@ const toastStyle = {
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter basename="/kora-roster/">
-    <AccountProvider>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <App />
-      </GoogleOAuthProvider>
-      <Toaster richColors position="top-right" style={toastStyle} />
-    </AccountProvider>
+    <LocaleProvider>
+      <AccountProvider>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <App />
+        </GoogleOAuthProvider>
+        <Toaster richColors position="top-right" style={toastStyle} />
+      </AccountProvider>
+    </LocaleProvider>
   </BrowserRouter>,
 );

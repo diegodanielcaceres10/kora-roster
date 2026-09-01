@@ -1,0 +1,37 @@
+.languageSwitcher {
+  display: inline-flex;
+  align-items: center;
+
+  &__srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  &__select {
+    height: 36px;
+    padding: 0 var(--space-3);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--kora-turf);
+    background: transparent;
+    color: var(--kora-chalk);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: border-color 150ms ease;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--kora-bib-gold);
+    }
+
+    option {
+      color: var(--kora-ink);
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
+import { useIntl } from "react-intl";
 import { useAccount } from "../AccountContext";
 import { useApiHealth } from "../hooks/useApiHealth";
 import { authStorage } from "../../../lib/auth/authStorage";
@@ -16,13 +17,14 @@ import { ServiceUnavailable } from "../../../components/service-unavailable/serv
 export function RequireAuth({ children }: { children: ReactNode }) {
   const { account, ensureLoaded } = useAccount();
   const { isHealthy, isChecking } = useApiHealth();
+  const intl = useIntl();
 
   useEffect(() => {
     ensureLoaded();
   }, [ensureLoaded]);
 
   if (isChecking) {
-    return <Spinner size="lg" label="Verificando disponibilidad del servicio..." />;
+    return <Spinner size="lg" label={intl.formatMessage({ id: "guards.checkingService" })} />;
   }
 
   if (!isHealthy) {
@@ -36,7 +38,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   }
 
   if (!account) {
-    return <Spinner size="lg" label="Verificando sesión..." />;
+    return <Spinner size="lg" label={intl.formatMessage({ id: "guards.checkingSession" })} />;
   }
 
   return <>{children}</>;
