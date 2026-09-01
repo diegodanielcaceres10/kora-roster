@@ -1,0 +1,111 @@
+.faq {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6);
+  flex: 1;
+
+  &__container {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  &__eyebrow {
+    font-family: var(--font-mono);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--kora-chalk);
+    font-size: var(--font-size-sm);
+    line-height: 1.55;
+    opacity: 0.75;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  &__description {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--kora-chalk);
+    opacity: 0.75;
+    max-width: 420px;
+  }
+
+  &__grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  &__item {
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(244, 246, 239, 0.12);
+    background: rgba(5, 31, 25, 0.4);
+    transition: border-color 150ms ease;
+    overflow: hidden;
+
+    &--open {
+      border-color: var(--kora-turf);
+    }
+  }
+
+  &__question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    border: none;
+    background: transparent;
+    color: var(--kora-chalk);
+    font-size: var(--font-size-base);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: transform 200ms ease;
+
+    &--open {
+      transform: rotate(180deg);
+      opacity: 1;
+    }
+  }
+
+  &__answerWrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 220ms ease;
+
+    &--open {
+      grid-template-rows: 1fr;
+    }
+  }
+
+  &__answerInner {
+    overflow: hidden;
+  }
+
+  &__answer {
+    margin: 0;
+    padding: 0 var(--space-5) var(--space-4);
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+    color: var(--kora-chalk);
+    opacity: 0.75;
+  }
+}

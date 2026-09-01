@@ -5,13 +5,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--space-2) var(--space-4);
   border-top: 1px solid rgba(244, 246, 239, 0.1);
   flex-wrap: wrap;
   height: var(--footer-height);
-  font-size: var(--font-size-sm);
   opacity: 0.7;
 
   @include ds.md {
-    height: 50px;
+    height: auto;
+    padding: var(--space-4) 0;
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    & a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-size: var(--font-size-xs);
+    }
   }
 }

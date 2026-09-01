@@ -32,7 +32,7 @@ export function StepWelcome({ onStart }: StepWelcomeProps) {
             <i className="fa-solid fa-user-group"></i>
             Armar equipos ahora
           </button>
-          <button type="button" className={styles.welcome__secondaryButton} onClick={() => navigate("/como-funciona")}>
+          <button type="button" className={styles.welcome__secondaryButton} onClick={() => navigate("/tutorial")}>
             <i className="fa-solid fa-circle-info"></i>
             Cómo funciona
           </button>

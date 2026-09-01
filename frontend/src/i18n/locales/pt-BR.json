@@ -1,0 +1,20 @@
+{
+  "header.nav.home": "Início",
+  "header.nav.tutorial": "Como funciona",
+  "header.nav.faq": "Perguntas frequentes",
+  "header.nav.about": "Sobre o Kora",
+  "header.menu.open": "Abrir menu",
+  "header.menu.close": "Fechar menu",
+  "header.account.login": "Entrar",
+
+  "footer.copyright": "© 2026 Kora • Diego Daniel Caceres",
+  "footer.links.terms": "Termos e Condições",
+  "footer.links.privacy": "Política de Privacidade",
+
+  "languageSwitcher.label": "Idioma",
+
+  "serviceUnavailable.message": "O serviço de contas não está disponível no momento. Tente novamente mais tarde.",
+
+  "guards.checkingService": "Verificando a disponibilidade do serviço...",
+  "guards.checkingSession": "Verificando sessão..."
+}

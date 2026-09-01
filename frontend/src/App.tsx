@@ -5,10 +5,18 @@ import { StepWelcome } from "./features/draft/steps/welcome/welcome";
 import { StepSetup } from "./features/draft/steps/setup/setup";
 import { StepDraw } from "./features/draft/steps/draw/draw";
 import { StepExport } from "./features/draft/steps/export/export";
-import { HowItWorksPage } from "./pages/HowItWorksPage";
-import { FAQPage } from "./pages/FAQPage";
-import { AboutPage } from "./pages/AboutPage";
-import { RegisterPage } from "./pages/RegisterPage";
+import { TutorialPage } from "./pages/tutorial/TutorialPage";
+import { FAQPage } from "./pages/faq/FAQPage";
+import { AboutPage } from "./pages/about/AboutPage";
+import { TermsPage } from "./pages/terms/TermsPage";
+import { PrivacyPage } from "./pages/privacy/PrivacyPage";
+import { LoginPage } from "./pages/auth/login/LoginPage";
+import { ForgotPage } from "./pages/auth/forgot/ForgotPage";
+import { RegisterPage } from "./pages/auth/register/RegisterPage";
+import { SetPasswordPage } from "./pages/auth/set-password/SetPasswordPage";
+import { MePage } from "./pages/me/MePage";
+import { RequireAuth } from "./features/account/guards/RequireAuth";
+import { RequireGuest } from "./features/account/guards/RequireGuest";
 
 function DraftWizard() {
   const wizard = useDraftWizard();
@@ -26,6 +34,7 @@ function DraftWizard() {
           addPlayer={wizard.addPlayer}
           addPlayers={wizard.addPlayers}
           removePlayer={wizard.removePlayer}
+          removeAllPlayers={wizard.removeAllPlayers}
           toggleGoalkeeper={wizard.toggleGoalkeeper}
           onNext={wizard.goNext}
           onBack={wizard.goBack}
@@ -47,13 +56,7 @@ function DraftWizard() {
       );
 
     case "export":
-      return (
-        <StepExport
-          config={wizard.config}
-          onBack={wizard.goBack}
-          onReset={wizard.reset}
-        />
-      );
+      return <StepExport config={wizard.config} onBack={wizard.goBack} onReset={wizard.reset} />;
   }
 }
 
@@ -62,10 +65,51 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<DraftWizard />} />
-        <Route path="/como-funciona" element={<HowItWorksPage />} />
+        <Route path="/tutorial" element={<TutorialPage />} />
         <Route path="/faq" element={<FAQPage />} />
-        <Route path="/sobre-kora" element={<AboutPage />} />
-        <Route path="/crear-cuenta" element={<RegisterPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route
+          path="/login"
+          element={
+            <RequireGuest>
+              <LoginPage />
+            </RequireGuest>
+          }
+        />
+        <Route
+          path="/forgot"
+          element={
+            <RequireGuest>
+              <ForgotPage />
+            </RequireGuest>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <RequireGuest>
+              <RegisterPage />
+            </RequireGuest>
+          }
+        />
+        <Route
+          path="/set-password"
+          element={
+            <RequireGuest>
+              <SetPasswordPage />
+            </RequireGuest>
+          }
+        />
+        <Route
+          path="/me"
+          element={
+            <RequireAuth>
+              <MePage />
+            </RequireAuth>
+          }
+        />
       </Route>
     </Routes>
   );
