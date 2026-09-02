@@ -212,5 +212,9 @@
   "forgot.error.generic": "No se pudo procesar la solicitud",
   "forgot.error.invalidEmail": "Ingresá un email válido",
   "forgot.error.tryAgain": "No se pudo procesar la solicitud, intentá de nuevo",
-  "googleAuth.buttonLabel": "Iniciar con Google"
+  "googleAuth.buttonLabel": "Iniciar con Google",
+  "googleAuth.error.generic": "No se pudo iniciar sesión con Google",
+  "googleAuth.error.invalidToken": "No pudimos validar tu cuenta de Google, intentá de nuevo",
+  "googleAuth.error.accountNotActive": "Tu cuenta no está activa",
+  "googleAuth.error.tryAgain": "No se pudo iniciar sesión con Google, intentá de nuevo"
 }

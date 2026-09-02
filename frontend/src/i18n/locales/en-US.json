@@ -212,5 +212,9 @@
   "forgot.error.generic": "The request couldn't be processed",
   "forgot.error.invalidEmail": "Enter a valid email",
   "forgot.error.tryAgain": "The request couldn't be processed, try again",
-  "googleAuth.buttonLabel": "Sign in with Google"
+  "googleAuth.buttonLabel": "Sign in with Google",
+  "googleAuth.error.generic": "Couldn't sign in with Google",
+  "googleAuth.error.invalidToken": "We couldn't validate your Google account, try again",
+  "googleAuth.error.accountNotActive": "Your account isn't active",
+  "googleAuth.error.tryAgain": "Couldn't sign in with Google, try again"
 }

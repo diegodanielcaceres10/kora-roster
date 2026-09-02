@@ -212,5 +212,9 @@
   "forgot.error.generic": "Não foi possível processar a solicitação",
   "forgot.error.invalidEmail": "Digite um e-mail válido",
   "forgot.error.tryAgain": "Não foi possível processar a solicitação, tente novamente",
-  "googleAuth.buttonLabel": "Entrar com o Google"
+  "googleAuth.buttonLabel": "Entrar com o Google",
+  "googleAuth.error.generic": "Não foi possível entrar com o Google",
+  "googleAuth.error.invalidToken": "Não conseguimos validar sua conta do Google, tente novamente",
+  "googleAuth.error.accountNotActive": "Sua conta não está ativa",
+  "googleAuth.error.tryAgain": "Não foi possível entrar com o Google, tente novamente"
 }

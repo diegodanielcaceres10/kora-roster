@@ -10,7 +10,7 @@ interface GoogleAuthButtonProps {
 }
 
 export function GoogleAuthButton({ text = "continue_with", redirectTo = "/" }: GoogleAuthButtonProps) {
-  const { submit, status, error } = useGoogleAuth();
+  const { submit, status, errorId } = useGoogleAuth();
   const navigate = useNavigate();
 
   const isLoading = status === "loading";
@@ -32,9 +32,9 @@ export function GoogleAuthButton({ text = "continue_with", redirectTo = "/" }: G
           onError={() => console.error("Google login failed")}
           text={text}
         />
-        {status === "error" && (
+        {status === "error" && errorId && (
           <p className={styles.google__error} role="alert">
-            {error}
+            <FormattedMessage id={errorId} />
           </p>
         )}
       </div>

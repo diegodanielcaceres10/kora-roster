@@ -6,28 +6,28 @@ import { useAccount } from "../AccountContext";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-function toErrorMessage(err: unknown): string {
-  if (!(err instanceof ApiError)) return "No se pudo iniciar sesión con Google";
+function toErrorMessageId(err: unknown): string {
+  if (!(err instanceof ApiError)) return "googleAuth.error.generic";
 
   switch (err.code) {
     case "INVALID_GOOGLE_TOKEN":
-      return "No pudimos validar tu cuenta de Google, intentá de nuevo";
+      return "googleAuth.error.invalidToken";
     case "ACCOUNT_NOT_ACTIVE":
-      return "Tu cuenta no está activa";
+      return "googleAuth.error.accountNotActive";
     default:
-      return "No se pudo iniciar sesión con Google, intentá de nuevo";
+      return "googleAuth.error.tryAgain";
   }
 }
 
 export function useGoogleAuth() {
   const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
+  const [errorId, setErrorId] = useState<string | null>(null);
   const { setAccount } = useAccount();
 
   const submit = useCallback(
     async (idToken: string) => {
       setStatus("loading");
-      setError(null);
+      setErrorId(null);
 
       try {
         const result = await googleAuth({ idToken });
@@ -36,7 +36,7 @@ export function useGoogleAuth() {
         setStatus("success");
         return result;
       } catch (err) {
-        setError(toErrorMessage(err));
+        setErrorId(toErrorMessageId(err));
         setStatus("error");
         return null;
       }
@@ -44,5 +44,5 @@ export function useGoogleAuth() {
     [setAccount],
   );
 
-  return { submit, status, error };
+  return { submit, status, errorId };
 }
