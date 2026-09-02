@@ -208,5 +208,6 @@
   "forgot.description": "Enter your account email and we'll send you a link to create a new password.",
   "forgot.submitButton": "Send instructions",
   "forgot.submittingButton": "Sending...",
-  "forgot.backToLoginLink": "Back to sign in"
+  "forgot.backToLoginLink": "Back to sign in",
+  "googleAuth.buttonLabel": "Sign in with Google"
 }

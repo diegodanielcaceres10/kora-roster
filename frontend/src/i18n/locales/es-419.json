@@ -208,5 +208,6 @@
   "forgot.description": "Ingresá el email de tu cuenta y te enviamos un link para crear una nueva contraseña.",
   "forgot.submitButton": "Enviar instrucciones",
   "forgot.submittingButton": "Enviando...",
-  "forgot.backToLoginLink": "Volver a iniciar sesión"
+  "forgot.backToLoginLink": "Volver a iniciar sesión",
+  "googleAuth.buttonLabel": "Iniciar con Google"
 }

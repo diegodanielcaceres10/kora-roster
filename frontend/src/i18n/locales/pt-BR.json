@@ -208,5 +208,6 @@
   "forgot.description": "Digite o e-mail da sua conta e enviaremos um link para você criar uma nova senha.",
   "forgot.submitButton": "Enviar instruções",
   "forgot.submittingButton": "Enviando...",
-  "forgot.backToLoginLink": "Voltar para o login"
+  "forgot.backToLoginLink": "Voltar para o login",
+  "googleAuth.buttonLabel": "Entrar com o Google"
 }

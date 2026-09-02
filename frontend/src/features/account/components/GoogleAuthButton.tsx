@@ -1,5 +1,6 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
 import { useGoogleAuth } from "../hooks/useGoogleAuth";
 import styles from "./GoogleAuthButton.module.scss";
 
@@ -42,7 +43,9 @@ export function GoogleAuthButton({ text = "continue_with", redirectTo = "/" }: G
       ) : (
         <div className={styles.google__name}>
           <i className="fa-brands fa-google"></i>
-          <span>Iniciar con Google</span>
+          <span>
+            <FormattedMessage id="googleAuth.buttonLabel" />
+          </span>
         </div>
       )}
     </div>
