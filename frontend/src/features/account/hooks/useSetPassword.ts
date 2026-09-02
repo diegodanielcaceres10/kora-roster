@@ -4,41 +4,41 @@ import { ApiError } from "../../../lib/http/httpClient";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-function toErrorMessage(err: unknown): string {
-  if (!(err instanceof ApiError)) return "No se pudo actualizar la contraseña";
+function toErrorMessageId(err: unknown): string {
+  if (!(err instanceof ApiError)) return "setPassword.error.generic";
 
   switch (err.code) {
     case "TOKEN_EXPIRED":
-      return "El link venció. Pedí uno nuevo desde 'Olvidé mi contraseña'";
+      return "setPassword.error.tokenExpired";
     case "TOKEN_ALREADY_USED":
-      return "Este link ya fue usado. Pedí uno nuevo si lo necesitás";
+      return "setPassword.error.tokenAlreadyUsed";
     case "INVALID_TOKEN":
-      return "El link no es válido. Pedí uno nuevo desde 'Olvidé mi contraseña'";
+      return "setPassword.error.invalidToken";
     case "VALIDATION_ERROR":
-      return "Revisá la contraseña ingresada";
+      return "setPassword.error.validation";
     default:
-      return "No se pudo actualizar la contraseña, intentá de nuevo";
+      return "setPassword.error.tryAgain";
   }
 }
 
 export function useSetPassword() {
   const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
+  const [errorId, setErrorId] = useState<string | null>(null);
 
   const submit = useCallback(async (token: string, password: string) => {
     setStatus("loading");
-    setError(null);
+    setErrorId(null);
 
     try {
       await setPassword({ token, password });
       setStatus("success");
       return true;
     } catch (err) {
-      setError(toErrorMessage(err));
+      setErrorId(toErrorMessageId(err));
       setStatus("error");
       return false;
     }
   }, []);
 
-  return { submit, status, error };
+  return { submit, status, errorId };
 }

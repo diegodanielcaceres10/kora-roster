@@ -52,7 +52,7 @@ export function SetPasswordPage() {
   const [mismatchError, setMismatchError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { submit, status, error } = useSetPassword();
+  const { submit, status, errorId } = useSetPassword();
 
   const isLoading = status === "loading";
   const isSuccess = status === "success";
@@ -192,9 +192,9 @@ export function SetPasswordPage() {
               </span>
             </button>
 
-            {(mismatchError || (status === "error" && error)) && (
+            {(mismatchError || (status === "error" && errorId)) && (
               <p className={styles.setPassword__error} role="alert">
-                {mismatchError ?? error}
+                {mismatchError ?? (errorId && <FormattedMessage id={errorId} />)}
               </p>
             )}
           </form>
