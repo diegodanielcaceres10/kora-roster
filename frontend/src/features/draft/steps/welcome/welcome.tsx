@@ -1,15 +1,31 @@
+import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./welcome.module.scss";
 import koraRosterLogo from "../../../../assets/logo/kora-roster-logo.png";
 import koraBibs from "../../../../assets/illustrations/kora-bibs.png";
+import { parsePastedNames } from "../../utils/parsePastedNames";
 
 interface StepWelcomeProps {
   onStart: () => void;
+  onQuickFriendly: (names: string[]) => void;
 }
 
-export function StepWelcome({ onStart }: StepWelcomeProps) {
+export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {
   const navigate = useNavigate();
+  const intl = useIntl();
+  const [isQuickMode, setIsQuickMode] = useState(false);
+  const [pasteText, setPasteText] = useState("");
+
+  const parsedCount = parsePastedNames(pasteText).length;
+  const canSubmit = parsedCount >= 2;
+
+  const handleQuickSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    const names = parsePastedNames(pasteText);
+    if (names.length < 2) return;
+    onQuickFriendly(names);
+  };
 
   return (
     <section className={styles.welcome}>
@@ -31,16 +47,43 @@ export function StepWelcome({ onStart }: StepWelcomeProps) {
           <FormattedMessage id="welcome.description.line2" />
         </p>
 
-        <div className={styles.welcome__actions}>
-          <button type="button" className={styles.welcome__primaryButton} onClick={onStart}>
-            <i className="fa-solid fa-user-group"></i>
-            <FormattedMessage id="welcome.actions.primary" />
-          </button>
-          <button type="button" className={styles.welcome__secondaryButton} onClick={() => navigate("/tutorial")}>
-            <i className="fa-solid fa-circle-info"></i>
-            <FormattedMessage id="welcome.actions.secondary" />
-          </button>
-        </div>
+        {isQuickMode ? (
+          <form className={styles.welcome__quickPanel} onSubmit={handleQuickSubmit}>
+            <p className={styles.welcome__quickHint}>
+              <FormattedMessage id="welcome.quick.hint" />
+            </p>
+            <textarea className={[styles.welcome__quickTextarea, "custom_scroll"].join(" ")} value={pasteText} onChange={(e) => setPasteText(e.target.value)} placeholder={intl.formatMessage({ id: "welcome.quick.placeholder" })} rows={6} autoFocus />
+            <div className={styles.welcome__quickFooter}>
+              <span className={styles.welcome__quickCount}>
+                {parsedCount} <FormattedMessage id="welcome.quick.playersDetected" />
+              </span>
+              <div className={styles.welcome__quickActions}>
+                <button type="button" onClick={() => setIsQuickMode(false)}>
+                  <FormattedMessage id="welcome.quick.cancel" />
+                </button>
+                <button type="submit" disabled={!canSubmit}>
+                  <FormattedMessage id="welcome.quick.submit" />
+                </button>
+              </div>
+            </div>
+          </form>
+        ) : (
+          <div className={styles.welcome__actions}>
+            <button type="button" className={styles.welcome__primaryButton} onClick={() => setIsQuickMode((prev) => !prev)} aria-expanded={isQuickMode}>
+              <i className="fa-solid fa-bolt"></i>
+              <FormattedMessage id="welcome.actions.quickFriendly" />
+            </button>
+            <button type="button" className={styles.welcome__secondaryButton} onClick={onStart}>
+              <i className="fa-solid fa-user-group"></i>
+              <FormattedMessage id="welcome.actions.primary" />
+            </button>
+            <button type="button" className={styles.welcome__secondaryButton} onClick={() => navigate("/tutorial")}>
+              <i className="fa-solid fa-circle-info"></i>
+              <FormattedMessage id="welcome.actions.secondary" />
+            </button>
+          </div>
+        )}
+
         <ul className={styles.welcome__stats}>
           <li>
             <i className="fa-solid fa-gift"></i>

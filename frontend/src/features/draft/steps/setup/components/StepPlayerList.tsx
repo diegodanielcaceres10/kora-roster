@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import type { Player } from "../../../draft.types";
 import styles from "../setup.module.scss";
+import { parsePastedNames } from "../../../utils/parsePastedNames";
 
 interface StepPlayerListProps {
   players: Player[];
@@ -14,19 +15,6 @@ interface StepPlayerListProps {
   onToggleGoalkeeper: (id: string) => void;
   onNext: () => void;
   onBack: () => void;
-}
-
-function parsePastedNames(raw: string): string[] {
-  return raw
-    .split(/\r?\n/)
-    .flatMap((line) => line.split(/[,;]/))
-    .map((line) =>
-      line
-        .replace(/^[^\p{L}]+/u, "")
-        .replace(/\s+/g, " ")
-        .trim(),
-    )
-    .filter(Boolean);
 }
 
 export function StepPlayerList({ players, totalNeeded, teamCount, onAdd, onAddMany, onRemove, onRemoveAll, onToggleGoalkeeper, onNext, onBack }: StepPlayerListProps) {

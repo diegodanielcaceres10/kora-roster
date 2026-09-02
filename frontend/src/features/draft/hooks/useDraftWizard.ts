@@ -4,6 +4,8 @@ import type { WizardStep, DraftConfig, Player, Team, AssignmentMode } from "../d
 import { DEFAULT_TEAM_COUNT, DEFAULT_PLAYERS_PER_TEAM, TEAM_COLOR_PALETTE } from "../draft.constants";
 
 const STEP_ORDER: WizardStep[] = ["welcome", "setup", "draw", "export"];
+const QUICK_TEAM_COUNT = 2;
+const MAX_PLAYERS_PER_TEAM = 11;
 
 const buildTeams = (count: number): Team[] =>
   Array.from({ length: count }, (_, i) => ({
@@ -33,6 +35,41 @@ export function useDraftWizard() {
   }, []);
 
   const [config, setConfig] = useState<DraftConfig>(createEmptyConfig());
+
+  const quickFriendlyDraft = useCallback(
+    (rawNames: string[]) => {
+      const names = rawNames.map((n) => n.trim()).filter(Boolean);
+      if (names.length < 2) return;
+
+      const playersPerTeam = Math.max(1, Math.min(MAX_PLAYERS_PER_TEAM, Math.floor(names.length / QUICK_TEAM_COUNT)));
+      const teams = buildTeams(QUICK_TEAM_COUNT);
+      const capacity = playersPerTeam * QUICK_TEAM_COUNT;
+
+      const shuffled = [...names].sort(() => Math.random() - 0.5).slice(0, capacity);
+
+      const players: Player[] = shuffled.map((name, i) => {
+        const team = teams[i % QUICK_TEAM_COUNT];
+        return {
+          id: `player-${Date.now()}-${i}`,
+          name,
+          teamId: team.id,
+          spotIndex: Math.floor(i / QUICK_TEAM_COUNT),
+          isGoalkeeper: false,
+        };
+      });
+
+      setConfig({
+        teamCount: QUICK_TEAM_COUNT,
+        playersPerTeam,
+        teams,
+        players,
+        assignmentMode: "random",
+      });
+
+      navigate(".", { state: { step: "export" } });
+    },
+    [navigate],
+  );
 
   const goNext = useCallback(() => {
     const currentIndex = STEP_ORDER.indexOf(step);
@@ -217,6 +254,7 @@ export function useDraftWizard() {
   return {
     step,
     config,
+    quickFriendlyDraft,
     goNext,
     goBack,
     setTeamCount,

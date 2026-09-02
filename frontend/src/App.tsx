@@ -23,37 +23,13 @@ function DraftWizard() {
 
   switch (wizard.step) {
     case "welcome":
-      return <StepWelcome onStart={wizard.goNext} />;
+      return <StepWelcome onStart={wizard.goNext} onQuickFriendly={wizard.quickFriendlyDraft} />;
 
     case "setup":
-      return (
-        <StepSetup
-          config={wizard.config}
-          setTeamCount={wizard.setTeamCount}
-          setPlayersPerTeam={wizard.setPlayersPerTeam}
-          addPlayer={wizard.addPlayer}
-          addPlayers={wizard.addPlayers}
-          removePlayer={wizard.removePlayer}
-          removeAllPlayers={wizard.removeAllPlayers}
-          toggleGoalkeeper={wizard.toggleGoalkeeper}
-          onNext={wizard.goNext}
-          onBack={wizard.goBack}
-        />
-      );
+      return <StepSetup config={wizard.config} setTeamCount={wizard.setTeamCount} setPlayersPerTeam={wizard.setPlayersPerTeam} addPlayer={wizard.addPlayer} addPlayers={wizard.addPlayers} removePlayer={wizard.removePlayer} removeAllPlayers={wizard.removeAllPlayers} toggleGoalkeeper={wizard.toggleGoalkeeper} onNext={wizard.goNext} onBack={wizard.goBack} />;
 
     case "draw":
-      return (
-        <StepDraw
-          config={wizard.config}
-          setAssignmentMode={wizard.setAssignmentMode}
-          resetAssignments={wizard.resetAssignments}
-          assignPlayerToTeam={wizard.assignPlayerToTeam}
-          unassignPlayer={wizard.unassignPlayer}
-          drawTeams={wizard.drawTeams}
-          onNext={wizard.goNext}
-          onBack={wizard.goBack}
-        />
-      );
+      return <StepDraw config={wizard.config} setAssignmentMode={wizard.setAssignmentMode} resetAssignments={wizard.resetAssignments} assignPlayerToTeam={wizard.assignPlayerToTeam} unassignPlayer={wizard.unassignPlayer} drawTeams={wizard.drawTeams} onNext={wizard.goNext} onBack={wizard.goBack} />;
 
     case "export":
       return <StepExport config={wizard.config} onBack={wizard.goBack} onReset={wizard.reset} />;
