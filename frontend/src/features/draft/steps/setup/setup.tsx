@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useIntl } from "react-intl";
 import type { DraftConfig, SetupSubStep } from "../../draft.types";
 import { StepTeamCount } from "./components/StepTeamCount";
 import { StepPlayersPerTeam } from "./components/StepPlayersPerTeam";
@@ -30,6 +31,7 @@ const GLOBAL_STEP_BY_SUB_STEP: Record<SetupSubStep, GlobalStep> = {
 export function StepSetup({ config, setTeamCount, setPlayersPerTeam, addPlayer, addPlayers, removePlayer, removeAllPlayers, toggleGoalkeeper, onNext, onBack }: StepSetupProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const intl = useIntl();
 
   const subStep = (location.state as { subStep?: SetupSubStep } | null)?.subStep ?? "teams";
   const subStepIndex = SUB_STEP_ORDER.indexOf(subStep);
@@ -57,8 +59,8 @@ export function StepSetup({ config, setTeamCount, setPlayersPerTeam, addPlayer, 
         summaries={
           config.teamCount
             ? {
-                1: `${config.teamCount} equipos`,
-                2: config.playersPerTeam ? `${config.playersPerTeam} jugadores por equipo` : undefined,
+                1: intl.formatMessage({ id: "setup.summary.teams" }, { count: config.teamCount }),
+                2: config.playersPerTeam ? intl.formatMessage({ id: "setup.summary.playersPerTeam" }, { count: config.playersPerTeam }) : undefined,
               }
             : undefined
         }
@@ -67,24 +69,9 @@ export function StepSetup({ config, setTeamCount, setPlayersPerTeam, addPlayer, 
       <div className={styles.setup__content}>
         {subStep === "teams" && <StepTeamCount teamCount={config.teamCount} onChange={setTeamCount} onNext={goToNextSubStep} onBack={goToPrevSubStep} />}
 
-        {subStep === "playersPerTeam" && (
-          <StepPlayersPerTeam teamCount={config.teamCount} playersPerTeam={config.playersPerTeam} onChange={setPlayersPerTeam} onNext={goToNextSubStep} onBack={goToPrevSubStep} />
-        )}
+        {subStep === "playersPerTeam" && <StepPlayersPerTeam teamCount={config.teamCount} playersPerTeam={config.playersPerTeam} onChange={setPlayersPerTeam} onNext={goToNextSubStep} onBack={goToPrevSubStep} />}
 
-        {subStep === "list" && (
-          <StepPlayerList
-            players={config.players}
-            totalNeeded={config.teamCount * config.playersPerTeam}
-            teamCount={config.teamCount}
-            onAdd={addPlayer}
-            onAddMany={addPlayers}
-            onRemove={removePlayer}
-            onRemoveAll={removeAllPlayers}
-            onToggleGoalkeeper={toggleGoalkeeper}
-            onNext={goToNextSubStep}
-            onBack={goToPrevSubStep}
-          />
-        )}
+        {subStep === "list" && <StepPlayerList players={config.players} totalNeeded={config.teamCount * config.playersPerTeam} teamCount={config.teamCount} onAdd={addPlayer} onAddMany={addPlayers} onRemove={removePlayer} onRemoveAll={removeAllPlayers} onToggleGoalkeeper={toggleGoalkeeper} onNext={goToNextSubStep} onBack={goToPrevSubStep} />}
       </div>
     </section>
   );
