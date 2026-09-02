@@ -6,13 +6,14 @@ import { StepPlayersPerTeam } from "./components/StepPlayersPerTeam";
 import { StepPlayerList } from "./components/StepPlayerList";
 import { StepProgress, type GlobalStep } from "./components/step-progress/StepProgress";
 import styles from "./setup.module.scss";
+import type { ParsedPlayerName } from "../../utils/parsePastedNames";
 
 interface StepSetupProps {
   config: DraftConfig;
   setTeamCount: (count: number) => void;
   setPlayersPerTeam: (count: number) => void;
   addPlayer: (name: string) => void;
-  addPlayers: (names: string[]) => void;
+  addPlayers: (entries: ParsedPlayerName[]) => void;
   removePlayer: (id: string) => void;
   removeAllPlayers: () => void;
   toggleGoalkeeper: (id: string) => void;

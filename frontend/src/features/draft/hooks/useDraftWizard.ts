@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useIntl } from "react-intl";
 import type { WizardStep, DraftConfig, Player, Team, AssignmentMode } from "../draft.types";
 import { DEFAULT_TEAM_COUNT, DEFAULT_PLAYERS_PER_TEAM, TEAM_COLOR_PALETTE } from "../draft.constants";
+import type { ParsedPlayerName } from "../utils/parsePastedNames";
 
 const STEP_ORDER: WizardStep[] = ["welcome", "setup", "draw", "export"];
 const QUICK_TEAM_COUNT = 2;
@@ -126,7 +127,7 @@ export function useDraftWizard() {
     }));
   }, []);
 
-  const addPlayers = useCallback((entries: { name: string; isGoalkeeper?: boolean }[]) => {
+  const addPlayers = useCallback((entries: ParsedPlayerName[]) => {
     const trimmed = entries.map((e) => ({ name: e.name.trim(), isGoalkeeper: Boolean(e.isGoalkeeper) })).filter((e) => e.name.length > 0);
     if (trimmed.length === 0) return;
 

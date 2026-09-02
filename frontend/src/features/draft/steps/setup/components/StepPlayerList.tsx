@@ -9,7 +9,7 @@ interface StepPlayerListProps {
   totalNeeded: number;
   teamCount: number;
   onAdd: (name: string) => void;
-  onAddMany: (names: ParsedPlayerName[]) => void;
+  onAddMany: (entries: ParsedPlayerName[]) => void;
   onRemove: (id: string) => void;
   onRemoveAll: () => void;
   onToggleGoalkeeper: (id: string) => void;
