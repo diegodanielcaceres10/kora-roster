@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./welcome.module.scss";
 import koraRosterLogo from "../../../../assets/logo/kora-roster-logo.png";
-import koraBibs from "../../../../assets/illustrations/kora-bibs.png";
 import { parsePastedNames, type ParsedPlayerName } from "../../utils/parsePastedNames";
 
 const QUICK_TEAM_COUNT = 2;
@@ -124,11 +123,6 @@ export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {
             <FormattedMessage id="welcome.stats.shareable" />
           </li>
         </ul>
-      </div>
-      <div className={styles.welcome__content}>
-        <div className={styles.welcome__illustration} aria-hidden="true">
-          <img src={koraBibs} alt="" />
-        </div>
       </div>
     </section>
   );

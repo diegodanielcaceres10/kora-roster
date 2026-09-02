@@ -1,18 +1,10 @@
 .layout {
   width: 100%;
   min-height: 100vh;
-  background:
-    radial-gradient(
-      circle at 85% 25%,
-      color-mix(in srgb, var(--kora-bib-green) 30%, transparent),
-      transparent 75%
-    ),
-    radial-gradient(
-      circle at 15% 15%,
-      color-mix(in srgb, var(--kora-bib-gold) 5%, transparent),
-      transparent 80%
-    ),
-    var(--kora-ink);
+  background: url("../../assets/illustrations/kora-back.png");
+  background-size: cover;
+  background-position: right bottom;
+  background-repeat: no-repeat;
   color: var(--kora-chalk);
   display: flex;
   flex-direction: column;
