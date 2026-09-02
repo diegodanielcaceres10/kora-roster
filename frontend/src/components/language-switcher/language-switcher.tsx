@@ -78,9 +78,7 @@ export function LanguageSwitcher() {
 
         <span className={styles.languageSwitcher__label}>{currentLabel}</span>
 
-        <svg className={`${styles.languageSwitcher__chevron} ${open ? styles["languageSwitcher__chevron--open"] : ""}`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="m5 7.5 5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <i className="fa-solid fa-caret-down"></i>
       </button>
 
       {open && (
@@ -102,11 +100,7 @@ export function LanguageSwitcher() {
 
                 <span className={styles.languageSwitcher__optionLabel}>{LOCALE_LABELS[code]}</span>
 
-                {selected && (
-                  <svg className={styles.languageSwitcher__check} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                    <path d="m5 10 3 3 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
+                {selected && <i className="fa-solid fa-check"></i>}
               </button>
             );
           })}
