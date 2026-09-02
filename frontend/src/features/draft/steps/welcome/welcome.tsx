@@ -1,10 +1,31 @@
-import { useState, type FormEvent } from "react";
+import { useState, useMemo, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./welcome.module.scss";
 import koraRosterLogo from "../../../../assets/logo/kora-roster-logo.png";
 import koraBibs from "../../../../assets/illustrations/kora-bibs.png";
 import { parsePastedNames } from "../../utils/parsePastedNames";
+
+const QUICK_TEAM_COUNT = 2;
+const MIN_PLAYERS_QUICK = 6;
+const MAX_PLAYERS_PER_TEAM_QUICK = 11;
+const MAX_PLAYERS_QUICK = MAX_PLAYERS_PER_TEAM_QUICK * QUICK_TEAM_COUNT; // 22
+
+type QuickValidation = { status: "empty" } | { status: "valid" } | { status: "error"; messageId: string; values?: Record<string, number> };
+
+function getQuickValidation(count: number): QuickValidation {
+  if (count === 0) return { status: "empty" };
+  if (count < MIN_PLAYERS_QUICK) {
+    return { status: "error", messageId: "welcome.quick.error.min", values: { min: MIN_PLAYERS_QUICK } };
+  }
+  if (count > MAX_PLAYERS_QUICK) {
+    return { status: "error", messageId: "welcome.quick.error.max", values: { max: MAX_PLAYERS_QUICK } };
+  }
+  if (count % 2 !== 0) {
+    return { status: "error", messageId: "welcome.quick.error.odd" };
+  }
+  return { status: "valid" };
+}
 
 interface StepWelcomeProps {
   onStart: () => void;
@@ -17,13 +38,12 @@ export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {
   const [isQuickMode, setIsQuickMode] = useState(false);
   const [pasteText, setPasteText] = useState("");
 
-  const parsedCount = parsePastedNames(pasteText).length;
-  const canSubmit = parsedCount >= 2;
+  const names = useMemo(() => parsePastedNames(pasteText), [pasteText]);
+  const validation = useMemo(() => getQuickValidation(names.length), [names.length]);
 
   const handleQuickSubmit = (event: FormEvent) => {
     event.preventDefault();
-    const names = parsePastedNames(pasteText);
-    if (names.length < 2) return;
+    if (validation.status !== "valid") return;
     onQuickFriendly(names);
   };
 
@@ -47,41 +67,47 @@ export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {
           <FormattedMessage id="welcome.description.line2" />
         </p>
 
-        {isQuickMode ? (
+        <div className={styles.welcome__actions}>
+          <button type="button" className={styles.welcome__primaryButton} onClick={onStart}>
+            <i className="fa-solid fa-user-group"></i>
+            <FormattedMessage id="welcome.actions.primary" />
+          </button>
+          <button type="button" className={styles.welcome__secondaryButton} onClick={() => navigate("/tutorial")}>
+            <i className="fa-solid fa-circle-info"></i>
+            <FormattedMessage id="welcome.actions.secondary" />
+          </button>
+          <button type="button" className={styles.welcome__quickButton} onClick={() => setIsQuickMode((prev) => !prev)} aria-expanded={isQuickMode}>
+            <i className="fa-solid fa-bolt"></i>
+            <FormattedMessage id="welcome.actions.quickFriendly" />
+          </button>
+        </div>
+
+        {isQuickMode && (
           <form className={styles.welcome__quickPanel} onSubmit={handleQuickSubmit}>
             <p className={styles.welcome__quickHint}>
               <FormattedMessage id="welcome.quick.hint" />
             </p>
-            <textarea className={[styles.welcome__quickTextarea, "custom_scroll"].join(" ")} value={pasteText} onChange={(e) => setPasteText(e.target.value)} placeholder={intl.formatMessage({ id: "welcome.quick.placeholder" })} rows={6} autoFocus />
+            <textarea className={styles.welcome__quickTextarea} value={pasteText} onChange={(e) => setPasteText(e.target.value)} placeholder={intl.formatMessage({ id: "welcome.quick.placeholder" })} rows={6} autoFocus />
             <div className={styles.welcome__quickFooter}>
-              <span className={styles.welcome__quickCount}>
-                {parsedCount} <FormattedMessage id="welcome.quick.playersDetected" />
+              <span className={validation.status === "error" ? `${styles.welcome__quickCount} ${styles["welcome__quickCount--error"]}` : styles.welcome__quickCount}>
+                {validation.status === "error" ? (
+                  <FormattedMessage id={validation.messageId} values={validation.values} />
+                ) : (
+                  <>
+                    {names.length} <FormattedMessage id="welcome.quick.playersDetected" />
+                  </>
+                )}
               </span>
               <div className={styles.welcome__quickActions}>
                 <button type="button" onClick={() => setIsQuickMode(false)}>
-                  <FormattedMessage id="welcome.quick.cancel" />
+                  <FormattedMessage id="common.cancel" />
                 </button>
-                <button type="submit" disabled={!canSubmit}>
+                <button type="submit" disabled={validation.status !== "valid"}>
                   <FormattedMessage id="welcome.quick.submit" />
                 </button>
               </div>
             </div>
           </form>
-        ) : (
-          <div className={styles.welcome__actions}>
-            <button type="button" className={styles.welcome__primaryButton} onClick={() => setIsQuickMode((prev) => !prev)} aria-expanded={isQuickMode}>
-              <i className="fa-solid fa-bolt"></i>
-              <FormattedMessage id="welcome.actions.quickFriendly" />
-            </button>
-            <button type="button" className={styles.welcome__secondaryButton} onClick={onStart}>
-              <i className="fa-solid fa-user-group"></i>
-              <FormattedMessage id="welcome.actions.primary" />
-            </button>
-            <button type="button" className={styles.welcome__secondaryButton} onClick={() => navigate("/tutorial")}>
-              <i className="fa-solid fa-circle-info"></i>
-              <FormattedMessage id="welcome.actions.secondary" />
-            </button>
-          </div>
         )}
 
         <ul className={styles.welcome__stats}>

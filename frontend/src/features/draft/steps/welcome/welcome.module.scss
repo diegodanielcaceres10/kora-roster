@@ -165,6 +165,12 @@
     font-size: var(--font-size-sm);
     color: var(--kora-chalk);
     opacity: 0.8;
+
+    &--error {
+      color: var(--kora-error);
+      opacity: 1;
+      font-weight: 600;
+    }
   }
 
   &__quickActions {
