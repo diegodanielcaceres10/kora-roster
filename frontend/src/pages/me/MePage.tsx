@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./MePage.module.scss";
 import { useAccount } from "../../features/account/AccountContext";
 import { authStorage } from "../../lib/auth/authStorage";
 import { logoutAccount } from "../../features/account/account.api";
 
-const STATUS_LABEL: Record<string, string> = {
-  ACTIVE: "Activo",
-  INACTIVE: "Inactivo",
-  PENDING: "Pendiente",
+const STATUS_LABEL_ID: Record<string, string> = {
+  ACTIVE: "me.status.active",
+  INACTIVE: "me.status.inactive",
+  PENDING: "me.status.pending",
 };
 
 export function MePage() {
@@ -16,6 +17,7 @@ export function MePage() {
   // here or handle a loading/missing-account state.
   const { account, logout } = useAccount();
   const navigate = useNavigate();
+  const intl = useIntl();
 
   if (!account) {
     return null;
@@ -40,17 +42,21 @@ export function MePage() {
     }
   };
 
-  const createdAt = new Date(account.createdAt).toLocaleDateString("es-AR", {
+  const createdAt = intl.formatDate(new Date(account.createdAt), {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
 
+  const statusLabelId = STATUS_LABEL_ID[account.status];
+
   return (
     <section className={styles.me}>
       <div className={styles.me__container}>
         <header>
-          <p className={styles.me__eyebrow}>Mi cuenta</p>
+          <p className={styles.me__eyebrow}>
+            <FormattedMessage id="me.eyebrow" />
+          </p>
           <h1 className={styles.me__title}>
             {account.name} {account.lastname}
           </h1>
@@ -58,28 +64,36 @@ export function MePage() {
 
         <dl className={styles.me__details}>
           <div className={styles.me__row}>
-            <dt>Email</dt>
+            <dt>
+              <FormattedMessage id="me.labels.email" />
+            </dt>
             <dd>{account.email}</dd>
           </div>
 
           <div className={styles.me__row}>
-            <dt>Teléfono</dt>
+            <dt>
+              <FormattedMessage id="me.labels.phone" />
+            </dt>
             <dd>{account.phone || ""}</dd>
           </div>
 
           <div className={styles.me__row}>
-            <dt>Estado</dt>
-            <dd>{STATUS_LABEL[account.status] ?? account.status}</dd>
+            <dt>
+              <FormattedMessage id="me.labels.status" />
+            </dt>
+            <dd>{statusLabelId ? intl.formatMessage({ id: statusLabelId }) : account.status}</dd>
           </div>
 
           <div className={styles.me__row}>
-            <dt>Miembro desde</dt>
+            <dt>
+              <FormattedMessage id="me.labels.memberSince" />
+            </dt>
             <dd>{createdAt}</dd>
           </div>
         </dl>
 
         <button type="button" className={styles.me__logout} onClick={handleLogout}>
-          Cerrar sesión
+          <FormattedMessage id="me.logout" />
         </button>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./LoginPage.module.scss";
 import { useLogin } from "../../../features/account/hooks/useLogin";
 import { useGoogleAuth } from "../../../features/account/hooks/useGoogleAuth";
@@ -12,6 +13,7 @@ export function LoginPage() {
   const { submit, status, error } = useLogin();
   const { status: googleStatus } = useGoogleAuth();
   const navigate = useNavigate();
+  const intl = useIntl();
 
   const isLoading = status === "loading" || googleStatus === "loading";
 
@@ -28,31 +30,45 @@ export function LoginPage() {
     <section className={styles.login}>
       <div className={styles.login__content}>
         <header>
-          <p className={styles.login__eyebrow}>Iniciar sesión</p>
-          <h1 className={styles.login__title}>Entrá a tu cuenta</h1>
+          <p className={styles.login__eyebrow}>
+            <FormattedMessage id="login.eyebrow" />
+          </p>
+          <h1 className={styles.login__title}>
+            <FormattedMessage id="login.title" />
+          </h1>
         </header>
 
         <form className={styles.login__form} onSubmit={handleSubmit}>
           <div className={styles.login__field}>
             <label className={styles.login__label} htmlFor="email">
-              Email
+              <FormattedMessage id="login.emailLabel" />
             </label>
-            <input id="email" name="email" type="email" placeholder="vos@email.com" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isLoading} required />
+            <input id="email" name="email" type="email" placeholder={intl.formatMessage({ id: "login.emailPlaceholder" })} value={email} onChange={(event) => setEmail(event.target.value)} disabled={isLoading} required />
           </div>
 
           <div className={styles.login__field}>
             <label className={styles.login__label} htmlFor="password">
-              Contraseña
+              <FormattedMessage id="login.passwordLabel" />
             </label>
             <input id="password" name="password" type={showConfirmPassword ? "text" : "password"} placeholder="••••••" value={password} onChange={(event) => setPassword(event.target.value)} disabled={isLoading} required />
-            <button type="button" className={styles.login__toggleVisibility} onClick={() => setShowConfirmPassword((prev) => !prev)} aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"} tabIndex={-1}>
+            <button
+              type="button"
+              className={styles.login__toggleVisibility}
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              aria-label={intl.formatMessage({
+                id: showConfirmPassword ? "login.hidePasswordAriaLabel" : "login.showPasswordAriaLabel",
+              })}
+              tabIndex={-1}
+            >
               {showConfirmPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i>}
             </button>
           </div>
 
           <button type="submit" className={styles.login__submit} disabled={isLoading}>
             {isLoading && <span className={styles.login__spinner} aria-hidden="true" />}
-            <span>{isLoading ? "Ingresando..." : "Iniciar sesión"}</span>
+            <span>
+              <FormattedMessage id={isLoading ? "login.submittingButton" : "login.submitButton"} />
+            </span>
           </button>
 
           <GoogleAuthButton text="continue_with" redirectTo="/" />
@@ -65,10 +81,10 @@ export function LoginPage() {
 
           <div className={styles.login__links}>
             <Link to="/forgot" className={styles.login__link}>
-              Olvidé mi contraseña
+              <FormattedMessage id="login.forgotPasswordLink" />
             </Link>
             <Link to="/register" className={styles.login__link}>
-              Crear cuenta
+              <FormattedMessage id="login.createAccountLink" />
             </Link>
           </div>
         </form>
