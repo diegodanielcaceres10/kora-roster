@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./welcome.module.scss";
 import koraRosterLogo from "../../../../assets/logo/kora-roster-logo.png";
 import koraBibs from "../../../../assets/illustrations/kora-bibs.png";
-import { parsePastedNames } from "../../utils/parsePastedNames";
+import { parsePastedNames, type ParsedPlayerName } from "../../utils/parsePastedNames";
 
 const QUICK_TEAM_COUNT = 2;
 const MIN_PLAYERS_QUICK = 6;
@@ -29,7 +29,7 @@ function getQuickValidation(count: number): QuickValidation {
 
 interface StepWelcomeProps {
   onStart: () => void;
-  onQuickFriendly: (names: string[]) => void;
+  onQuickFriendly: (names: ParsedPlayerName[]) => void;
 }
 
 export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {

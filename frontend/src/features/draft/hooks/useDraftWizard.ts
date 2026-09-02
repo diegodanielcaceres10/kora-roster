@@ -5,6 +5,7 @@ import { DEFAULT_TEAM_COUNT, DEFAULT_PLAYERS_PER_TEAM, TEAM_COLOR_PALETTE } from
 
 const STEP_ORDER: WizardStep[] = ["welcome", "setup", "draw", "export"];
 const QUICK_TEAM_COUNT = 2;
+const MIN_PLAYERS_QUICK = 6;
 const MAX_PLAYERS_PER_TEAM = 11;
 
 const buildTeams = (count: number): Team[] =>
@@ -43,35 +44,31 @@ export function useDraftWizard() {
   const [config, setConfig] = useState<DraftConfig>(createEmptyConfig());
 
   const quickFriendlyDraft = useCallback(
-    (rawNames: string[]) => {
-      const names = rawNames.map((n) => n.trim()).filter(Boolean);
-      if (names.length < 2) return;
+    (entries: { name: string; isGoalkeeper?: boolean }[]) => {
+      const parsed = entries.map((e) => ({ name: e.name.trim(), isGoalkeeper: Boolean(e.isGoalkeeper) })).filter((e) => e.name);
+      if (parsed.length < MIN_PLAYERS_QUICK) return;
 
-      const playersPerTeam = Math.max(1, Math.min(MAX_PLAYERS_PER_TEAM, Math.floor(names.length / QUICK_TEAM_COUNT)));
+      const playersPerTeam = Math.max(1, Math.min(MAX_PLAYERS_PER_TEAM, Math.floor(parsed.length / QUICK_TEAM_COUNT)));
       const teams = buildTeams(QUICK_TEAM_COUNT);
       const capacity = playersPerTeam * QUICK_TEAM_COUNT;
 
-      const shuffled = [...names].sort(() => Math.random() - 0.5).slice(0, capacity);
+      const shuffled = [...parsed].sort(() => Math.random() - 0.5).slice(0, capacity);
 
-      const players: Player[] = shuffled.map((name, i) => {
+      let goalkeeperSlotsLeft = QUICK_TEAM_COUNT;
+      const players: Player[] = shuffled.map((entry, i) => {
         const team = teams[i % QUICK_TEAM_COUNT];
+        const isGoalkeeper = entry.isGoalkeeper && goalkeeperSlotsLeft > 0;
+        if (isGoalkeeper) goalkeeperSlotsLeft -= 1;
         return {
           id: `player-${Date.now()}-${i}`,
-          name,
+          name: entry.name,
           teamId: team.id,
           spotIndex: Math.floor(i / QUICK_TEAM_COUNT),
-          isGoalkeeper: false,
+          isGoalkeeper,
         };
       });
 
-      setConfig({
-        teamCount: QUICK_TEAM_COUNT,
-        playersPerTeam,
-        teams,
-        players,
-        assignmentMode: "random",
-      });
-
+      setConfig({ teamCount: QUICK_TEAM_COUNT, playersPerTeam, teams, players, assignmentMode: "random" });
       navigate(".", { state: { step: "export" } });
     },
     [navigate],
@@ -118,18 +115,26 @@ export function useDraftWizard() {
     }));
   }, []);
 
-  const addPlayers = useCallback((names: string[]) => {
-    const trimmed = names.map((n) => n.trim()).filter(Boolean);
+  const addPlayers = useCallback((entries: { name: string; isGoalkeeper?: boolean }[]) => {
+    const trimmed = entries.map((e) => ({ name: e.name.trim(), isGoalkeeper: Boolean(e.isGoalkeeper) })).filter((e) => e.name.length > 0);
     if (trimmed.length === 0) return;
 
     setConfig((prev) => {
-      const newPlayers: Player[] = trimmed.map((name, i) => ({
-        id: `player-${Date.now()}-${prev.players.length + i}`,
-        name,
-        teamId: null,
-        spotIndex: null,
-        isGoalkeeper: false,
-      }));
+      const existingGoalkeepers = prev.players.filter((p) => p.isGoalkeeper).length;
+      let slotsLeft = Math.max(0, prev.teamCount - existingGoalkeepers);
+
+      const newPlayers: Player[] = trimmed.map((entry, i) => {
+        const isGoalkeeper = entry.isGoalkeeper && slotsLeft > 0;
+        if (isGoalkeeper) slotsLeft -= 1;
+        return {
+          id: `player-${Date.now()}-${prev.players.length + i}`,
+          name: entry.name,
+          teamId: null,
+          spotIndex: null,
+          isGoalkeeper,
+        };
+      });
+
       return { ...prev, players: [...prev.players, ...newPlayers] };
     });
   }, []);

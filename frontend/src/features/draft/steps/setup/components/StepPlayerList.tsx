@@ -2,14 +2,14 @@ import { useState, type FormEvent } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import type { Player } from "../../../draft.types";
 import styles from "../setup.module.scss";
-import { parsePastedNames } from "../../../utils/parsePastedNames";
+import { parsePastedNames, type ParsedPlayerName } from "../../../utils/parsePastedNames";
 
 interface StepPlayerListProps {
   players: Player[];
   totalNeeded: number;
   teamCount: number;
   onAdd: (name: string) => void;
-  onAddMany: (names: string[]) => void;
+  onAddMany: (names: ParsedPlayerName[]) => void;
   onRemove: (id: string) => void;
   onRemoveAll: () => void;
   onToggleGoalkeeper: (id: string) => void;
@@ -38,9 +38,9 @@ export function StepPlayerList({ players, totalNeeded, teamCount, onAdd, onAddMa
 
   const handlePasteSubmit = (event: FormEvent) => {
     event.preventDefault();
-    const names = parsePastedNames(pasteText);
-    if (names.length === 0) return;
-    onAddMany(names);
+    const entries = parsePastedNames(pasteText);
+    if (entries.length === 0) return;
+    onAddMany(entries);
     setPasteText("");
     setIsPasteMode(false);
   };
