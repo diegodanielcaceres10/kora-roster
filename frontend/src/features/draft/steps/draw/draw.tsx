@@ -1,21 +1,13 @@
 import { useMemo, useState, type DragEvent } from "react";
-import type {
-  AssignmentMode,
-  DraftConfig,
-  Player,
-  Team,
-} from "../../draft.types";
+import { FormattedMessage, useIntl } from "react-intl";
+import type { AssignmentMode, DraftConfig, Player, Team } from "../../draft.types";
 import styles from "./draw.module.scss";
 
 interface StepDrawProps {
   config: DraftConfig;
   setAssignmentMode: (mode: AssignmentMode) => void;
   resetAssignments: () => void;
-  assignPlayerToTeam: (
-    playerId: string,
-    teamId: string,
-    spotIndex?: number,
-  ) => void;
+  assignPlayerToTeam: (playerId: string, teamId: string, spotIndex?: number) => void;
   unassignPlayer: (playerId: string) => void;
   drawTeams: () => void;
   onNext: () => void;
@@ -111,19 +103,9 @@ const FORMATION_SPOTS_BY_SIZE: Record<number, { x: number; y: number }[]> = {
   ],
 };
 
-export function StepDraw({
-  config,
-  setAssignmentMode,
-  resetAssignments,
-  assignPlayerToTeam,
-  unassignPlayer,
-  drawTeams,
-  onNext,
-  onBack,
-}: StepDrawProps) {
-  const [selectedTeamId, setSelectedTeamId] = useState(
-    config.teams[0]?.id ?? "",
-  );
+export function StepDraw({ config, setAssignmentMode, resetAssignments, assignPlayerToTeam, unassignPlayer, drawTeams, onNext, onBack }: StepDrawProps) {
+  const intl = useIntl();
+  const [selectedTeamId, setSelectedTeamId] = useState(config.teams[0]?.id ?? "");
   const [dragOverZone, setDragOverZone] = useState<string | null>(null);
   const [draggedPlayerId, setDraggedPlayerId] = useState<string | null>(null);
   const [spotModal, setSpotModal] = useState<{
@@ -131,31 +113,20 @@ export function StepDraw({
     spotIndex: number;
   } | null>(null);
 
-  const selectedTeam =
-    config.teams.find((team) => team.id === selectedTeamId) ?? config.teams[0];
+  const selectedTeam = config.teams.find((team) => team.id === selectedTeamId) ?? config.teams[0];
 
-  const assignedCount = config.players.filter(
-    (player) => player.teamId !== null,
-  ).length;
-  const availablePlayers = config.players.filter(
-    (player) => player.teamId === null,
-  );
-  const draggedPlayer = config.players.find(
-    (player) => player.id === draggedPlayerId,
-  );
+  const assignedCount = config.players.filter((player) => player.teamId !== null).length;
+  const availablePlayers = config.players.filter((player) => player.teamId === null);
+  const draggedPlayer = config.players.find((player) => player.id === draggedPlayerId);
   const availableCount = config.players.length - assignedCount;
-  const allAssigned =
-    config.players.length > 0 &&
-    config.players.every((player) => player.teamId !== null);
+  const allAssigned = config.players.length > 0 && config.players.every((player) => player.teamId !== null);
 
   const playersByTeam = useMemo(
     () =>
       config.teams.reduce<Record<string, typeof config.players>>(
         (acc, team) => ({
           ...acc,
-          [team.id]: config.players.filter(
-            (player) => player.teamId === team.id,
-          ),
+          [team.id]: config.players.filter((player) => player.teamId === team.id),
         }),
         {},
       ),
@@ -163,51 +134,34 @@ export function StepDraw({
   );
   const lineupsByTeam = useMemo(
     () =>
-      config.teams.reduce<Record<string, Array<Player | undefined>>>(
-        (acc, team) => {
-          const lineup: Array<Player | undefined> = Array.from({
-            length: config.playersPerTeam,
-          });
-          const unplacedPlayers: Player[] = [];
+      config.teams.reduce<Record<string, Array<Player | undefined>>>((acc, team) => {
+        const lineup: Array<Player | undefined> = Array.from({
+          length: config.playersPerTeam,
+        });
+        const unplacedPlayers: Player[] = [];
 
-          (playersByTeam[team.id] ?? []).forEach((player) => {
-            if (
-              player.spotIndex !== null &&
-              player.spotIndex >= 0 &&
-              player.spotIndex < config.playersPerTeam &&
-              !lineup[player.spotIndex]
-            ) {
-              lineup[player.spotIndex] = player;
-              return;
-            }
+        (playersByTeam[team.id] ?? []).forEach((player) => {
+          if (player.spotIndex !== null && player.spotIndex >= 0 && player.spotIndex < config.playersPerTeam && !lineup[player.spotIndex]) {
+            lineup[player.spotIndex] = player;
+            return;
+          }
 
-            unplacedPlayers.push(player);
-          });
+          unplacedPlayers.push(player);
+        });
 
-          unplacedPlayers.forEach((player) => {
-            const nextIndex = lineup.findIndex((spotPlayer) => !spotPlayer);
-            if (nextIndex !== -1) lineup[nextIndex] = player;
-          });
+        unplacedPlayers.forEach((player) => {
+          const nextIndex = lineup.findIndex((spotPlayer) => !spotPlayer);
+          if (nextIndex !== -1) lineup[nextIndex] = player;
+        });
 
-          return { ...acc, [team.id]: lineup };
-        },
-        {},
-      ),
+        return { ...acc, [team.id]: lineup };
+      }, {}),
     [config.playersPerTeam, config.teams, playersByTeam],
   );
-  const formationSpots =
-    FORMATION_SPOTS_BY_SIZE[config.playersPerTeam] ??
-    FORMATION_SPOTS_BY_SIZE[11];
-  const spotModalTeam = spotModal
-    ? config.teams.find((team) => team.id === spotModal.teamId)
-    : undefined;
-  const spotModalPlayer =
-    spotModal && spotModalTeam
-      ? lineupsByTeam[spotModalTeam.id]?.[spotModal.spotIndex]
-      : undefined;
-  const spotModalTeamHasGoalkeeper = spotModalTeam
-    ? playersByTeam[spotModalTeam.id]?.some((player) => player.isGoalkeeper)
-    : false;
+  const formationSpots = FORMATION_SPOTS_BY_SIZE[config.playersPerTeam] ?? FORMATION_SPOTS_BY_SIZE[11];
+  const spotModalTeam = spotModal ? config.teams.find((team) => team.id === spotModal.teamId) : undefined;
+  const spotModalPlayer = spotModal && spotModalTeam ? lineupsByTeam[spotModalTeam.id]?.[spotModal.spotIndex] : undefined;
+  const spotModalTeamHasGoalkeeper = spotModalTeam ? playersByTeam[spotModalTeam.id]?.some((player) => player.isGoalkeeper) : false;
   const assignableModalPlayers = spotModal
     ? availablePlayers.filter((player) => {
         if (!player.isGoalkeeper) return true;
@@ -232,11 +186,7 @@ export function StepDraw({
     if (dragOverZone !== zone) setDragOverZone(zone);
   };
 
-  const handleDropOnTeam = (
-    event: DragEvent<HTMLElement>,
-    team: Team,
-    spotIndex?: number,
-  ) => {
+  const handleDropOnTeam = (event: DragEvent<HTMLElement>, team: Team, spotIndex?: number) => {
     event.preventDefault();
     event.stopPropagation();
     const playerId = event.dataTransfer.getData("text/plain");
@@ -296,71 +246,45 @@ export function StepDraw({
         <div className={styles.draw__board}>
           <div className={styles.draw__container}>
             <div className={styles.draw__header}>
-              <p className={styles.draw__eyebrow}>Alineacion de equipos</p>
-              <h1 className={styles.draw__title}>Asigná los jugadores</h1>
+              <p className={styles.draw__eyebrow}>
+                <FormattedMessage id="draw.header.eyebrow" />
+              </p>
+              <h1 className={styles.draw__title}>
+                <FormattedMessage id="draw.header.title" />
+              </h1>
               <p className={styles.draw__description}>
-                Arrastrá cada jugador al equipo que quieras. También podés
-                sortearlos automáticamente.
+                <FormattedMessage id="draw.header.description" />
               </p>
             </div>
-            <button
-              type="button"
-              className={styles.draw__automatic}
-              onClick={handleDrawTeams}
-            >
+            <button type="button" className={styles.draw__automatic} onClick={handleDrawTeams}>
               <i className="fa-solid fa-shuffle"></i>
-              Sortear equipos
+              <FormattedMessage id="draw.automaticButton" />
             </button>
             <div className={styles.draw__summary}>
               <span>
                 <i className="fa-solid fa-shirt"></i>
-                {config.teamCount} Equipos
+                <FormattedMessage id="draw.summary.teams" values={{ count: config.teamCount }} />
               </span>
               <span>
                 <i className="fa-solid fa-user-group"></i>
-                {assignedCount}/{config.players.length} Jugadores
+                <FormattedMessage id="draw.summary.players" values={{ assigned: assignedCount, total: config.players.length }} />
               </span>
             </div>
-            <div
-              className={[
-                styles.draw__panel,
-                dragOverZone === "available" ? styles["draw__panel--over"] : "",
-              ].join(" ")}
-              onDragOver={(event) => handleDragOver(event, "available")}
-              onDragLeave={() => setDragOverZone(null)}
-              onDrop={handleDropOnAvailable}
-            >
+            <div className={[styles.draw__panel, dragOverZone === "available" ? styles["draw__panel--over"] : ""].join(" ")} onDragOver={(event) => handleDragOver(event, "available")} onDragLeave={() => setDragOverZone(null)} onDrop={handleDropOnAvailable}>
               <div className={styles.draw__available}>
-                <h2>Jugadores disponibles</h2>
+                <h2>
+                  <FormattedMessage id="draw.available.title" />
+                </h2>
                 <span>{availableCount}</span>
               </div>
               <ul className={[styles.draw__list, "custom_scroll"].join(" ")}>
                 {availablePlayers.map((player) => {
                   return (
-                    <li
-                      key={player.id}
-                      className={styles.draw__player}
-                      draggable
-                      onDragStart={(event) => handleDragStart(event, player.id)}
-                      onDragEnd={handleDragEnd}
-                    >
+                    <li key={player.id} className={styles.draw__player} draggable onDragStart={(event) => handleDragStart(event, player.id)} onDragEnd={handleDragEnd}>
                       <i className="fa-solid fa-grip-vertical"></i>
                       <strong>{player.name}</strong>
-                      <span
-                        className={[
-                          styles.draw__badge,
-                          player.isGoalkeeper
-                            ? styles["draw__badge--keeper"]
-                            : "",
-                        ].join(" ")}
-                      >
-                        <i
-                          className={
-                            player.isGoalkeeper
-                              ? "fa-solid fa-mitten"
-                              : "fa-solid fa-shirt"
-                          }
-                        ></i>
+                      <span className={[styles.draw__badge, player.isGoalkeeper ? styles["draw__badge--keeper"] : ""].join(" ")}>
+                        <i className={player.isGoalkeeper ? "fa-solid fa-mitten" : "fa-solid fa-shirt"}></i>
                       </span>
                     </li>
                   );
@@ -368,7 +292,7 @@ export function StepDraw({
               </ul>
               <div className={styles.draw__hint}>
                 <i className="fa-regular fa-hand-pointer"></i>
-                Arrastrá acá para dejar sin asignar
+                <FormattedMessage id="draw.available.hint" />
               </div>
             </div>
           </div>
@@ -378,26 +302,8 @@ export function StepDraw({
                 const roster = playersByTeam[team.id] ?? [];
                 const filled = roster.length === config.playersPerTeam;
                 return (
-                  <button
-                    key={team.id}
-                    type="button"
-                    className={[
-                      styles.draw__team,
-                      filled ? `custom-bib-${team.color}` : undefined,
-                      selectedTeam?.id === team.id
-                        ? styles["draw__team--active"]
-                        : "",
-                    ].join(" ")}
-                    onClick={() => setSelectedTeamId(team.id)}
-                    onDragOver={(event) => handleDragOver(event, team.id)}
-                    onDragLeave={() => setDragOverZone(null)}
-                    onDrop={(event) => handleDropOnTeam(event, team)}
-                  >
-                    {filled ? (
-                      <i className="fa-solid fa-shirt"></i>
-                    ) : (
-                      <i className="fa-solid fa-triangle-exclamation"></i>
-                    )}
+                  <button key={team.id} type="button" className={[styles.draw__team, filled ? `custom-bib-${team.color}` : undefined, selectedTeam?.id === team.id ? styles["draw__team--active"] : ""].join(" ")} onClick={() => setSelectedTeamId(team.id)} onDragOver={(event) => handleDragOver(event, team.id)} onDragLeave={() => setDragOverZone(null)} onDrop={(event) => handleDropOnTeam(event, team)}>
+                    {filled ? <i className="fa-solid fa-shirt"></i> : <i className="fa-solid fa-triangle-exclamation"></i>}
                     <span>{team.name}</span>
                     <strong>
                       {roster.length}/{config.playersPerTeam}
@@ -406,45 +312,22 @@ export function StepDraw({
                 );
               })}
             </div>
-            <div
-              className={styles.draw__field}
-              onDragOver={(event) =>
-                selectedTeam && handleDragOver(event, selectedTeam.id)
-              }
-              onDragLeave={() => setDragOverZone(null)}
-              onDrop={(event) =>
-                selectedTeam && handleDropOnTeam(event, selectedTeam)
-              }
-            >
+            <div className={styles.draw__field} onDragOver={(event) => selectedTeam && handleDragOver(event, selectedTeam.id)} onDragLeave={() => setDragOverZone(null)} onDrop={(event) => selectedTeam && handleDropOnTeam(event, selectedTeam)}>
               <div className={styles.draw__pitchLines} aria-hidden="true">
                 <span className={styles.draw__boxTop}></span>
                 <span className={styles.draw__centerLine}></span>
                 <span className={styles.draw__centerCircle}></span>
               </div>
               {formationSpots.map((spot, index) => {
-                const player = selectedTeam
-                  ? lineupsByTeam[selectedTeam.id]?.[index]
-                  : undefined;
-                const spotZone =
-                  selectedTeam && `${selectedTeam.id}-spot-${index}`;
+                const player = selectedTeam ? lineupsByTeam[selectedTeam.id]?.[index] : undefined;
+                const spotZone = selectedTeam && `${selectedTeam.id}-spot-${index}`;
                 const isDraggedPlayerOnSpot = player?.id === draggedPlayerId;
-                const canDropOnSpot =
-                  !draggedPlayer ||
-                  ((!draggedPlayer.isGoalkeeper || index === 0) &&
-                    (!player || isDraggedPlayerOnSpot));
+                const canDropOnSpot = !draggedPlayer || ((!draggedPlayer.isGoalkeeper || index === 0) && (!player || isDraggedPlayerOnSpot));
 
                 return (
                   <div
                     key={index}
-                    className={[
-                      styles.draw__spot,
-                      dragOverZone === spotZone
-                        ? styles["draw__spot--over"]
-                        : "",
-                      dragOverZone === spotZone && !canDropOnSpot
-                        ? styles["draw__spot--blocked"]
-                        : "",
-                    ].join(" ")}
+                    className={[styles.draw__spot, dragOverZone === spotZone ? styles["draw__spot--over"] : "", dragOverZone === spotZone && !canDropOnSpot ? styles["draw__spot--blocked"] : ""].join(" ")}
                     style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
                     draggable={Boolean(player)}
                     onDragStart={(event) => {
@@ -477,54 +360,27 @@ export function StepDraw({
                       handleDropOnTeam(event, selectedTeam, index);
                     }}
                     onClick={() => {
-                      if (selectedTeam)
-                        handleOpenSpotModal(selectedTeam, index);
+                      if (selectedTeam) handleOpenSpotModal(selectedTeam, index);
                     }}
                   >
-                    <span
-                      className={[
-                        styles.draw__spotIcon,
-                        player ? styles["draw__spotIcon--filled"] : "",
-                        player ? `custom-bib-${selectedTeam.color}` : "",
-                      ].join(" ")}
-                    >
-                      <i
-                        className={
-                          player?.isGoalkeeper
-                            ? "fa-solid fa-mitten"
-                            : "fa-solid fa-shirt"
-                        }
-                      ></i>
+                    <span className={[styles.draw__spotIcon, player ? styles["draw__spotIcon--filled"] : "", player ? `custom-bib-${selectedTeam.color}` : ""].join(" ")}>
+                      <i className={player?.isGoalkeeper ? "fa-solid fa-mitten" : "fa-solid fa-shirt"}></i>
                     </span>
-                    <small>{player?.name ?? "Arrastrá un jugador"}</small>
+                    <small>{player?.name ?? intl.formatMessage({ id: "draw.field.emptySpot" })}</small>
                   </div>
                 );
               })}
             </div>
             <div className={styles.draw__actions}>
-              <button
-                type="button"
-                className={styles.draw__secondaryButton}
-                onClick={onBack}
-              >
+              <button type="button" className={styles.draw__secondaryButton} onClick={onBack}>
                 <i className="fa-solid fa-arrow-left"></i>
-                Volver
+                <FormattedMessage id="draw.actions.back" />
               </button>
-              <button
-                type="button"
-                className={styles.draw__ghostButton}
-                onClick={handleResetAssignments}
-                disabled={assignedCount === 0}
-              >
-                Limpiar asignaciones
+              <button type="button" className={styles.draw__ghostButton} onClick={handleResetAssignments} disabled={assignedCount === 0}>
+                <FormattedMessage id="draw.actions.reset" />
               </button>
-              <button
-                type="button"
-                className={styles.draw__primaryButton}
-                onClick={onNext}
-                disabled={!allAssigned}
-              >
-                Continuar
+              <button type="button" className={styles.draw__primaryButton} onClick={onNext} disabled={!allAssigned}>
+                <FormattedMessage id="draw.actions.next" />
                 <i className="fa-solid fa-arrow-right"></i>
               </button>
             </div>
@@ -533,29 +389,16 @@ export function StepDraw({
       </div>
 
       {spotModal && spotModalTeam && (
-        <div
-          className={styles.draw__modalBackdrop}
-          role="presentation"
-          onClick={() => setSpotModal(null)}
-        >
-          <section
-            className={styles.draw__modal}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="spot-modal-title"
-            onClick={(event) => event.stopPropagation()}
-          >
+        <div className={styles.draw__modalBackdrop} role="presentation" onClick={() => setSpotModal(null)}>
+          <section className={styles.draw__modal} role="dialog" aria-modal="true" aria-labelledby="spot-modal-title" onClick={(event) => event.stopPropagation()}>
             <div className={styles.draw__modalHeader}>
               <div>
                 <p>{spotModalTeam.name}</p>
-                <h2 id="spot-modal-title">Puesto {spotModal.spotIndex + 1}</h2>
+                <h2 id="spot-modal-title">
+                  <FormattedMessage id="draw.modal.spotTitle" values={{ number: spotModal.spotIndex + 1 }} />
+                </h2>
               </div>
-              <button
-                type="button"
-                className={styles.draw__modalClose}
-                aria-label="Cerrar"
-                onClick={() => setSpotModal(null)}
-              >
+              <button type="button" className={styles.draw__modalClose} aria-label={intl.formatMessage({ id: "draw.modal.closeAriaLabel" })} onClick={() => setSpotModal(null)}>
                 <i className="fa-solid fa-xmark"></i>
               </button>
             </div>
@@ -563,56 +406,25 @@ export function StepDraw({
             {spotModalPlayer ? (
               <div className={styles.draw__assignedPlayer}>
                 <span className={styles.draw__assignedIcon}>
-                  <i
-                    className={
-                      spotModalPlayer.isGoalkeeper
-                        ? "fa-solid fa-mitten"
-                        : "fa-solid fa-shirt"
-                    }
-                  ></i>
+                  <i className={spotModalPlayer.isGoalkeeper ? "fa-solid fa-mitten" : "fa-solid fa-shirt"}></i>
                 </span>
                 <strong>{spotModalPlayer.name}</strong>
-                <button
-                  type="button"
-                  className={styles.draw__unassignButton}
-                  aria-label={`Desasignar a ${spotModalPlayer.name}`}
-                  onClick={handleUnassignFromModal}
-                >
+                <button type="button" className={styles.draw__unassignButton} aria-label={intl.formatMessage({ id: "draw.modal.unassignAriaLabel" }, { name: spotModalPlayer.name })} onClick={handleUnassignFromModal}>
                   <i className="fa-solid fa-xmark"></i>
                 </button>
               </div>
             ) : (
               <div className={styles.draw__modalListWrapper}>
                 <p className={styles.draw__modalHint}>
-                  Elegí un jugador disponible para asignarlo a este puesto.
+                  <FormattedMessage id="draw.modal.hint" />
                 </p>
                 {assignableModalPlayers.length > 0 ? (
-                  <ul
-                    className={[
-                      styles.draw__modalPlayerList,
-                      "custom_scroll",
-                    ].join(" ")}
-                  >
+                  <ul className={[styles.draw__modalPlayerList, "custom_scroll"].join(" ")}>
                     {assignableModalPlayers.map((player) => (
                       <li key={player.id}>
-                        <button
-                          type="button"
-                          className={[
-                            styles.draw__modalPlayerButton,
-                            player.isGoalkeeper
-                              ? styles["draw__modalPlayerButton--keeper"]
-                              : "",
-                          ].join(" ")}
-                          onClick={() => handleAssignFromModal(player.id)}
-                        >
+                        <button type="button" className={[styles.draw__modalPlayerButton, player.isGoalkeeper ? styles["draw__modalPlayerButton--keeper"] : ""].join(" ")} onClick={() => handleAssignFromModal(player.id)}>
                           <span>
-                            <i
-                              className={
-                                player.isGoalkeeper
-                                  ? "fa-solid fa-mitten"
-                                  : "fa-solid fa-shirt"
-                              }
-                            ></i>
+                            <i className={player.isGoalkeeper ? "fa-solid fa-mitten" : "fa-solid fa-shirt"}></i>
                           </span>
                           <strong>{player.name}</strong>
                         </button>
@@ -621,7 +433,7 @@ export function StepDraw({
                   </ul>
                 ) : (
                   <p className={styles.draw__emptyModal}>
-                    No hay jugadores disponibles para este puesto.
+                    <FormattedMessage id="draw.modal.empty" />
                   </p>
                 )}
               </div>

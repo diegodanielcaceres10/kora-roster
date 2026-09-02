@@ -55,5 +55,22 @@
   "setup.playerList.clearList": "Clear list",
   "setup.progress.teams": "Teams",
   "setup.progress.players": "Players",
-  "setup.progress.list": "List"
+  "setup.progress.list": "List",
+  "draw.header.eyebrow": "Team lineup",
+  "draw.header.title": "Assign the players",
+  "draw.header.description": "Drag each player to the team you want. You can also draw them automatically.",
+  "draw.automaticButton": "Draw teams",
+  "draw.summary.teams": "{count, plural, one {# Team} other {# Teams}}",
+  "draw.summary.players": "{assigned}/{total} Players",
+  "draw.available.title": "Available players",
+  "draw.available.hint": "Drag here to unassign",
+  "draw.field.emptySpot": "Drag a player here",
+  "draw.actions.back": "Back",
+  "draw.actions.reset": "Clear assignments",
+  "draw.actions.next": "Continue",
+  "draw.modal.spotTitle": "Spot {number}",
+  "draw.modal.closeAriaLabel": "Close",
+  "draw.modal.unassignAriaLabel": "Unassign {name}",
+  "draw.modal.hint": "Choose an available player to assign to this spot.",
+  "draw.modal.empty": "No players available for this spot."
 }

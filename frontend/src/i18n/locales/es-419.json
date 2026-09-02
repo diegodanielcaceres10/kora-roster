@@ -55,5 +55,22 @@
   "setup.playerList.clearList": "Limpiar lista",
   "setup.progress.teams": "Equipos",
   "setup.progress.players": "Jugadores",
-  "setup.progress.list": "Lista"
+  "setup.progress.list": "Lista",
+  "draw.header.eyebrow": "Alineación de equipos",
+  "draw.header.title": "Asigná los jugadores",
+  "draw.header.description": "Arrastrá cada jugador al equipo que quieras. También podés sortearlos automáticamente.",
+  "draw.automaticButton": "Sortear equipos",
+  "draw.summary.teams": "{count, plural, one {# Equipo} other {# Equipos}}",
+  "draw.summary.players": "{assigned}/{total} Jugadores",
+  "draw.available.title": "Jugadores disponibles",
+  "draw.available.hint": "Arrastrá acá para dejar sin asignar",
+  "draw.field.emptySpot": "Arrastrá un jugador",
+  "draw.actions.back": "Volver",
+  "draw.actions.reset": "Limpiar asignaciones",
+  "draw.actions.next": "Continuar",
+  "draw.modal.spotTitle": "Puesto {number}",
+  "draw.modal.closeAriaLabel": "Cerrar",
+  "draw.modal.unassignAriaLabel": "Desasignar a {name}",
+  "draw.modal.hint": "Elegí un jugador disponible para asignarlo a este puesto.",
+  "draw.modal.empty": "No hay jugadores disponibles para este puesto."
 }

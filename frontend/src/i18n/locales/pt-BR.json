@@ -55,5 +55,22 @@
   "setup.playerList.clearList": "Limpar lista",
   "setup.progress.teams": "Times",
   "setup.progress.players": "Jogadores",
-  "setup.progress.list": "Lista"
+  "setup.progress.list": "Lista",
+  "draw.header.eyebrow": "Escalação dos times",
+  "draw.header.title": "Escale os jogadores",
+  "draw.header.description": "Arraste cada jogador para o time que quiser. Você também pode sorteá-los automaticamente.",
+  "draw.automaticButton": "Sortear times",
+  "draw.summary.teams": "{count, plural, one {# Time} other {# Times}}",
+  "draw.summary.players": "{assigned}/{total} Jogadores",
+  "draw.available.title": "Jogadores disponíveis",
+  "draw.available.hint": "Arraste aqui para deixar sem time",
+  "draw.field.emptySpot": "Arraste um jogador",
+  "draw.actions.back": "Voltar",
+  "draw.actions.reset": "Limpar atribuições",
+  "draw.actions.next": "Continuar",
+  "draw.modal.spotTitle": "Posição {number}",
+  "draw.modal.closeAriaLabel": "Fechar",
+  "draw.modal.unassignAriaLabel": "Remover {name}",
+  "draw.modal.hint": "Escolha um jogador disponível para atribuir a esta posição.",
+  "draw.modal.empty": "Não há jogadores disponíveis para esta posição."
 }
