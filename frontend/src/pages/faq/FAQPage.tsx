@@ -1,59 +1,50 @@
 import { useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./FAQPage.module.scss";
 
 const FAQ_ITEMS = [
-  {
-    question: "¿Es gratis usar Kora?",
-    answer: "Sí, Kora es 100% gratuito. No necesitás pagar nada ni crear una cuenta para armar tus equipos.",
-  },
-  {
-    question: "¿Puedo editar los equipos después del sorteo?",
-    answer: "Sí. Antes de confirmar el resultado podés pasar a modo manual y reacomodar jugadores entre equipos arrastrándolos.",
-  },
-  {
-    question: "¿Cuántos jugadores puedo agregar?",
-    answer: "Depende de cuántos equipos y jugadores por equipo elijas: hasta 6 equipos, con hasta 11 jugadores cada uno.",
-  },
-  {
-    question: "¿Cómo comparto los equipos?",
-    answer: "Una vez confirmado el sorteo, descargás una imagen lista para compartir por WhatsApp o donde quieras.",
-  },
-  {
-    question: "¿Puedo elegir la cantidad de equipos y jugadores?",
-    answer: "Sí, vos definís cuántos equipos armar y cuántos jugadores va a tener cada uno antes de sortear.",
-  },
-  {
-    question: "¿Necesito crear una cuenta para usar Kora?",
-    answer: "No. Podés usar Kora sin registrarte.",
-  },
+  { id: "free", questionId: "faq.items.free.question", answerId: "faq.items.free.answer" },
+  { id: "edit", questionId: "faq.items.edit.question", answerId: "faq.items.edit.answer" },
+  { id: "maxPlayers", questionId: "faq.items.maxPlayers.question", answerId: "faq.items.maxPlayers.answer" },
+  { id: "share", questionId: "faq.items.share.question", answerId: "faq.items.share.answer" },
+  { id: "choose", questionId: "faq.items.choose.question", answerId: "faq.items.choose.answer" },
+  { id: "account", questionId: "faq.items.account.question", answerId: "faq.items.account.answer" },
 ];
 
 export function FAQPage() {
+  const intl = useIntl();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
     <section className={styles.faq}>
       <div className={styles.faq__container}>
         <header>
-          <p className={styles.faq__eyebrow}>FAQ</p>
-          <h1 className={styles.faq__title}>Preguntas frecuentes</h1>
+          <p className={styles.faq__eyebrow}>
+            <FormattedMessage id="faq.eyebrow" />
+          </p>
+          <h1 className={styles.faq__title}>
+            <FormattedMessage id="faq.title" />
+          </h1>
         </header>
 
         <div className={styles.faq__grid}>
-          {FAQ_ITEMS.map(({ question, answer }, i) => {
+          {FAQ_ITEMS.map(({ id, questionId, answerId }, i) => {
             const isOpen = openIndex === i;
-            const answerId = `faq-answer-${i}`;
+            const answerElementId = `faq-answer-${i}`;
+            const question = intl.formatMessage({ id: questionId });
 
             return (
-              <div key={question} className={[styles.faq__item, isOpen ? styles["faq__item--open"] : ""].join(" ")}>
-                <button type="button" className={styles.faq__question} aria-expanded={isOpen} aria-controls={answerId} onClick={() => setOpenIndex(isOpen ? null : i)}>
+              <div key={id} className={[styles.faq__item, isOpen ? styles["faq__item--open"] : ""].join(" ")}>
+                <button type="button" className={styles.faq__question} aria-expanded={isOpen} aria-controls={answerElementId} onClick={() => setOpenIndex(isOpen ? null : i)}>
                   <span>{question}</span>
                   <i className={["fa-solid fa-angle-down", styles.faq__chevron, isOpen ? styles["faq__chevron--open"] : ""].join(" ")}></i>
                 </button>
 
-                <div id={answerId} className={[styles.faq__answerWrapper, isOpen ? styles["faq__answerWrapper--open"] : ""].join(" ")}>
+                <div id={answerElementId} className={[styles.faq__answerWrapper, isOpen ? styles["faq__answerWrapper--open"] : ""].join(" ")}>
                   <div className={styles.faq__answerInner}>
-                    <p className={styles.faq__answer}>{answer}</p>
+                    <p className={styles.faq__answer}>
+                      <FormattedMessage id={answerId} />
+                    </p>
                   </div>
                 </div>
               </div>
