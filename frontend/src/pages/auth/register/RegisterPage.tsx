@@ -12,7 +12,7 @@ export function RegisterPage() {
   const [lastname, setLastname] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [marketingConsent, setmarketingConsent] = useState(false);
-  const { submit, status, error } = useRegisterAccount();
+  const { submit, status, errorId } = useRegisterAccount();
   const { status: googleStatus } = useGoogleAuth();
   const intl = useIntl();
 
@@ -107,9 +107,9 @@ export function RegisterPage() {
 
             <GoogleAuthButton text="continue_with" redirectTo="/" />
 
-            {status === "error" && (
+            {status === "error" && errorId && (
               <p className={styles.register__error} role="alert">
-                {error}
+                <FormattedMessage id={errorId} />
               </p>
             )}
           </form>

@@ -5,27 +5,27 @@ import { ApiError } from "../../../lib/http/httpClient";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-function toErrorMessage(err: unknown): string {
-  if (!(err instanceof ApiError)) return "No se pudo crear la cuenta";
+function toErrorMessageId(err: unknown): string {
+  if (!(err instanceof ApiError)) return "register.error.generic";
 
   switch (err.code) {
     case "EMAIL_TAKEN":
-      return "Ese email ya está registrado";
+      return "register.error.emailTaken";
     case "VALIDATION_ERROR":
-      return "Revisá los datos ingresados";
+      return "register.error.validation";
     default:
-      return "No se pudo crear la cuenta, intentá de nuevo";
+      return "register.error.tryAgain";
   }
 }
 
 export function useRegisterAccount() {
   const [status, setStatus] = useState<Status>("idle");
   const [account, setAccount] = useState<Account | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [errorId, setErrorId] = useState<string | null>(null);
 
   const submit = useCallback(async (payload: RegisterAccountPayload) => {
     setStatus("loading");
-    setError(null);
+    setErrorId(null);
 
     try {
       const created = await registerAccount(payload);
@@ -33,11 +33,11 @@ export function useRegisterAccount() {
       setStatus("success");
       return created;
     } catch (err) {
-      setError(toErrorMessage(err));
+      setErrorId(toErrorMessageId(err));
       setStatus("error");
       return null;
     }
   }, []);
 
-  return { submit, status, account, error };
+  return { submit, status, account, errorId };
 }
