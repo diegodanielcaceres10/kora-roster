@@ -7,30 +7,30 @@ import { useAccount } from "../AccountContext";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-function toErrorMessage(err: unknown): string {
-  if (!(err instanceof ApiError)) return "No se pudo iniciar sesión";
+function toErrorMessageId(err: unknown): string {
+  if (!(err instanceof ApiError)) return "login.error.generic";
 
   switch (err.code) {
     case "INVALID_CREDENTIALS":
-      return "Email o contraseña incorrectos";
+      return "login.error.invalidCredentials";
     case "ACCOUNT_NOT_ACTIVE":
-      return "Tu cuenta todavía no está activada. Revisá tu email para crear la contraseña";
+      return "login.error.accountNotActive";
     case "VALIDATION_ERROR":
-      return "Revisá los datos ingresados";
+      return "login.error.validation";
     default:
-      return "No se pudo iniciar sesión, intentá de nuevo";
+      return "login.error.tryAgain";
   }
 }
 
 export function useLogin() {
   const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
+  const [errorId, setErrorId] = useState<string | null>(null);
   const { setAccount } = useAccount();
 
   const submit = useCallback(
     async (payload: LoginPayload) => {
       setStatus("loading");
-      setError(null);
+      setErrorId(null);
 
       try {
         const result = await loginAccount(payload);
@@ -39,7 +39,7 @@ export function useLogin() {
         setStatus("success");
         return result;
       } catch (err) {
-        setError(toErrorMessage(err));
+        setErrorId(toErrorMessageId(err));
         setStatus("error");
         return null;
       }
@@ -47,7 +47,7 @@ export function useLogin() {
     [setAccount],
   );
 
-  return { submit, status, error };
+  return { submit, status, errorId };
 }
 
 export type { LoginResponse };

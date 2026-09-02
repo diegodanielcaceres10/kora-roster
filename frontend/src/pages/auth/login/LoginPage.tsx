@@ -10,7 +10,7 @@ export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { submit, status, error } = useLogin();
+  const { submit, status, errorId } = useLogin();
   const { status: googleStatus } = useGoogleAuth();
   const navigate = useNavigate();
   const intl = useIntl();
@@ -73,9 +73,9 @@ export function LoginPage() {
 
           <GoogleAuthButton text="continue_with" redirectTo="/" />
 
-          {status === "error" && (
+          {status === "error" && errorId && (
             <p className={styles.login__error} role="alert">
-              {error}
+              <FormattedMessage id={errorId} />
             </p>
           )}
 
