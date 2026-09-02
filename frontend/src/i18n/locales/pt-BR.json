@@ -13,6 +13,7 @@
   "serviceUnavailable.message": "O serviço de contas não está disponível no momento. Tente novamente mais tarde.",
   "guards.checkingService": "Verificando a disponibilidade do serviço...",
   "guards.checkingSession": "Verificando sessão...",
+  "account.sessionExpired": "Sua sessão terminou. Faça login novamente.",
   "welcome.title.line1": "Sorteie os times",
   "welcome.title.highlight": "em 10 segundos",
   "welcome.description.line1": "Reúna sua turma, montamos os times",

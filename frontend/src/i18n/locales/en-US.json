@@ -13,6 +13,7 @@
   "serviceUnavailable.message": "The account service isn't available right now. Please try again later.",
   "guards.checkingService": "Checking service availability...",
   "guards.checkingSession": "Checking session...",
+  "account.sessionExpired": "Your session ended. Please sign in again.",
   "welcome.title.line1": "Draw the teams",
   "welcome.title.highlight": "in 10 seconds",
   "welcome.description.line1": "Get your people together, we'll build the teams",

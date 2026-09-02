@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
+import { useIntl } from "react-intl";
 import { getMe } from "./account.api";
 import type { Me } from "./account.types";
 import { authStorage, AUTH_SESSION_EXPIRED_EVENT } from "../../lib/auth/authStorage";
@@ -17,6 +18,7 @@ interface AccountContextValue {
 const AccountContext = createContext<AccountContextValue | null>(null);
 
 export function AccountProvider({ children }: { children: ReactNode }) {
+  const intl = useIntl();
   const [account, setAccount] = useState<Me | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -57,11 +59,11 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     function handleSessionExpired() {
       logout();
-      toast.info("Tu sesión finalizó. Iniciá sesión nuevamente.");
+      toast.info(intl.formatMessage({ id: "account.sessionExpired" }));
     }
     window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
     return () => window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
-  }, [logout]);
+  }, [logout, intl]);
 
   return <AccountContext.Provider value={{ account, isLoading, ensureLoaded, setAccount, logout }}>{children}</AccountContext.Provider>;
 }
