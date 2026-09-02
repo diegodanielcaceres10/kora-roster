@@ -5,35 +5,35 @@ import { ApiError } from "../../../lib/http/httpClient";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-function toErrorMessage(err: unknown): string {
-  if (!(err instanceof ApiError)) return "No se pudo procesar la solicitud";
+function toErrorMessageId(err: unknown): string {
+  if (!(err instanceof ApiError)) return "forgot.error.generic";
 
   switch (err.code) {
     case "VALIDATION_ERROR":
-      return "Ingresá un email válido";
+      return "forgot.error.invalidEmail";
     default:
-      return "No se pudo procesar la solicitud, intentá de nuevo";
+      return "forgot.error.tryAgain";
   }
 }
 
 export function useForgotPassword() {
   const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
+  const [errorId, setErrorId] = useState<string | null>(null);
 
   const submit = useCallback(async (payload: ForgotPasswordPayload) => {
     setStatus("loading");
-    setError(null);
+    setErrorId(null);
 
     try {
       await forgotPassword(payload);
       setStatus("success");
       return true;
     } catch (err) {
-      setError(toErrorMessage(err));
+      setErrorId(toErrorMessageId(err));
       setStatus("error");
       return false;
     }
   }, []);
 
-  return { submit, status, error };
+  return { submit, status, errorId };
 }

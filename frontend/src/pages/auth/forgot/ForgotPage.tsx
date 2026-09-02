@@ -6,7 +6,7 @@ import { useForgotPassword } from "../../../features/account/hooks/useForgotPass
 
 export function ForgotPage() {
   const [email, setEmail] = useState("");
-  const { submit, status, error } = useForgotPassword();
+  const { submit, status, errorId } = useForgotPassword();
   const intl = useIntl();
 
   const isLoading = status === "loading";
@@ -59,9 +59,9 @@ export function ForgotPage() {
               </span>
             </button>
 
-            {status === "error" && (
+            {status === "error" && errorId && (
               <p className={styles.forgot__error} role="alert">
-                {error}
+                <FormattedMessage id={errorId} />
               </p>
             )}
           </form>

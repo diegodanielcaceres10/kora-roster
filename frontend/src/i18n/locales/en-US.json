@@ -209,5 +209,8 @@
   "forgot.submitButton": "Send instructions",
   "forgot.submittingButton": "Sending...",
   "forgot.backToLoginLink": "Back to sign in",
+  "forgot.error.generic": "The request couldn't be processed",
+  "forgot.error.invalidEmail": "Enter a valid email",
+  "forgot.error.tryAgain": "The request couldn't be processed, try again",
   "googleAuth.buttonLabel": "Sign in with Google"
 }
