@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useIntl } from "react-intl";
 import type { WizardStep, DraftConfig, Player, Team, AssignmentMode } from "../draft.types";
 import { DEFAULT_TEAM_COUNT, DEFAULT_PLAYERS_PER_TEAM, TEAM_COLOR_PALETTE } from "../draft.constants";
 
@@ -8,24 +9,31 @@ const QUICK_TEAM_COUNT = 2;
 const MIN_PLAYERS_QUICK = 6;
 const MAX_PLAYERS_PER_TEAM = 11;
 
-const buildTeams = (count: number): Team[] =>
-  Array.from({ length: count }, (_, i) => ({
-    id: `team-${i}`,
-    name: `Equipo ${String.fromCharCode(65 + i)}`,
-    color: TEAM_COLOR_PALETTE[i % TEAM_COLOR_PALETTE.length],
-  }));
-
-const createEmptyConfig = (): DraftConfig => ({
-  teamCount: DEFAULT_TEAM_COUNT,
-  playersPerTeam: DEFAULT_PLAYERS_PER_TEAM,
-  teams: buildTeams(DEFAULT_TEAM_COUNT),
-  players: [],
-  assignmentMode: null,
-});
-
 export function useDraftWizard() {
   const navigate = useNavigate();
   const location = useLocation();
+  const intl = useIntl();
+
+  const buildTeams = useCallback(
+    (count: number): Team[] =>
+      Array.from({ length: count }, (_, i) => ({
+        id: `team-${i}`,
+        name: intl.formatMessage({ id: "draft.defaultTeamName" }, { letter: String.fromCharCode(65 + i) }),
+        color: TEAM_COLOR_PALETTE[i % TEAM_COLOR_PALETTE.length],
+      })),
+    [intl],
+  );
+
+  const createEmptyConfig = useCallback(
+    (): DraftConfig => ({
+      teamCount: DEFAULT_TEAM_COUNT,
+      playersPerTeam: DEFAULT_PLAYERS_PER_TEAM,
+      teams: buildTeams(DEFAULT_TEAM_COUNT),
+      players: [],
+      assignmentMode: null,
+    }),
+    [buildTeams],
+  );
 
   const step = (location.state as { step?: WizardStep } | null)?.step ?? "welcome";
 
@@ -41,7 +49,7 @@ export function useDraftWizard() {
     }
   }, []);
 
-  const [config, setConfig] = useState<DraftConfig>(createEmptyConfig());
+  const [config, setConfig] = useState<DraftConfig>(() => createEmptyConfig());
 
   const quickFriendlyDraft = useCallback(
     (entries: { name: string; isGoalkeeper?: boolean }[]) => {
@@ -84,13 +92,16 @@ export function useDraftWizard() {
     navigate(-1);
   }, [navigate]);
 
-  const setTeamCount = useCallback((count: number) => {
-    setConfig((prev) => ({
-      ...prev,
-      teamCount: count,
-      teams: buildTeams(count),
-    }));
-  }, []);
+  const setTeamCount = useCallback(
+    (count: number) => {
+      setConfig((prev) => ({
+        ...prev,
+        teamCount: count,
+        teams: buildTeams(count),
+      }));
+    },
+    [buildTeams],
+  );
 
   const setPlayersPerTeam = useCallback((count: number) => {
     setConfig((prev) => ({ ...prev, playersPerTeam: count }));
@@ -260,7 +271,7 @@ export function useDraftWizard() {
   const reset = useCallback(() => {
     setConfig(createEmptyConfig());
     navigate(".", { replace: true, state: { step: "welcome" } });
-  }, [navigate]);
+  }, [navigate, createEmptyConfig]);
 
   return {
     step,

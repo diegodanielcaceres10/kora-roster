@@ -32,6 +32,7 @@
   "welcome.stats.free": "100% free",
   "welcome.stats.fast": "Fast and easy",
   "welcome.stats.shareable": "Ready to share",
+  "draft.defaultTeamName": "Team {letter}",
   "setup.summary.teams": "{count, plural, one {# team} other {# teams}}",
   "setup.summary.playersPerTeam": "{count, plural, one {# player per team} other {# players per team}}",
   "setup.step.progress": "Step {step} of {total}",
