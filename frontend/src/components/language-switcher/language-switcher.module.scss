@@ -1,0 +1,167 @@
+@use "../../styles/tokens" as ds;
+
+.languageSwitcher {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+
+  &__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    min-height: 36px;
+    padding: 0 var(--space-3);
+
+    border: 1px solid var(--kora-turf);
+    border-radius: var(--radius-pill);
+
+    background: transparent;
+    color: var(--kora-chalk);
+
+    font: inherit;
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      color 150ms ease;
+
+    &:hover {
+      border-color: var(--kora-bib-gold);
+      background: color-mix(in srgb, var(--kora-chalk) 5%, transparent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--kora-bib-gold);
+      outline-offset: 2px;
+    }
+  }
+
+  &__flag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  &__label {
+    line-height: 1;
+    white-space: nowrap;
+
+    @include ds.md {
+      display: none;
+    }
+  }
+
+  &__chevron {
+    width: 16px;
+    height: 16px;
+
+    opacity: 0.7;
+
+    transition: transform 150ms ease;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    z-index: 100;
+
+    top: calc(100% + 8px);
+    right: 0;
+
+    min-width: 180px;
+    padding: 6px;
+
+    border: 1px solid color-mix(in srgb, var(--kora-chalk) 12%, transparent);
+    border-radius: 12px;
+
+    background: var(--kora-ink);
+
+    box-shadow:
+      0 12px 30px rgb(0 0 0 / 20%),
+      0 2px 8px rgb(0 0 0 / 12%);
+
+    animation: language-menu-in 120ms ease-out;
+  }
+
+  &__option {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    min-height: 38px;
+    padding: 0 10px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: transparent;
+    color: var(--kora-chalk);
+
+    font: inherit;
+    font-size: var(--font-size-sm);
+
+    text-align: left;
+    cursor: pointer;
+
+    transition:
+      background-color 100ms ease,
+      color 100ms ease;
+
+    &:hover,
+    &:focus-visible {
+      background: color-mix(in srgb, var(--kora-chalk) 8%, transparent);
+      outline: none;
+    }
+
+    &--selected {
+      color: var(--kora-bib-gold);
+    }
+  }
+
+  &__optionFlag {
+    width: 22px;
+
+    font-size: 17px;
+    line-height: 1;
+  }
+
+  &__optionLabel {
+    flex: 1;
+  }
+
+  &__check {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@keyframes language-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .languageSwitcher__menu,
+  .languageSwitcher__chevron {
+    animation: none;
+    transition: none;
+  }
+}

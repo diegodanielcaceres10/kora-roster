@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.13.5",
     "html-to-image": "^1.11.13",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.2"
+    "react-intl": "^10.1.25",
+    "react-router-dom": "^7.18.2",
+    "sonner": "^2.0.8"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",

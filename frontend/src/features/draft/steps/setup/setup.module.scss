@@ -223,26 +223,9 @@
     display: flex;
     gap: var(--space-3);
     margin-top: var(--space-2);
-  }
 
-  &__input {
-    width: 1px;
-    flex: 1;
-    height: 48px;
-    padding: 0 var(--space-4);
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(244, 246, 239, 0.25);
-    background: rgba(244, 246, 239, 0.05);
-    color: var(--kora-chalk);
-    font-size: var(--font-size-base);
-
-    &:focus {
-      outline: none;
-      border-color: var(--kora-turf);
-    }
-
-    &::placeholder {
-      color: rgba(244, 246, 239, 0.45);
+    & input {
+      flex: 1;
     }
   }
 
@@ -295,8 +278,13 @@
     cursor: pointer;
     padding: 0;
 
-    &:hover {
+    &:hover:not(:disabled) {
       text-decoration: underline;
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
     }
   }
 
@@ -435,6 +423,24 @@
 
     &:hover {
       opacity: 1;
+      color: var(--kora-error);
+    }
+  }
+
+  &__clean {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    border: none;
+    background: transparent;
+    color: var(--kora-turf);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
       color: var(--kora-error);
     }
   }

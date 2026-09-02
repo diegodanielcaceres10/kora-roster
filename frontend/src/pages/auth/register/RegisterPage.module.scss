@@ -1,0 +1,155 @@
+.register {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6);
+  flex: 1;
+
+  &__content {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  &__eyebrow {
+    font-family: var(--font-mono);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--kora-chalk);
+    font-size: var(--font-size-sm);
+    line-height: 1.55;
+    opacity: 0.75;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 420px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  &__label {
+    font-size: var(--font-size-sm);
+    color: var(--kora-chalk);
+    opacity: 0.75;
+  }
+
+  &__checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  &__checkboxField {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--kora-chalk);
+    opacity: 0.85;
+    cursor: pointer;
+
+    & input[type="checkbox"] {
+      appearance: auto;
+      -webkit-appearance: checkbox;
+      margin: 3px 0 0;
+      padding: 0;
+      width: 16px;
+      height: 16px;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      flex-shrink: 0;
+      accent-color: var(--kora-turf);
+      cursor: pointer;
+    }
+  }
+
+  &__inlineLink {
+    color: var(--kora-bib-green);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  &__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: 48px;
+    margin-top: var(--space-2);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--kora-turf);
+    background: var(--kora-turf);
+    color: var(--kora-chalk);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__spinner {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(244, 246, 239, 0.35);
+    border-top-color: var(--kora-chalk);
+    animation: spin 700ms linear infinite;
+  }
+
+  &__error {
+    color: var(--kora-error);
+    font-size: var(--font-size-lg);
+  }
+
+  &__success {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--kora-success);
+    background: rgba(22, 163, 74, 0.1);
+    color: var(--kora-chalk);
+    max-width: 420px;
+  }
+
+  &__successTitle {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  &__successDescription {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    opacity: 0.85;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
