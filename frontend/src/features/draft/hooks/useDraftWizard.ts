@@ -29,8 +29,14 @@ export function useDraftWizard() {
   const step = (location.state as { step?: WizardStep } | null)?.step ?? "welcome";
 
   useEffect(() => {
-    if (!(location.state as { step?: WizardStep } | null)?.step) {
+    const stateStep = (location.state as { step?: WizardStep } | null)?.step;
+
+    if (!stateStep) {
       navigate(".", { replace: true, state: { step: "welcome" } });
+      return;
+    }
+    if (stateStep !== "welcome" && config.players.length === 0) {
+      navigate(".", { replace: true, state: { step: "setup" } });
     }
   }, []);
 
