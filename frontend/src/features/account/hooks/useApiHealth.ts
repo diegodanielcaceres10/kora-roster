@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { checkApiHealth } from "../account.api";
 
+const VITE_ALLOW_API = import.meta.env.VITE_VITE_ALLOW_API;
 const FRONTEND_ENV = import.meta.env.VITE_ENV;
 
 export function useApiHealth() {
@@ -9,6 +10,7 @@ export function useApiHealth() {
 
   useEffect(() => {
     let cancelled = false;
+    if (!VITE_ALLOW_API) return;
 
     async function verify() {
       try {
