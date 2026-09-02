@@ -16,5 +16,15 @@
   "serviceUnavailable.message": "The account service isn't available right now. Please try again later.",
 
   "guards.checkingService": "Checking service availability...",
-  "guards.checkingSession": "Checking session..."
+  "guards.checkingSession": "Checking session...",
+
+  "welcome.title.line1": "Draw the teams",
+  "welcome.title.highlight": "in 10 seconds",
+  "welcome.description.line1": "Get your people together, we'll build the teams",
+  "welcome.description.line2": "and get playing. That simple.",
+  "welcome.actions.primary": "Build teams now",
+  "welcome.actions.secondary": "How it works",
+  "welcome.stats.free": "100% free",
+  "welcome.stats.fast": "Fast and easy",
+  "welcome.stats.shareable": "Ready to share"
 }

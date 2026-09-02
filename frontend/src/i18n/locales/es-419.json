@@ -16,5 +16,15 @@
   "serviceUnavailable.message": "El servicio de cuentas no está disponible en este momento. Probá de nuevo más tarde.",
 
   "guards.checkingService": "Verificando disponibilidad del servicio...",
-  "guards.checkingSession": "Verificando sesión..."
+  "guards.checkingSession": "Verificando sesión...",
+
+  "welcome.title.line1": "Sorteá los equipos",
+  "welcome.title.highlight": "en 10 segundos",
+  "welcome.description.line1": "Juntá a tu gente, armamos los equipos",
+  "welcome.description.line2": "y a jugar. Así de simple.",
+  "welcome.actions.primary": "Armar equipos ahora",
+  "welcome.actions.secondary": "Cómo funciona",
+  "welcome.stats.free": "100% gratis",
+  "welcome.stats.fast": "Rápido y fácil",
+  "welcome.stats.shareable": "Listo para compartir"
 }
