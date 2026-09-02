@@ -72,5 +72,21 @@
   "draw.modal.closeAriaLabel": "Cerrar",
   "draw.modal.unassignAriaLabel": "Desasignar a {name}",
   "draw.modal.hint": "Elegí un jugador disponible para asignarlo a este puesto.",
-  "draw.modal.empty": "No hay jugadores disponibles para este puesto."
+  "draw.modal.empty": "No hay jugadores disponibles para este puesto.",
+  "export.share.title": "Sorteo de equipos Kora",
+  "export.share.text": "Mirá cómo quedaron los equipos del partido.",
+  "export.error.image": "No se pudo generar la imagen. Probá de nuevo.",
+  "export.error.shareUnsupported": "Este navegador no permite compartir imágenes directamente. Probá desde el celular.",
+  "export.error.shareWhatsapp": "No se pudo compartir la imagen por WhatsApp.",
+  "export.error.copy": "No se pudo copiar el listado.",
+  "export.clipboardSuccess": "Listado copiado al portapapeles.",
+  "export.goalkeeperLabel": " (Arquero)",
+  "export.shareSection.title": "Compartir resultado",
+  "export.shareButton.whatsapp": "WhatsApp",
+  "export.shareButton.copyText": "Copiar texto",
+  "export.shareButton.download": "Descargar",
+  "export.actions.back": "Volver",
+  "export.actions.newDraw": "Nuevo sorteo",
+  "image.goalkeeperAriaLabel": "Arquero",
+  "image.credit": "Creado con Kora"
 }

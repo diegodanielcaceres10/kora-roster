@@ -72,5 +72,21 @@
   "draw.modal.closeAriaLabel": "Fechar",
   "draw.modal.unassignAriaLabel": "Remover {name}",
   "draw.modal.hint": "Escolha um jogador disponível para atribuir a esta posição.",
-  "draw.modal.empty": "Não há jogadores disponíveis para esta posição."
+  "draw.modal.empty": "Não há jogadores disponíveis para esta posição.",
+  "export.share.title": "Sorteio de times Kora",
+  "export.share.text": "Veja como ficaram os times da partida.",
+  "export.error.image": "Não foi possível gerar a imagem. Tente novamente.",
+  "export.error.shareUnsupported": "Este navegador não permite compartilhar imagens diretamente. Tente pelo celular.",
+  "export.error.shareWhatsapp": "Não foi possível compartilhar a imagem pelo WhatsApp.",
+  "export.error.copy": "Não foi possível copiar a lista.",
+  "export.clipboardSuccess": "Lista copiada para a área de transferência.",
+  "export.goalkeeperLabel": " (Goleiro)",
+  "export.shareSection.title": "Compartilhar resultado",
+  "export.shareButton.whatsapp": "WhatsApp",
+  "export.shareButton.copyText": "Copiar texto",
+  "export.shareButton.download": "Baixar",
+  "export.actions.back": "Voltar",
+  "export.actions.newDraw": "Novo sorteio",
+  "image.goalkeeperAriaLabel": "Goleiro",
+  "image.credit": "Criado com Kora"
 }

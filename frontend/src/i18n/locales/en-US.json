@@ -72,5 +72,21 @@
   "draw.modal.closeAriaLabel": "Close",
   "draw.modal.unassignAriaLabel": "Unassign {name}",
   "draw.modal.hint": "Choose an available player to assign to this spot.",
-  "draw.modal.empty": "No players available for this spot."
+  "draw.modal.empty": "No players available for this spot.",
+  "export.share.title": "Kora team draw",
+  "export.share.text": "Check out how the teams turned out.",
+  "export.error.image": "Couldn't generate the image. Try again.",
+  "export.error.shareUnsupported": "This browser doesn't support sharing images directly. Try from your phone.",
+  "export.error.shareWhatsapp": "Couldn't share the image via WhatsApp.",
+  "export.error.copy": "Couldn't copy the list.",
+  "export.clipboardSuccess": "List copied to clipboard.",
+  "export.goalkeeperLabel": " (Goalkeeper)",
+  "export.shareSection.title": "Share result",
+  "export.shareButton.whatsapp": "WhatsApp",
+  "export.shareButton.copyText": "Copy text",
+  "export.shareButton.download": "Download",
+  "export.actions.back": "Back",
+  "export.actions.newDraw": "New draw",
+  "image.goalkeeperAriaLabel": "Goalkeeper",
+  "image.credit": "Made with Kora"
 }

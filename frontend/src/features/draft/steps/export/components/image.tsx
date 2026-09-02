@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import type { DraftConfig } from "../../../draft.types";
 import styles from "./image.module.scss";
 import koraRosterLogo from "../../../../../assets/logo/kora-roster-logo.png";
@@ -9,6 +10,8 @@ interface ImageProps {
 }
 
 export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ config }, ref) {
+  const intl = useIntl();
+
   return (
     <div ref={ref} className={styles.image}>
       <div className={styles.image__header}>
@@ -31,7 +34,7 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ con
                     <strong>{index + 1}</strong>
                     <span>{player.name}</span>
                     {player.isGoalkeeper && (
-                      <span className={styles.image__goalkeeperBadge} aria-label="Arquero">
+                      <span className={styles.image__goalkeeperBadge} aria-label={intl.formatMessage({ id: "image.goalkeeperAriaLabel" })}>
                         <i className="fa-solid fa-mitten"></i>
                       </span>
                     )}
@@ -46,7 +49,9 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ con
       <div className={styles.image__footer}>
         <div className={styles.image__credit}>
           <img src={koraRosterLogo} alt="" />
-          <span>Creado con Kora</span>
+          <span>
+            <FormattedMessage id="image.credit" />
+          </span>
         </div>
         <img src={koraBibs} alt="" className={styles.image__bibs} />
       </div>

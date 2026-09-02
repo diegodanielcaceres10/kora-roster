@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
+import { FormattedMessage, useIntl } from "react-intl";
 import type { DraftConfig } from "../../draft.types";
 import { Image } from "./components/image";
 import styles from "./export.module.scss";
@@ -11,13 +12,14 @@ interface StepExportProps {
 }
 
 export function StepExport({ config, onBack, onReset }: StepExportProps) {
+  const intl = useIntl();
   const cardRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [clipboardMessage, setClipboardMessage] = useState<string | null>(null);
 
-  const shareTitle = "Sorteo de equipos Kora";
-  const shareText = "Mirá cómo quedaron los equipos del partido.";
+  const shareTitle = intl.formatMessage({ id: "export.share.title" });
+  const shareText = intl.formatMessage({ id: "export.share.text" });
 
   const createResultImage = async () => {
     if (!cardRef.current) return null;
@@ -54,7 +56,7 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
       if (!dataUrl) return;
       downloadImage(dataUrl);
     } catch {
-      setError("No se pudo generar la imagen. Probá de nuevo.");
+      setError(intl.formatMessage({ id: "export.error.image" }));
     } finally {
       setIsExporting(false);
     }
@@ -76,15 +78,13 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
       };
 
       if (!navigator.canShare?.(shareData)) {
-        setError(
-          "Este navegador no permite compartir imágenes directamente. Probá desde el celular.",
-        );
+        setError(intl.formatMessage({ id: "export.error.shareUnsupported" }));
         return;
       }
 
       await navigator.share(shareData);
     } catch {
-      setError("No se pudo compartir la imagen por WhatsApp.");
+      setError(intl.formatMessage({ id: "export.error.shareWhatsapp" }));
     } finally {
       setIsExporting(false);
     }
@@ -95,13 +95,9 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
       .map((team) => {
         const players = config.players
           .filter((player) => player.teamId === team.id)
-          .sort(
-            (a, b) =>
-              (a.spotIndex ?? Number.MAX_SAFE_INTEGER) -
-              (b.spotIndex ?? Number.MAX_SAFE_INTEGER),
-          )
+          .sort((a, b) => (a.spotIndex ?? Number.MAX_SAFE_INTEGER) - (b.spotIndex ?? Number.MAX_SAFE_INTEGER))
           .map((player, index) => {
-            const goalkeeperLabel = player.isGoalkeeper ? " (Arquero)" : "";
+            const goalkeeperLabel = player.isGoalkeeper ? intl.formatMessage({ id: "export.goalkeeperLabel" }) : "";
             return `${index + 1}. ${player.name}${goalkeeperLabel}`;
           });
 
@@ -115,9 +111,9 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
 
     try {
       await navigator.clipboard.writeText(createPlainTextResult());
-      setClipboardMessage("Listado copiado al portapapeles.");
+      setClipboardMessage(intl.formatMessage({ id: "export.clipboardSuccess" }));
     } catch {
-      setError("No se pudo copiar el listado.");
+      setError(intl.formatMessage({ id: "export.error.copy" }));
     }
   };
 
@@ -129,66 +125,41 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
         </div>
 
         {error && <p className={styles.export__error}>{error}</p>}
-        {clipboardMessage && (
-          <p className={styles.export__clipboardMessage}>{clipboardMessage}</p>
-        )}
+        {clipboardMessage && <p className={styles.export__clipboardMessage}>{clipboardMessage}</p>}
 
         <section className={styles.export__share}>
-          <p className={styles.export__shareTitle}>Compartir resultado</p>
+          <p className={styles.export__shareTitle}>
+            <FormattedMessage id="export.shareSection.title" />
+          </p>
           <div className={styles.export__shareActions}>
-            <button
-              type="button"
-              className={[
-                styles.export__shareButton,
-                styles["export__shareButton--whatsapp"],
-              ].join(" ")}
-              onClick={handleShareWhatsApp}
-              disabled={isExporting}
-            >
+            <button type="button" className={[styles.export__shareButton, styles["export__shareButton--whatsapp"]].join(" ")} onClick={handleShareWhatsApp} disabled={isExporting}>
               <span>
                 <i className="fa-brands fa-whatsapp"></i>
               </span>
-              WhatsApp
+              <FormattedMessage id="export.shareButton.whatsapp" />
             </button>
-            <button
-              type="button"
-              className={styles.export__shareButton}
-              onClick={handleCopyPlainText}
-            >
+            <button type="button" className={styles.export__shareButton} onClick={handleCopyPlainText}>
               <span>
                 <i className="fa-solid fa-clipboard-list"></i>
               </span>
-              Copiar texto
+              <FormattedMessage id="export.shareButton.copyText" />
             </button>
-            <button
-              type="button"
-              className={styles.export__shareButton}
-              onClick={handleDownload}
-              disabled={isExporting}
-            >
+            <button type="button" className={styles.export__shareButton} onClick={handleDownload} disabled={isExporting}>
               <span>
                 <i className="fa-solid fa-download"></i>
               </span>
-              Descargar
+              <FormattedMessage id="export.shareButton.download" />
             </button>
           </div>
         </section>
 
         <div className={styles.export__actions}>
-          <button
-            type="button"
-            className={styles.export__secondaryButton}
-            onClick={onBack}
-          >
+          <button type="button" className={styles.export__secondaryButton} onClick={onBack}>
             <i className="fa-solid fa-arrow-left"></i>
-            Volver
+            <FormattedMessage id="export.actions.back" />
           </button>
-          <button
-            type="button"
-            className={styles.export__primaryButton}
-            onClick={onReset}
-          >
-            Nuevo sorteo
+          <button type="button" className={styles.export__primaryButton} onClick={onReset}>
+            <FormattedMessage id="export.actions.newDraw" />
           </button>
         </div>
       </div>
