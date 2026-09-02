@@ -17,15 +17,16 @@
 
   &__content {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
+    justify-content: center;
     gap: var(--space-5);
   }
 
   &__logo {
-    align-self: start;
-    width: 300px;
+    width: 200px;
     max-width: 90%;
   }
 
@@ -61,7 +62,6 @@
   }
 
   &__actions {
-    align-self: start;
     display: flex;
     align-items: center;
     gap: var(--space-3);
@@ -99,12 +99,6 @@
     color: var(--kora-chalk);
   }
 
-  &__illustration {
-    display: flex;
-    justify-content: center;
-    margin: var(--space-4) 0;
-  }
-
   &__stats {
     list-style: none;
     padding: 0;
@@ -125,5 +119,10 @@
       color: var(--kora-bib-green);
       font-size: var(--font-size-lg);
     }
+  }
+
+  &__illustration {
+    display: flex;
+    justify-content: center;
   }
 }

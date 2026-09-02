@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styles from "./header.module.scss";
-import kRosterLogo from "../../assets/logo/k-roster-logo.png";
+import kRosterLogo from "/favicon.png";
 
 const NAV_LINKS = [
   { label: "Inicio", to: "/" },

@@ -37,12 +37,6 @@ export function StepWelcome({ onStart }: StepWelcomeProps) {
             Cómo funciona
           </button>
         </div>
-      </div>
-      <div className={styles.welcome__content}>
-        <div className={styles.welcome__illustration} aria-hidden="true">
-          <img src={koraBibs} alt="" />
-        </div>
-
         <ul className={styles.welcome__stats}>
           <li>
             <i className="fa-solid fa-gift"></i>100% gratis
@@ -54,6 +48,11 @@ export function StepWelcome({ onStart }: StepWelcomeProps) {
             <i className="fa-solid fa-share-nodes"></i>Listo para compartir
           </li>
         </ul>
+      </div>
+      <div className={styles.welcome__content}>
+        <div className={styles.welcome__illustration} aria-hidden="true">
+          <img src={koraBibs} alt="" />
+        </div>
       </div>
     </section>
   );
