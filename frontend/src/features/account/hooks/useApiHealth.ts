@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { checkApiHealth } from "../account.api";
 
-const VITE_ALLOW_API = import.meta.env.VITE_VITE_ALLOW_API;
+const VITE_ALLOW_API = import.meta.env.VITE_ALLOW_API;
 const FRONTEND_ENV = import.meta.env.VITE_ENV;
 
 export function useApiHealth() {
@@ -10,7 +10,10 @@ export function useApiHealth() {
 
   useEffect(() => {
     let cancelled = false;
-    if (!VITE_ALLOW_API) return;
+    if (!VITE_ALLOW_API) {
+      console.log("API health check skipped because VITE_ALLOW_API is false");
+      return;
+    }
 
     async function verify() {
       try {

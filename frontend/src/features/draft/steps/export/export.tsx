@@ -46,8 +46,6 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
     const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
     const time = `${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
 
-    console.log(`Exporting file with name: kora-roster-${date}-${time}.png`);
-
     return `kora-roster-${date}-${time}.png`;
   };
 
