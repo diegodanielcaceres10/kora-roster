@@ -10,6 +10,38 @@ const QUICK_TEAM_COUNT = 2;
 const MIN_PLAYERS_QUICK = 6;
 const MAX_PLAYERS_PER_TEAM = 11;
 
+const STORAGE_KEY = "kora:draft-wizard";
+
+interface PersistedWizardState {
+  step: WizardStep;
+  config: DraftConfig;
+}
+
+function loadPersistedWizardState(): PersistedWizardState | null {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as PersistedWizardState) : null;
+  } catch {
+    return null;
+  }
+}
+
+function savePersistedWizardState(state: PersistedWizardState) {
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    console.warn("Failed to persist wizard state to sessionStorage");
+  }
+}
+
+function clearPersistedWizardState() {
+  try {
+    sessionStorage.removeItem(STORAGE_KEY);
+  } catch {
+    console.warn("Failed to clear wizard state from sessionStorage");
+  }
+}
+
 export function useDraftWizard() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,6 +74,11 @@ export function useDraftWizard() {
     const stateStep = (location.state as { step?: WizardStep } | null)?.step;
 
     if (!stateStep) {
+      const persisted = loadPersistedWizardState();
+      if (persisted && persisted.step !== "welcome" && persisted.config.players.length > 0) {
+        navigate(".", { replace: true, state: { step: persisted.step } });
+        return;
+      }
       navigate(".", { replace: true, state: { step: "welcome" } });
       return;
     }
@@ -50,7 +87,15 @@ export function useDraftWizard() {
     }
   }, []);
 
-  const [config, setConfig] = useState<DraftConfig>(() => createEmptyConfig());
+  const [config, setConfig] = useState<DraftConfig>(() => loadPersistedWizardState()?.config ?? createEmptyConfig());
+
+  useEffect(() => {
+    if (step === "export" || step === "welcome") {
+      clearPersistedWizardState();
+      return;
+    }
+    savePersistedWizardState({ step, config });
+  }, [step, config]);
 
   const quickFriendlyDraft = useCallback(
     (entries: { name: string; isGoalkeeper?: boolean }[]) => {
@@ -270,6 +315,7 @@ export function useDraftWizard() {
   }, []);
 
   const reset = useCallback(() => {
+    clearPersistedWizardState();
     setConfig(createEmptyConfig());
     navigate(".", { replace: true, state: { step: "welcome" } });
   }, [navigate, createEmptyConfig]);
