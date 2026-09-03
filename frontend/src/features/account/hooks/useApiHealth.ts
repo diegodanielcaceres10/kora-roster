@@ -10,13 +10,13 @@ export function useApiHealth() {
 
   useEffect(() => {
     let cancelled = false;
-    if (!VITE_ALLOW_API) {
-      console.log("API health check skipped because VITE_ALLOW_API is false");
-      return;
-    }
 
     async function verify() {
       try {
+        if (!VITE_ALLOW_API) {
+          console.log("API health check skipped because VITE_ALLOW_API is false");
+          return;
+        }
         const health = await checkApiHealth();
         const healthy = health.status === "ok" && health.env === FRONTEND_ENV;
         if (!cancelled) setIsHealthy(healthy);
