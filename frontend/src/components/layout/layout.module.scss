@@ -2,9 +2,8 @@
   width: 100%;
   min-height: 100vh;
   background: url("../../assets/illustrations/kora-back.png");
-  background-size: cover;
-  background-position: right bottom;
-  background-repeat: no-repeat;
+  background-size: 50%;
+  background-repeat: repeat;
   color: var(--kora-chalk);
   display: flex;
   flex-direction: column;

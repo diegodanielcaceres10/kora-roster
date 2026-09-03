@@ -20,7 +20,7 @@
   "welcome.description.line2": "and get playing. That simple.",
   "welcome.actions.quickFriendly": "Quick friendly",
   "welcome.quick.hint": "Paste the player list (one per line, or comma-separated) and we'll build the 2 teams instantly.",
-  "welcome.quick.placeholder": "John Smith\nMike Johnson\nAlex Brown\n...",
+  "welcome.quick.placeholder": "John Smith (Goalkeeper)\nMike Johnson\nAlex Brown\n...",
   "welcome.quick.playersDetected": "players detected",
   "welcome.quick.error.min": "You need at least {min} players to build 2 teams.",
   "welcome.quick.error.max": "Maximum {max} players (11 per team). Remove some names from the list.",

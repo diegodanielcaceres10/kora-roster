@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./welcome.module.scss";
 import koraRosterLogo from "../../../../assets/logo/kora-roster-logo.png";
+import koraRosterWelcome from "../../../../assets/illustrations/kora-welcome.png";
 import { parsePastedNames, type ParsedPlayerName } from "../../utils/parsePastedNames";
 
 const QUICK_TEAM_COUNT = 2;
@@ -48,6 +49,7 @@ export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {
 
   return (
     <section className={styles.welcome}>
+      <img className={styles.welcome__background} src={koraRosterWelcome} alt="Kora Roster Background" />
       <div className={styles.welcome__content}>
         <div className={styles.welcome__logo}>
           <img src={koraRosterLogo} alt="" />
@@ -66,33 +68,7 @@ export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {
           <FormattedMessage id="welcome.description.line2" />
         </p>
 
-        {isQuickMode ? (
-          <form className={styles.welcome__quickPanel} onSubmit={handleQuickSubmit}>
-            <p className={styles.welcome__quickHint}>
-              <FormattedMessage id="welcome.quick.hint" />
-            </p>
-            <textarea className={styles.welcome__quickTextarea} value={pasteText} onChange={(e) => setPasteText(e.target.value)} placeholder={intl.formatMessage({ id: "welcome.quick.placeholder" })} rows={6} autoFocus />
-            <div className={styles.welcome__quickFooter}>
-              <span className={validation.status === "error" ? `${styles.welcome__quickCount} ${styles["welcome__quickCount--error"]}` : styles.welcome__quickCount}>
-                {validation.status === "error" ? (
-                  <FormattedMessage id={validation.messageId} values={validation.values} />
-                ) : (
-                  <>
-                    {names.length} <FormattedMessage id="welcome.quick.playersDetected" />
-                  </>
-                )}
-              </span>
-              <div className={styles.welcome__quickActions}>
-                <button type="button" onClick={() => setIsQuickMode(false)}>
-                  <FormattedMessage id="welcome.quick.cancel" />
-                </button>
-                <button type="submit" disabled={validation.status !== "valid"}>
-                  <FormattedMessage id="welcome.quick.submit" />
-                </button>
-              </div>
-            </div>
-          </form>
-        ) : (
+        {!isQuickMode && (
           <div className={styles.welcome__actions}>
             <button type="button" className={styles.welcome__primaryButton} onClick={() => setIsQuickMode((prev) => !prev)} aria-expanded={isQuickMode}>
               <i className="fa-solid fa-bolt"></i>
@@ -123,6 +99,35 @@ export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {
             <FormattedMessage id="welcome.stats.shareable" />
           </li>
         </ul>
+      </div>
+      <div className={styles.welcome__content}>
+        {isQuickMode && (
+          <form className={styles.welcome__quickPanel} onSubmit={handleQuickSubmit}>
+            <p className={styles.welcome__quickHint}>
+              <FormattedMessage id="welcome.quick.hint" />
+            </p>
+            <textarea className={[styles.welcome__quickTextarea, "custom_scroll"].join(" ")} value={pasteText} onChange={(e) => setPasteText(e.target.value)} placeholder={intl.formatMessage({ id: "welcome.quick.placeholder" })} rows={6} autoFocus />
+            <div className={styles.welcome__quickFooter}>
+              <span className={validation.status === "error" ? `${styles.welcome__quickCount} ${styles["welcome__quickCount--error"]}` : styles.welcome__quickCount}>
+                {validation.status === "error" ? (
+                  <FormattedMessage id={validation.messageId} values={validation.values} />
+                ) : (
+                  <>
+                    {names.length} <FormattedMessage id="welcome.quick.playersDetected" />
+                  </>
+                )}
+              </span>
+              <div className={styles.welcome__quickActions}>
+                <button type="button" onClick={() => setIsQuickMode(false)}>
+                  <FormattedMessage id="welcome.quick.cancel" />
+                </button>
+                <button type="submit" disabled={validation.status !== "valid"}>
+                  <FormattedMessage id="welcome.quick.submit" />
+                </button>
+              </div>
+            </div>
+          </form>
+        )}
       </div>
     </section>
   );

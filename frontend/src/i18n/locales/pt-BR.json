@@ -20,7 +20,7 @@
   "welcome.description.line2": "e é só jogar. Simples assim.",
   "welcome.actions.quickFriendly": "Amistoso rápido",
   "welcome.quick.hint": "Cole a lista de jogadores (um por linha, ou separados por vírgula) e montamos os 2 times na hora.",
-  "welcome.quick.placeholder": "João Silva\nPedro Souza\nLucas Costa\n...",
+  "welcome.quick.placeholder": "João Silva (Goleiro)\nPedro Souza\nLucas Costa\n...",
   "welcome.quick.playersDetected": "jogadores detectados",
   "welcome.quick.error.min": "Você precisa de pelo menos {min} jogadores para montar 2 times.",
   "welcome.quick.error.max": "Máximo de {max} jogadores (11 por time). Remova alguns nomes da lista.",

@@ -84,7 +84,7 @@ export function StepPlayerList({ players, totalNeeded, teamCount, onAdd, onAddMa
 
       {isPasteMode && (
         <form className={styles.setup__pasteForm} onSubmit={handlePasteSubmit}>
-          <textarea className={styles.setup__textarea} placeholder={intl.formatMessage({ id: "setup.playerList.pastePlaceholder" })} value={pasteText} onChange={(event) => setPasteText(event.target.value)} rows={5} autoFocus />
+          <textarea className={[styles.setup__textarea, "custom_scroll"].join(" ")} placeholder={intl.formatMessage({ id: "setup.playerList.pastePlaceholder" })} value={pasteText} onChange={(event) => setPasteText(event.target.value)} rows={5} autoFocus />
           <div className={styles.setup__pasteActions}>
             <button
               type="button"
