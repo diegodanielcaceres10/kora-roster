@@ -13,7 +13,7 @@ export function useApiHealth() {
 
     async function verify() {
       try {
-        if (!VITE_ALLOW_API) {
+        if (VITE_ALLOW_API !== "true" && VITE_ALLOW_API !== true) {
           console.log("API health check skipped because VITE_ALLOW_API is false");
           return;
         }
