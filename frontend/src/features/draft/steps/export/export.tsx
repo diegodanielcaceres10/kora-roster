@@ -11,9 +11,12 @@ interface StepExportProps {
   onReset: () => void;
 }
 
+const EXPORT_WIDTH = 900;
+
 export function StepExport({ config, onBack, onReset }: StepExportProps) {
   const intl = useIntl();
   const cardRef = useRef<HTMLDivElement>(null);
+  const exportRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [clipboardMessage, setClipboardMessage] = useState<string | null>(null);
@@ -22,18 +25,35 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
   const shareText = intl.formatMessage({ id: "export.share.text" });
 
   const createResultImage = async () => {
-    if (!cardRef.current) return null;
+    if (!exportRef.current) return null;
 
-    return toPng(cardRef.current, {
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+
+    return toPng(exportRef.current, {
       pixelRatio: 2,
       cacheBust: true,
       backgroundColor: "#063326",
+      width: EXPORT_WIDTH,
     });
+  };
+
+  const getExportFileName = () => {
+    const now = new Date();
+    const pad = (n: number) => n.toString().padStart(2, "0");
+
+    const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+    const time = `${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+
+    console.log(`Exporting file with name: kora-roster-${date}-${time}.png`);
+
+    return `kora-roster-${date}-${time}.png`;
   };
 
   const downloadImage = (dataUrl: string) => {
     const link = document.createElement("a");
-    link.download = "kora-equipos.png";
+    link.download = getExportFileName();
     link.href = dataUrl;
     link.click();
   };
@@ -43,7 +63,7 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
     if (!dataUrl) return null;
 
     const blob = await (await fetch(dataUrl)).blob();
-    return new File([blob], "kora-equipos.png", { type: "image/png" });
+    return new File([blob], getExportFileName(), { type: "image/png" });
   };
 
   const handleDownload = async () => {
@@ -121,7 +141,21 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
     <section className={styles.export}>
       <div className={styles.export__content}>
         <div className={styles.export__preview}>
+          {/* Vista previa: responsive, es la que ve el usuario */}
           <Image ref={cardRef} config={config} />
+        </div>
+
+        <div
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: "-10000px",
+            width: EXPORT_WIDTH,
+            pointerEvents: "none",
+          }}
+        >
+          <Image ref={exportRef} config={config} variant="export" />
         </div>
 
         {error && <p className={styles.export__error}>{error}</p>}

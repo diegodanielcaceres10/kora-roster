@@ -225,6 +225,7 @@
     margin-top: var(--space-2);
 
     & input {
+      min-width: 0;
       flex: 1;
     }
   }

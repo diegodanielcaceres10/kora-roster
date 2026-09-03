@@ -6,6 +6,7 @@ import App from "./App";
 import { AccountProvider } from "./features/account/AccountContext";
 import { LocaleProvider } from "./i18n/LocaleContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ScrollToTop } from "./utils/ScrollToTop";
 
 import "./styles/global.scss";
 
@@ -38,6 +39,7 @@ createRoot(document.getElementById("root")!).render(
     <LocaleProvider>
       <AccountProvider>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <ScrollToTop />
           <App />
         </GoogleOAuthProvider>
         <Toaster richColors position="top-right" style={toastStyle} />

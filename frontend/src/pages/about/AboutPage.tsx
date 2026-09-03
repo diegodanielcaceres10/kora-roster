@@ -21,12 +21,15 @@ export function AboutPage() {
           <FormattedMessage id="about.description" />
         </p>
 
-        <a className={styles.about__author} href="https://diegodanielcaceres10.github.io/nura/" target="_blank" rel="noreferrer" aria-label={intl.formatMessage({ id: "about.authorAriaLabel" })}>
-          <div className={styles.about__authorLogo}>
+        <div className={styles.about__author}>
+          <div className={styles.about__signature}>
             <img src={authorLogo} alt="Diego Daniel Caceres" />
           </div>
-          <i className="fa-solid fa-arrow-up-right-from-square"></i>
-        </a>
+          <a className={styles.about__portfolio} href="https://diegodanielcaceres10.github.io/nura/" target="_blank" rel="noreferrer" aria-label={intl.formatMessage({ id: "about.authorAriaLabel" })}>
+            Portfolio
+            <i className="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
       </div>
     </section>
   );

@@ -7,13 +7,14 @@ import koraBibs from "../../../../../assets/illustrations/kora-bibs.png";
 
 interface ImageProps {
   config: DraftConfig;
+  variant?: "preview" | "export";
 }
 
-export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ config }, ref) {
+export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ config, variant = "preview" }, ref) {
   const intl = useIntl();
 
   return (
-    <div ref={ref} className={styles.image}>
+    <div ref={ref} className={[styles.image, variant === "export" ? styles["image--export"] : ""].join(" ").trim()}>
       <div className={styles.image__header}>
         <img src={koraRosterLogo} alt="Kora" className={styles.image__logo} />
       </div>
