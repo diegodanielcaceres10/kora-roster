@@ -61,23 +61,10 @@ Set these in `frontend/.env` (see `frontend/.env.example`):
 
 ### Available scripts
 
-| Script            | Description                           |
-| ----------------- | ------------------------------------- |
-| `npm run dev`     | Start the Vite dev server with HMR.   |
-| `npm run build`   | Type-check and build for production.  |
-| `npm run lint`    | Run Oxlint.                           |
-| `npm run preview` | Preview the production build locally. |
-
-## Project structure
-
-```
-frontend/
-  src/
-    features/draft/   # draft wizard, quick draft, drawing logic
-    lib/auth/          # auth storage & API client
-    assets/            # illustrations, logo
-    i18n/               # translation catalogs (en-US, es-419, pt-BR)
-```
+| Script          | Description                          |
+| --------------- | ------------------------------------ |
+| `npm run dev`   | Start the Vite dev server with HMR.  |
+| `npm run build` | Type-check and build for production. |
 
 ## License
 
