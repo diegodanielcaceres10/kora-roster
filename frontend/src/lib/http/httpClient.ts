@@ -1,4 +1,4 @@
-import { authStorage, AUTH_SESSION_EXPIRED_EVENT } from "../auth/authStorage";
+import { authStorage, onTokensChangedExternally, AUTH_SESSION_EXPIRED_EVENT } from "../auth/authStorage";
 import { isJwtExpiringSoon } from "../auth/jwt";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -36,9 +36,17 @@ interface RefreshTokenResponse {
 // instead of starting a new one.
 let refreshPromise: Promise<string> | null = null;
 
+// If another tab rotates the token while ours is mid-flight, our in-flight
+// fetch already went out with the old one and can't be cancelled — but we
+// can drop our cached promise so the NEXT caller reads the fresh token from
+// storage instead of piggybacking on a request that's bound to fail.
+onTokensChangedExternally(() => {
+  refreshPromise = null;
+});
+
 async function performRefresh(): Promise<string> {
-  const refreshToken = authStorage.getRefreshToken();
-  if (!refreshToken) {
+  const sentRefreshToken = authStorage.getRefreshToken();
+  if (!sentRefreshToken) {
     authStorage.clearTokens();
     window.dispatchEvent(new Event(AUTH_SESSION_EXPIRED_EVENT));
     throw new Error("NO_REFRESH_TOKEN");
@@ -47,10 +55,21 @@ async function performRefresh(): Promise<string> {
   const response = await fetch(`${API_URL}/auth/refresh-token`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refreshToken }),
+    body: JSON.stringify({ refreshToken: sentRefreshToken }),
   });
 
   if (!response.ok) {
+    // Another tab may have rotated with this same refresh token while our
+    // request was in flight (e.g. both tabs waking from background at
+    // once). If storage now holds a different refresh token than the one
+    // we sent, that's a legitimate rotation from another tab, not a real
+    // failure — adopt what it wrote instead of forcing a logout.
+    const currentRefreshToken = authStorage.getRefreshToken();
+    const currentAccessToken = authStorage.getAccessToken();
+    if (currentAccessToken && currentRefreshToken && currentRefreshToken !== sentRefreshToken) {
+      return currentAccessToken;
+    }
+
     authStorage.clearTokens();
     window.dispatchEvent(new Event(AUTH_SESSION_EXPIRED_EVENT));
     throw new Error("REFRESH_FAILED");

@@ -23,3 +23,17 @@ export const authStorage = {
     localStorage.removeItem(REFRESH_TOKEN_KEY);
   },
 };
+
+// The native "storage" event fires in OTHER tabs when one tab writes to
+// localStorage (the writing tab never receives its own event). Used so a
+// tab that has a refresh in flight can notice another tab already rotated
+// the token, instead of failing with a stale one and forcing a logout.
+export function onTokensChangedExternally(callback: () => void): () => void {
+  function handler(event: StorageEvent) {
+    if (event.key === ACCESS_TOKEN_KEY || event.key === REFRESH_TOKEN_KEY) {
+      callback();
+    }
+  }
+  window.addEventListener("storage", handler);
+  return () => window.removeEventListener("storage", handler);
+}
