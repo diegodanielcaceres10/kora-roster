@@ -12,7 +12,16 @@ const MAX_PLAYERS_PER_TEAM = 11;
 
 const STORAGE_KEY = "kora:draft-wizard";
 
-function shuffle<T>(arr: T[]): T[] {
+/**
+ * Uniform random shuffle (Fisher–Yates).
+ *
+ * NOTE: `arr.sort(() => Math.random() - 0.5)` is NOT a fair shuffle — it
+ * produces a biased distribution (some orderings are far more likely than
+ * others) because Array.prototype.sort does not guarantee every pairwise
+ * comparison is made, and the comparator isn't a valid ordering relation.
+ * Use this instead whenever players need to be drawn/mixed randomly.
+ */
+export function shuffle<T>(arr: T[]): T[] {
   const result = [...arr];
   for (let i = result.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
