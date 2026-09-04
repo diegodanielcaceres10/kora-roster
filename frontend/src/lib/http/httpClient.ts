@@ -91,6 +91,7 @@ async function getValidAccessToken(): Promise<string | null> {
     // reject it with 401 UNAUTHORIZED, which is a consistent outcome
     // already handled by the rest of the app (see AccountContext /
     // AUTH_SESSION_EXPIRED_EVENT).
+    console.warn("Access token expired and refresh failed, logging out");
     return null;
   }
 }
@@ -133,6 +134,7 @@ async function request<TResponse>(path: string, options: RequestOptions = {}, is
         // The refresh token is also invalid or expired: fall through with
         // the original error so the caller handles it the same way as
         // today (see AccountContext.ensureLoaded).
+        console.warn("Access token expired and refresh failed, logging out");
       }
     }
 
