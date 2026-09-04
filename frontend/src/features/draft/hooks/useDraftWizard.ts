@@ -12,6 +12,15 @@ const MAX_PLAYERS_PER_TEAM = 11;
 
 const STORAGE_KEY = "kora:draft-wizard";
 
+function shuffle<T>(arr: T[]): T[] {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 interface PersistedWizardState {
   step: WizardStep;
   config: DraftConfig;
@@ -106,7 +115,7 @@ export function useDraftWizard() {
       const teams = buildTeams(QUICK_TEAM_COUNT);
       const capacity = playersPerTeam * QUICK_TEAM_COUNT;
 
-      const shuffled = [...parsed].sort(() => Math.random() - 0.5).slice(0, capacity);
+      const shuffled = shuffle(parsed).slice(0, capacity);
 
       let goalkeeperSlotsLeft = QUICK_TEAM_COUNT;
       const players: Player[] = shuffled.map((entry, i) => {
@@ -292,8 +301,6 @@ export function useDraftWizard() {
 
   const drawTeams = useCallback(() => {
     setConfig((prev) => {
-      const shuffle = <T>(arr: T[]) => [...arr].sort(() => Math.random() - 0.5);
-
       const goalkeepers = shuffle(prev.players.filter((p) => p.isGoalkeeper));
       const rest = shuffle(prev.players.filter((p) => !p.isGoalkeeper));
 
