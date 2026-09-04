@@ -1,8 +1,9 @@
 import { httpClient } from "../../lib/http/httpClient";
+import { getCurrentApiLang } from "../../i18n/apiLang";
 import type { Account, ForgotPasswordPayload, LoginPayload, LoginResponse, RegisterAccountPayload, SetPasswordPayload, Me, GoogleAuthPayload, GoogleAuthResponse, ApiHealth } from "./account.types";
 
 export function registerAccount(payload: RegisterAccountPayload) {
-  return httpClient.post<Account>("/auth/register", payload);
+  return httpClient.post<Account>("/auth/register", { ...payload, lang: getCurrentApiLang() });
 }
 
 export function loginAccount(payload: LoginPayload) {
@@ -10,7 +11,7 @@ export function loginAccount(payload: LoginPayload) {
 }
 
 export function forgotPassword(payload: ForgotPasswordPayload) {
-  return httpClient.post<{ message: string; code: string }>("/auth/forgot-password", payload);
+  return httpClient.post<{ message: string; code: string }>("/auth/forgot-password", { ...payload, lang: getCurrentApiLang() });
 }
 
 export function setPassword(payload: SetPasswordPayload) {
@@ -26,7 +27,7 @@ export function logoutAccount(refreshToken: string) {
 }
 
 export function googleAuth(payload: GoogleAuthPayload) {
-  return httpClient.post<GoogleAuthResponse>("/auth/google", payload);
+  return httpClient.post<GoogleAuthResponse>("/auth/google", { ...payload, lang: getCurrentApiLang() });
 }
 
 export function checkApiHealth() {
