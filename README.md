@@ -52,21 +52,21 @@ The app runs at `http://localhost:4002` (mapped to the container's Vite dev serv
 
 Set these in `frontend/.env` (see `frontend/.env.example`):
 
-| Variable                | Description                                                              |
-| ------------------------ | -------------------------------------------------------------------------- |
-| `VITE_ENV`               | `development` \| `production`. Used for environment-specific behavior. |
-| `VITE_ALLOW_API`         | `true`/`false`. Toggles features that depend on `kora-api` (accounts, saved rosters). Useful to run the app fully offline/without a backend. |
-| `VITE_API_URL`           | Base URL of `kora-api` (e.g. `http://localhost:3003`).                 |
-| `VITE_GOOGLE_CLIENT_ID`  | OAuth client ID for "Sign in with Google". Leave empty to hide that option. |
+| Variable                | Description                                                                                                                                  |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_ENV`              | `development` \| `production`. Used for environment-specific behavior.                                                                       |
+| `VITE_ALLOW_API`        | `true`/`false`. Toggles features that depend on `kora-api` (accounts, saved rosters). Useful to run the app fully offline/without a backend. |
+| `VITE_API_URL`          | Base URL of `kora-api` (e.g. `http://localhost:3003`).                                                                                       |
+| `VITE_GOOGLE_CLIENT_ID` | OAuth client ID for "Sign in with Google". Leave empty to hide that option.                                                                  |
 
 ### Available scripts
 
-| Script           | Description                                  |
-| ---------------- | --------------------------------------------- |
-| `npm run dev`     | Start the Vite dev server with HMR.          |
-| `npm run build`   | Type-check and build for production.         |
-| `npm run lint`    | Run Oxlint.                                  |
-| `npm run preview` | Preview the production build locally.        |
+| Script            | Description                           |
+| ----------------- | ------------------------------------- |
+| `npm run dev`     | Start the Vite dev server with HMR.   |
+| `npm run build`   | Type-check and build for production.  |
+| `npm run lint`    | Run Oxlint.                           |
+| `npm run preview` | Preview the production build locally. |
 
 ## Project structure
 
@@ -78,12 +78,6 @@ frontend/
     assets/            # illustrations, logo
     i18n/               # translation catalogs (en-US, es-419, pt-BR)
 ```
-
-## Roadmap
-
-- [ ] Court rentals platform (`kora-rentals`)
-- [ ] Tournament organization platform (`kora-tournaments`)
-- [ ] Support for sports beyond football
 
 ## License
 
