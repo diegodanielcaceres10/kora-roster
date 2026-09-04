@@ -143,7 +143,7 @@ export function useDraftWizard() {
       setConfig({ teamCount: QUICK_TEAM_COUNT, playersPerTeam, teams, players, assignmentMode: "random" });
       navigate(".", { state: { step: "export" } });
     },
-    [navigate],
+    [navigate, buildTeams],
   );
 
   const goNext = useCallback(() => {

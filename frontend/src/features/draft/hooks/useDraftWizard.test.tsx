@@ -5,6 +5,7 @@ import { IntlProvider } from "react-intl";
 import { describe, expect, it } from "vitest";
 import { shuffle, useDraftWizard } from "./useDraftWizard";
 import messages from "../../../i18n/locales/en-US.json";
+import esMessages from "../../../i18n/locales/es-419.json";
 
 function Providers({ children }: { children: ReactNode }) {
   return (
@@ -188,5 +189,40 @@ describe("useDraftWizard - drawTeams", () => {
       const goalkeepersInTeam = result.current.config.players.filter((p) => p.teamId === team.id && p.isGoalkeeper);
       expect(goalkeepersInTeam.length).toBeLessThanOrEqual(1);
     }
+  });
+});
+
+describe("useDraftWizard - regression: quickFriendlyDraft reacts to locale changes", () => {
+  it("builds teams with the current locale's names, not a stale one from the first render", () => {
+    // Regression test for a missing `buildTeams` dependency on quickFriendlyDraft's
+    // useCallback: without it, the callback keeps a stale closure and would still
+    // name teams using whatever locale was active on the *first* render.
+    let currentLocale: "es-419" | "en-US" = "es-419";
+    let currentMessages: Record<string, string> = esMessages;
+
+    function LocaleAwareProviders({ children }: { children: ReactNode }) {
+      return (
+        <MemoryRouter>
+          <IntlProvider locale={currentLocale} messages={currentMessages}>
+            {children}
+          </IntlProvider>
+        </MemoryRouter>
+      );
+    }
+
+    const { result, rerender } = renderHook(() => useDraftWizard(), { wrapper: LocaleAwareProviders });
+
+    // simulate the user switching the app language mid-flow
+    currentLocale = "en-US";
+    currentMessages = messages;
+    rerender();
+
+    const entries = ["Ana", "Bruno", "Carla", "Diego", "Elena", "Fabio"].map((name) => ({ name }));
+    act(() => {
+      result.current.quickFriendlyDraft(entries);
+    });
+
+    const teamNames = result.current.config.teams.map((t) => t.name);
+    expect(teamNames).toEqual(["Team A", "Team B"]);
   });
 });
