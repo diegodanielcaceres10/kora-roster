@@ -43,8 +43,8 @@ describe("httpClient", () => {
     expect(result).toEqual({ ok: true });
     const [, init] = vi.mocked(fetch).mock.calls[0];
     expect(init?.method).toBe("GET");
-    expect((init?.headers as Record<string, string>)["Content-Type"]).toBe("application/json");
-    expect((init?.headers as Record<string, string>).Authorization).toBeUndefined();
+    expect((init?.headers as Record<string, string> | undefined)?.["Content-Type"]).toBe("application/json");
+    expect((init?.headers as Record<string, string> | undefined)?.Authorization).toBeUndefined();
   });
 
   it("sends a POST request with a JSON-stringified body", async () => {
@@ -64,7 +64,7 @@ describe("httpClient", () => {
     await httpClient.get("/auth/me", { auth: true });
 
     const [, init] = vi.mocked(fetch).mock.calls[0];
-    expect((init?.headers as Record<string, string>).Authorization).toBe(`Bearer ${token}`);
+    expect((init?.headers as Record<string, string> | undefined)?.Authorization).toBe(`Bearer ${token}`);
   });
 
   it("omits Authorization when auth:true but there is no token stored", async () => {
@@ -73,7 +73,7 @@ describe("httpClient", () => {
     await httpClient.get("/auth/me", { auth: true });
 
     const [, init] = vi.mocked(fetch).mock.calls[0];
-    expect((init?.headers as Record<string, string>).Authorization).toBeUndefined();
+    expect((init?.headers as Record<string, string> | undefined)?.Authorization).toBeUndefined();
   });
 
   it("proactively refreshes a token that's about to expire before sending the request", async () => {
@@ -92,7 +92,7 @@ describe("httpClient", () => {
 
     expect(fetch).toHaveBeenCalledTimes(2);
     const meCall = vi.mocked(fetch).mock.calls.find(([url]) => String(url).includes("/auth/me"));
-    expect((meCall?.[1]?.headers as Record<string, string>).Authorization).toBe(`Bearer ${newToken}`);
+    expect((meCall?.[1]?.headers as Record<string, string> | undefined)?.Authorization).toBe(`Bearer ${newToken}`);
     expect(authStorage.getAccessToken()).toBe(newToken);
   });
 
