@@ -59,15 +59,22 @@ async function performRefresh(): Promise<string> {
   });
 
   if (!response.ok) {
+    const errorBody = await response.json().catch(() => undefined);
+    const code = errorBody && typeof errorBody === "object" ? (errorBody as { code?: string }).code : undefined;
+
     // Another tab may have rotated with this same refresh token while our
     // request was in flight (e.g. both tabs waking from background at
-    // once). If storage now holds a different refresh token than the one
-    // we sent, that's a legitimate rotation from another tab, not a real
-    // failure — adopt what it wrote instead of forcing a logout.
-    const currentRefreshToken = authStorage.getRefreshToken();
-    const currentAccessToken = authStorage.getAccessToken();
-    if (currentAccessToken && currentRefreshToken && currentRefreshToken !== sentRefreshToken) {
-      return currentAccessToken;
+    // once). Only treat this as that legitimate rotation - and adopt what
+    // the other tab wrote - when the backend specifically reports the
+    // token as already used. Any other failure (network hiccup, rate
+    // limit, server error) must not be papered over just because storage
+    // happens to hold a different token for some unrelated reason.
+    if (code === "TOKEN_ALREADY_USED") {
+      const currentRefreshToken = authStorage.getRefreshToken();
+      const currentAccessToken = authStorage.getAccessToken();
+      if (currentAccessToken && currentRefreshToken && currentRefreshToken !== sentRefreshToken) {
+        return currentAccessToken;
+      }
     }
 
     authStorage.clearTokens();

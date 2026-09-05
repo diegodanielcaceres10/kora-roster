@@ -163,6 +163,57 @@ describe("httpClient", () => {
     window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, listener);
   });
 
+  it("adopts another tab's already-rotated tokens when the backend reports TOKEN_ALREADY_USED", async () => {
+    authStorage.setTokens(makeToken(3600), "old-refresh-token"); // not expiring soon: exercises the reactive 401 path
+    const rotatedAccessToken = makeToken(7200);
+    const rotatedRefreshToken = "rotated-refresh-token";
+    let meCalls = 0;
+
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (String(url).includes("/auth/refresh-token")) {
+        // Simulate another tab rotating the token while this refresh call is in flight.
+        authStorage.setTokens(rotatedAccessToken, rotatedRefreshToken);
+        return jsonResponse(409, { message: "already used", code: "TOKEN_ALREADY_USED" });
+      }
+      meCalls += 1;
+      return meCalls === 1 ? jsonResponse(401, { message: "expired", code: "TOKEN_EXPIRED" }) : jsonResponse(200, { ok: true });
+    });
+
+    const result = await httpClient.get("/auth/me", { auth: true });
+
+    expect(result).toEqual({ ok: true });
+    expect(authStorage.getAccessToken()).toBe(rotatedAccessToken);
+    expect(authStorage.getRefreshToken()).toBe(rotatedRefreshToken);
+  });
+
+  it("does NOT adopt a stored token from an unrelated refresh failure (only TOKEN_ALREADY_USED is trusted)", async () => {
+    // Regression test: storage happening to hold a different token is not
+    // by itself proof of a legitimate cross-tab rotation - only a backend
+    // response explicitly coded TOKEN_ALREADY_USED is trusted for that.
+    authStorage.setTokens(makeToken(5), "old-refresh-token"); // expiring soon: exercises the proactive path
+    const listener = vi.fn();
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, listener);
+
+    vi.mocked(fetch).mockImplementation(async (url) => {
+      if (String(url).includes("/auth/refresh-token")) {
+        // Storage differs from what we sent, but the failure is a generic
+        // server error, not TOKEN_ALREADY_USED.
+        authStorage.setTokens("unrelated-access-token", "unrelated-refresh-token");
+        return jsonResponse(500, { message: "internal error" });
+      }
+      return jsonResponse(200, { ok: true });
+    });
+
+    const result = await httpClient.get("/auth/me", { auth: true });
+
+    expect(result).toEqual({ ok: true }); // request still goes out, just without Authorization
+    expect(authStorage.getAccessToken()).toBeNull();
+    expect(authStorage.getRefreshToken()).toBeNull();
+    expect(listener).toHaveBeenCalledTimes(1);
+
+    window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, listener);
+  });
+
   it("throws an ApiError with status, code, message and body parsed from the response", async () => {
     vi.mocked(fetch).mockResolvedValueOnce(jsonResponse(422, { message: "Invalid email", code: "VALIDATION_ERROR", field: "email" }));
 
