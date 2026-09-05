@@ -324,12 +324,20 @@ export function StepDraw({ config, setAssignmentMode, resetAssignments, assignPl
                 const isDraggedPlayerOnSpot = player?.id === draggedPlayerId;
                 const canDropOnSpot = !draggedPlayer || ((!draggedPlayer.isGoalkeeper || index === 0) && (!player || isDraggedPlayerOnSpot));
 
+                const openSpotModal = () => {
+                  if (selectedTeam) handleOpenSpotModal(selectedTeam, index);
+                };
+                const spotAriaLabel = `${intl.formatMessage({ id: "draw.modal.spotTitle" }, { number: index + 1 })}: ${player ? player.name : intl.formatMessage({ id: "draw.field.emptySpot" })}`;
+
                 return (
                   <div
                     key={index}
                     className={[styles.draw__spot, dragOverZone === spotZone ? styles["draw__spot--over"] : "", dragOverZone === spotZone && !canDropOnSpot ? styles["draw__spot--blocked"] : ""].join(" ")}
                     style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
                     draggable={Boolean(player)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={spotAriaLabel}
                     onDragStart={(event) => {
                       if (player) handleDragStart(event, player.id);
                     }}
@@ -359,8 +367,11 @@ export function StepDraw({ config, setAssignmentMode, resetAssignments, assignPl
 
                       handleDropOnTeam(event, selectedTeam, index);
                     }}
-                    onClick={() => {
-                      if (selectedTeam) handleOpenSpotModal(selectedTeam, index);
+                    onClick={openSpotModal}
+                    onKeyDown={(event) => {
+                      if (event.key !== "Enter" && event.key !== " ") return;
+                      event.preventDefault();
+                      openSpotModal();
                     }}
                   >
                     <span className={[styles.draw__spotIcon, player ? styles["draw__spotIcon--filled"] : "", player ? `custom-bib-${selectedTeam.color}` : ""].join(" ")}>

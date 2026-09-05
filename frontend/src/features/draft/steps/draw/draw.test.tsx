@@ -117,6 +117,32 @@ describe("StepDraw - spot assignment modal", () => {
     expect(handlers.assignPlayerToTeam).toHaveBeenCalledWith("p2", "t2", 0);
   });
 
+  it("is reachable via Tab and opens the modal with Enter (keyboard, no mouse)", async () => {
+    const user = userEvent.setup();
+    renderDraw(baseConfig);
+
+    await user.click(screen.getByRole("button", { name: /Team B/ }));
+    const spot = screen.getByRole("button", { name: "Spot 1: Drag a player here" });
+    expect(spot).toHaveAttribute("tabindex", "0");
+
+    spot.focus();
+    await user.keyboard("{Enter}");
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("also opens the modal with Space on a focused spot", async () => {
+    const user = userEvent.setup();
+    renderDraw(baseConfig);
+
+    await user.click(screen.getByRole("button", { name: /Team B/ }));
+    const spot = screen.getByRole("button", { name: "Spot 1: Drag a player here" });
+    spot.focus();
+    await user.keyboard(" ");
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
   it("opens the modal for a filled spot and unassigns the player from there", async () => {
     const user = userEvent.setup();
     const handlers = renderDraw(baseConfig);
