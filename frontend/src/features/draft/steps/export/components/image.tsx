@@ -2,8 +2,8 @@ import { forwardRef } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import type { DraftConfig } from "../../../draft.types";
 import styles from "./image.module.scss";
-import koraRosterLogo from "../../../../../assets/logo/kora-roster-logo.png";
-import koraBibs from "../../../../../assets/illustrations/kora-bibs.png";
+import koraRosterLogo from "../../../../../assets/logo/kora-roster-logo.webp";
+import koraBibs from "../../../../../assets/illustrations/kora-bibs.webp";
 
 interface ImageProps {
   config: DraftConfig;

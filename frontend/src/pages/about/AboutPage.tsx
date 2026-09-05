@@ -1,6 +1,6 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./AboutPage.module.scss";
-import authorLogo from "../../assets/diegodanielcaceres.png";
+import authorLogo from "../../assets/diegodanielcaceres.webp";
 
 export function AboutPage() {
   const intl = useIntl();

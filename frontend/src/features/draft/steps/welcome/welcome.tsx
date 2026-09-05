@@ -2,8 +2,8 @@ import { useState, useMemo, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./welcome.module.scss";
-import koraRosterLogo from "../../../../assets/logo/kora-roster-logo.png";
-import koraRosterWelcome from "../../../../assets/illustrations/kora-welcome.png";
+import koraRosterLogo from "../../../../assets/logo/kora-roster-logo.webp";
+import koraRosterWelcome from "../../../../assets/illustrations/kora-welcome.webp";
 import { parsePastedNames, type ParsedPlayerName } from "../../utils/parsePastedNames";
 
 const QUICK_TEAM_COUNT = 2;
