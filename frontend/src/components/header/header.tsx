@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./header.module.scss";
-import kRosterLogo from "/favicon.svg";
+import kRosterLogo from "/favicon.png";
 import { useAccount } from "../../features/account/AccountContext";
 import { useApiHealth } from "../../features/account/hooks/useApiHealth";
 import { LanguageSwitcher } from "../language-switcher/language-switcher";
