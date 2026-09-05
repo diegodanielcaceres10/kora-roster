@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./header.module.scss";
-import kRosterLogo from "/favicon.png";
+import kRosterLogo from "/favicon.svg";
 import { useAccount } from "../../features/account/AccountContext";
 import { useApiHealth } from "../../features/account/hooks/useApiHealth";
 import { LanguageSwitcher } from "../language-switcher/language-switcher";
@@ -29,12 +29,7 @@ export function Header() {
     <header className={styles.nav}>
       <div className={styles.nav__content}>
         <div className={styles.nav__menu}>
-          <button
-            type="button"
-            aria-expanded={isMenuOpen}
-            aria-label={isMenuOpen ? intl.formatMessage({ id: "header.menu.close" }) : intl.formatMessage({ id: "header.menu.open" })}
-            onClick={() => setIsMenuOpen((open) => !open)}
-          >
+          <button type="button" aria-expanded={isMenuOpen} aria-label={isMenuOpen ? intl.formatMessage({ id: "header.menu.close" }) : intl.formatMessage({ id: "header.menu.open" })} onClick={() => setIsMenuOpen((open) => !open)}>
             {isMenuOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars-staggered"></i>}
           </button>
           <div className={styles.nav__logo}>
