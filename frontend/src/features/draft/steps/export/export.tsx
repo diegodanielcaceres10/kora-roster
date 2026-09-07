@@ -139,7 +139,6 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
     <section className={styles.export}>
       <div className={styles.export__content}>
         <div className={styles.export__preview}>
-          {/* Vista previa: responsive, es la que ve el usuario */}
           <Image ref={cardRef} config={config} />
         </div>
 
