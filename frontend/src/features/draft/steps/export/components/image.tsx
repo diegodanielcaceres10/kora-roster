@@ -57,7 +57,6 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ con
           </span>
         </div>
       </div>
-      <img src={koraBibs} alt="" className={styles.image__bibs} />
     </div>
   );
 });
