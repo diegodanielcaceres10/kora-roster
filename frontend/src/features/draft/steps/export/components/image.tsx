@@ -3,6 +3,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import type { DraftConfig } from "../../../draft.types";
 import styles from "./image.module.scss";
 import koraRosterLogo from "../../../../../assets/logo/kora-roster-logo.webp";
+import kRosterLogo from "/favicon.png";
 import koraBibs from "../../../../../assets/illustrations/kora-bibs.webp";
 
 interface ImageProps {
@@ -32,7 +33,7 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ con
               <ul className={styles.image__roster}>
                 {players.map((player, index) => (
                   <li key={player.id} className={styles.image__player}>
-                    <strong>{index + 1}</strong>
+                    <strong className={[`custom-bib-${team.color}`].join(" ")}>{index + 1}</strong>
                     <span>{player.name}</span>
                     {player.isGoalkeeper && (
                       <span className={styles.image__goalkeeperBadge} aria-label={intl.formatMessage({ id: "image.goalkeeperAriaLabel" })}>
@@ -49,13 +50,14 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ con
 
       <div className={styles.image__footer}>
         <div className={styles.image__credit}>
-          <img src={koraRosterLogo} alt="" />
+          <img src={kRosterLogo} alt="" />
           <span>
             <FormattedMessage id="image.credit" />
+            <strong>Kora</strong>
           </span>
         </div>
-        <img src={koraBibs} alt="" className={styles.image__bibs} />
       </div>
+      <img src={koraBibs} alt="" className={styles.image__bibs} />
     </div>
   );
 });
