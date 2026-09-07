@@ -3,8 +3,8 @@ import { FormattedDate, FormattedMessage, useIntl } from "react-intl";
 import type { DraftConfig } from "../../../draft.types";
 import styles from "./image.module.scss";
 import koraRosterLogo from "../../../../../assets/logo/kora-roster-logo.webp";
-import kRosterLogo from "/favicon.png";
 import qrKoraRoster from "../../../../../assets/qrs/qr_kora_roster.png";
+import qrPortfolio from "../../../../../assets/qrs/qr_portfolio.png";
 
 interface ImageProps {
   config: DraftConfig;
@@ -60,16 +60,20 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ con
 
       <div className={styles.image__footer}>
         <div className={styles.image__credit}>
-          <img src={kRosterLogo} alt="" />
           <span>
             <FormattedMessage id="image.credit" />
             <strong>Kora</strong>
           </span>
-        </div>
-        <div className={styles.image__qrs}>
           <div className={styles.image__qr}>
-            <small>Web</small>
-            <img src={qrKoraRoster} alt="QR Code Kora Roster Web" />
+            <img src={qrKoraRoster} alt="QR Code for Kora Roster Web" />
+          </div>
+        </div>
+        <div className={styles.image__author}>
+          <span>
+            <FormattedMessage id="image.author" />
+          </span>
+          <div className={styles.image__qr}>
+            <img src={qrPortfolio} alt="QR Code for Diego Daniel Caceres Portfolio" />
           </div>
         </div>
       </div>

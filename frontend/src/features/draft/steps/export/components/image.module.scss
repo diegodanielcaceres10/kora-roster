@@ -6,9 +6,9 @@
   border: 1px solid rgba(244, 246, 239, 0.12);
   background: url("../../../../../assets/illustrations/kora-export.png");
   background-color: var(--kora-ink);
-  background-position: right bottom;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: 300px;
   box-shadow: 0 22px 44px rgba(0, 0, 0, 0.35);
   padding: var(--space-4);
   display: flex;
@@ -21,8 +21,13 @@
   max-width: 100%;
   min-height: 600px;
 
+  @include ds.lg {
+    min-width: 100%;
+  }
+
   @include ds.md {
     font-size: var(--font-size-xs);
+    padding: var(--space-2);
   }
 
   &--export {
@@ -37,7 +42,6 @@
     align-items: center;
     text-align: center;
     gap: var(--space-1);
-    opacity: 0.5;
     margin-bottom: var(--space-4);
 
     & h2 {
@@ -55,6 +59,7 @@
       display: flex;
       align-items: center;
       gap: var(--space-2);
+      opacity: 0.5;
 
       & i {
         font-size: 20px;
@@ -144,6 +149,7 @@
     justify-content: space-between;
     gap: var(--space-4);
     width: 100%;
+    margin-top: var(--space-4);
   }
 
   &__credit {
@@ -151,30 +157,34 @@
     flex-direction: column;
     align-items: start;
     gap: var(--space-2);
-    width: 30%;
-
-    & img {
-      width: auto;
-      height: 40px;
-    }
+    color: var(--kora-turf);
 
     & span {
       display: flex;
       gap: var(--space-1);
-      color: var(--kora-turf);
 
       & strong {
         color: var(--kora-chalk);
       }
     }
-
-    & small {
-      color: var(--kora-chalk);
-    }
   }
 
-  &__qrs {
+  &__author {
     display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: var(--space-2);
+    color: var(--kora-turf);
+
+    & span {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+
+      & strong {
+        color: var(--kora-chalk);
+      }
+    }
   }
 
   &__qr {
@@ -189,8 +199,8 @@
       border-radius: 5px;
       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
       overflow: hidden;
-      height: 100px;
-      width: 100px;
+      height: 150px;
+      width: 150px;
       border: 2px solid rgba(7, 159, 104, 0.55);
       padding: var(--space-2);
     }

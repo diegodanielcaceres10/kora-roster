@@ -100,6 +100,7 @@
   "export.actions.newDraw": "Nuevo sorteo",
   "image.goalkeeperAriaLabel": "Arquero",
   "image.credit": "Creado con",
+  "image.author": "Autor",
   "about.title": "Una forma simple de resolver el sorteo antes de jugar",
   "about.description": "Kora nació para esos partidos donde nadie quiere perder diez minutos repartiendo jugadores. Elegís la cantidad de equipos, cargás la lista y dejás que la app haga el trabajo rápido, claro y sin vueltas.",
   "about.authorAriaLabel": "Portfolio de Diego Daniel Caceres",
