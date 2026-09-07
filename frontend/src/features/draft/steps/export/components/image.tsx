@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedDate, FormattedMessage, useIntl } from "react-intl";
 import type { DraftConfig } from "../../../draft.types";
 import styles from "./image.module.scss";
 import koraRosterLogo from "../../../../../assets/logo/kora-roster-logo.webp";
@@ -20,7 +20,13 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ con
         <img src={koraRosterLogo} alt="Kora" className={styles.image__logo} />
         <small>
           <i className="fa-regular fa-calendar"></i>
-          06 Sep 2025
+          <FormattedMessage
+            id="common.currentDate"
+            defaultMessage="{date}"
+            values={{
+              date: <FormattedDate value={new Date()} year="numeric" month="long" day="2-digit" />,
+            }}
+          />
         </small>
       </div>
 
