@@ -101,7 +101,7 @@ export function useDraftWizard() {
       return;
     }
     if (stateStep !== "welcome" && config.players.length === 0) {
-      navigate(".", { replace: true, state: { step: "setup" } });
+      navigate(".", { replace: true, state: { step: "welcome" } });
     }
   }, []);
 

@@ -4,7 +4,7 @@ import type { DraftConfig } from "../../../draft.types";
 import styles from "./image.module.scss";
 import koraRosterLogo from "../../../../../assets/logo/kora-roster-logo.webp";
 import kRosterLogo from "/favicon.png";
-import koraBibs from "../../../../../assets/illustrations/kora-bibs.webp";
+import qrKoraRoster from "../../../../../assets/qrs/qr_kora_roster.png";
 
 interface ImageProps {
   config: DraftConfig;
@@ -18,6 +18,10 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ con
     <div ref={ref} className={[styles.image, variant === "export" ? styles["image--export"] : ""].join(" ").trim()}>
       <div className={styles.image__header}>
         <img src={koraRosterLogo} alt="Kora" className={styles.image__logo} />
+        <small>
+          <i className="fa-regular fa-calendar"></i>
+          06 Sep 2025
+        </small>
       </div>
 
       <div className={styles.image__teams}>
@@ -55,6 +59,12 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(function Image({ con
             <FormattedMessage id="image.credit" />
             <strong>Kora</strong>
           </span>
+        </div>
+        <div className={styles.image__qrs}>
+          <div className={styles.image__qr}>
+            <small>Web</small>
+            <img src={qrKoraRoster} alt="QR Code Kora Roster Web" />
+          </div>
         </div>
       </div>
     </div>
