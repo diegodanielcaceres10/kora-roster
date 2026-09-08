@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Layout } from "./components/Layout/Layout";
+import { Layout } from "./shared/components/Layout/Layout";
 import { useDraftWizard } from "./features/draft/hooks/useDraftWizard";
 import { StepWelcome } from "./features/draft/steps/welcome/welcome";
 import { StepSetup } from "./features/draft/steps/setup/setup";

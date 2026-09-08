@@ -6,7 +6,7 @@ import App from "./App";
 import { AccountProvider } from "./features/account/AccountContext";
 import { LocaleProvider } from "./i18n/LocaleContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { ScrollToTop } from "./utils/ScrollToTop";
+import { ScrollToTop } from "./shared/utils/ScrollToTop";
 
 import "./styles/global.scss";
 

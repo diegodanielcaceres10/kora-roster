@@ -4,8 +4,8 @@ import { useIntl } from "react-intl";
 import { useAccount } from "../AccountContext";
 import { useApiHealth } from "../hooks/useApiHealth";
 import { authStorage } from "../../../lib/auth/authStorage";
-import { Spinner } from "../../../components/Spinner/Spinner";
-import { ServiceUnavailable } from "../../../components/ServiceUnavailable/ServiceUnavailable";
+import { Spinner } from "../../../shared/components/Spinner/Spinner";
+import { ServiceUnavailable } from "../../../shared/components/ServiceUnavailable/ServiceUnavailable";
 
 /**
  * Wrap routes meant for logged-out visitors (login, register, forgot,
