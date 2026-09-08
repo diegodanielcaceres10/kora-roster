@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
-import { LOCALE_LABELS, SUPPORTED_LOCALES, type AppLocale } from "../../i18n/config";
-import { useLocale } from "../../i18n/LocaleContext";
+import { LOCALE_LABELS, SUPPORTED_LOCALES, type AppLocale } from "../../../i18n/config";
+import { useLocale } from "../../../i18n/LocaleContext";
 import styles from "./LanguageSwitcher.module.scss";
 
 const LOCALE_FLAGS: Record<AppLocale, string> = {

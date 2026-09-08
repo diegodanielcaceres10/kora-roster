@@ -3,8 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./Header.module.scss";
 import kRosterLogo from "/favicon.png";
-import { useAccount } from "../../features/account/AccountContext";
-import { useApiHealth } from "../../features/account/hooks/useApiHealth";
+import { useAccount } from "../../../features/account/AccountContext";
+import { useApiHealth } from "../../../features/account/hooks/useApiHealth";
 import { LanguageSwitcher } from "../LanguageSwitcher/LanguageSwitcher";
 
 const NAV_LINKS = [

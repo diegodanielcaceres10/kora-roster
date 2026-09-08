@@ -10,7 +10,7 @@ import messages from "../../../i18n/locales/en-US.json";
 
 vi.mock("../../../features/account/hooks/useRegisterAccount");
 vi.mock("../../../features/account/hooks/useGoogleRegister");
-vi.mock("../../../features/account/shared/components/GoogleAuthButton", () => ({ GoogleAuthButton: () => null }));
+vi.mock("../../../features/account/components/GoogleAuthButton", () => ({ GoogleAuthButton: () => null }));
 
 function renderPage() {
   return render(

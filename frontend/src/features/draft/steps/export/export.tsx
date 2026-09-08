@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import { FormattedMessage, useIntl } from "react-intl";
 import type { DraftConfig } from "../../draft.types";
-import { Image } from "./components/image";
+import { Image } from "./ExportImagePreview/ExportImagePreview";
 import styles from "./export.module.scss";
 
 interface StepExportProps {

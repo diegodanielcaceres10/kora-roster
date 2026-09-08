@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { FormattedDate, FormattedMessage, useIntl } from "react-intl";
 import type { DraftConfig } from "../../../draft.types";
-import styles from "./image.module.scss";
+import styles from "./ExportImagePreview.module.scss";
 import koraRosterLogo from "../../../../../assets/logo/kora-roster-logo.webp";
 import qrKoraRoster from "../../../../../assets/qrs/qr_kora_roster.png";
 import qrPortfolio from "../../../../../assets/qrs/qr_portfolio.png";
