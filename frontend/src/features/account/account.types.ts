@@ -1,11 +1,3 @@
-export interface RegisterAccountPayload {
-  email: string;
-  name: string;
-  lastname: string;
-  acceptedTerms: boolean;
-  marketingConsent: boolean;
-}
-
 export interface Account {
   id: number;
   email: string;
@@ -15,6 +7,14 @@ export interface Account {
   status: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface RegisterAccountPayload {
+  email: string;
+  name: string;
+  lastname: string;
+  acceptedTerms: boolean;
+  marketingConsent: boolean;
 }
 
 export interface LoginPayload {
@@ -39,13 +39,26 @@ export interface SetPasswordPayload {
 
 export type Me = Account;
 
-export interface GoogleAuthPayload {
+export interface GoogleLoginPayload {
   idToken: string;
-  acceptedTerms: true;
+}
+
+export interface GoogleRegisterPayload {
+  idToken: string;
+  name: string;
+  lastname: string;
+  marketingConsent: boolean;
 }
 
 export interface GoogleAuthResponse extends LoginResponse {
   linkedAccount?: boolean;
+}
+
+export interface GoogleAccountNotFoundProfile {
+  email: string;
+  name: string;
+  lastname: string;
+  idToken: string;
 }
 
 export interface ApiHealth {

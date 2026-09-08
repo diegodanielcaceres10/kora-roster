@@ -3,27 +3,28 @@ import { Link, useNavigate } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./LoginPage.module.scss";
 import { useLogin } from "../../../features/account/hooks/useLogin";
-import { useGoogleAuth } from "../../../features/account/hooks/useGoogleAuth";
 import { GoogleAuthButton } from "../../../features/account/components/GoogleAuthButton";
+import type { GoogleAccountNotFoundProfile } from "../../../features/account/account.types";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { submit, status, errorId } = useLogin();
-  const { status: googleStatus } = useGoogleAuth();
   const navigate = useNavigate();
   const intl = useIntl();
 
-  const isLoading = status === "loading" || googleStatus === "loading";
+  const isLoading = status === "loading";
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isLoading) return;
     const result = await submit({ email, password });
-    if (result) {
-      navigate("/");
-    }
+    if (result) navigate("/");
+  };
+
+  const handleGoogleAccountNotFound = (profile: GoogleAccountNotFoundProfile) => {
+    navigate("/register", { state: { googleProfile: profile } });
   };
 
   return (
@@ -71,7 +72,7 @@ export function LoginPage() {
             </span>
           </button>
 
-          <GoogleAuthButton mode="login" text="continue_with" redirectTo="/" />
+          <GoogleAuthButton mode="login" text="continue_with" redirectTo="/" onAccountNotFound={handleGoogleAccountNotFound} />
 
           {status === "error" && errorId && (
             <p className={styles.login__error} role="alert">

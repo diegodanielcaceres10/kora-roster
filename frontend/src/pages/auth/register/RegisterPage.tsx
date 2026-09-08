@@ -1,10 +1,15 @@
-import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState, type FormEvent } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./RegisterPage.module.scss";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
-import { useGoogleAuth } from "../../../features/account/hooks/useGoogleAuth";
+import { useGoogleRegister } from "../../../features/account/hooks/useGoogleRegister";
 import { GoogleAuthButton, type GoogleProfile } from "../../../features/account/components/GoogleAuthButton";
+import type { GoogleAccountNotFoundProfile } from "../../../features/account/account.types";
+
+interface RegisterLocationState {
+  googleProfile?: GoogleAccountNotFoundProfile;
+}
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -14,8 +19,21 @@ export function RegisterPage() {
   const [marketingConsent, setmarketingConsent] = useState(false);
   const [googleProfile, setGoogleProfile] = useState<GoogleProfile | null>(null);
   const { submit, status, errorId } = useRegisterAccount();
-  const { submit: submitGoogle, status: googleStatus, errorId: googleErrorId } = useGoogleAuth();
+  const { submit: submitGoogle, status: googleStatus, errorId: googleErrorId } = useGoogleRegister();
   const intl = useIntl();
+  const location = useLocation();
+
+  useEffect(() => {
+    const state = location.state as RegisterLocationState | null;
+    if (state?.googleProfile) {
+      const { idToken, email: profileEmail, name: profileName, lastname: profileLastname } = state.googleProfile;
+      setGoogleProfile({ idToken, email: profileEmail, name: profileName, lastname: profileLastname });
+      setEmail(profileEmail);
+      setName(profileName);
+      setLastname(profileLastname);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isLoading = status === "loading" || googleStatus === "loading";
   const isSuccess = status === "success" || googleStatus === "success";
@@ -39,7 +57,7 @@ export function RegisterPage() {
     if (isLoading || !acceptedTerms) return;
 
     if (googleProfile) {
-      submitGoogle(googleProfile.idToken);
+      submitGoogle({ idToken: googleProfile.idToken, name, lastname, marketingConsent });
       return;
     }
 
@@ -85,16 +103,7 @@ export function RegisterPage() {
               <label className={styles.register__label} htmlFor="email">
                 <FormattedMessage id="register.emailLabel" />
               </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder={intl.formatMessage({ id: "register.emailPlaceholder" })}
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                disabled={isLoading || !!googleProfile}
-                required
-              />
+              <input id="email" name="email" type="email" placeholder={intl.formatMessage({ id: "register.emailPlaceholder" })} value={email} onChange={(event) => setEmail(event.target.value)} disabled={isLoading || !!googleProfile} required />
             </div>
 
             {googleProfile && (

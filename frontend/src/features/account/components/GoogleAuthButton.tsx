@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
-import { useGoogleAuth } from "../hooks/useGoogleAuth";
+import { useGoogleLogin } from "../hooks/useGoogleLogin";
 import { decodeJwtPayload } from "../../../lib/auth/jwt";
+import type { GoogleAccountNotFoundProfile } from "../account.types";
 import styles from "./GoogleAuthButton.module.scss";
 
 export interface GoogleProfile {
@@ -16,11 +18,8 @@ interface GoogleAuthButtonProps {
   mode: "login" | "register";
   text?: "signin_with" | "signup_with" | "continue_with";
   redirectTo?: string;
-  // Requerido cuando mode="register": en vez de loguear/crear directo, se le
-  // pasa el perfil decodificado del idToken para que la página lo use como
-  // prefill y decida cuándo mandar la cuenta al backend (después de que el
-  // usuario tilde los términos).
   onRegisterProfile?: (profile: GoogleProfile) => void;
+  onAccountNotFound?: (profile: GoogleAccountNotFoundProfile) => void;
 }
 
 interface GoogleIdTokenClaims {
@@ -29,11 +28,15 @@ interface GoogleIdTokenClaims {
   family_name?: string;
 }
 
-export function GoogleAuthButton({ mode, text = "continue_with", redirectTo = "/", onRegisterProfile }: GoogleAuthButtonProps) {
-  const { submit, status, errorId } = useGoogleAuth();
+export function GoogleAuthButton({ mode, text = "continue_with", redirectTo = "/", onRegisterProfile, onAccountNotFound }: GoogleAuthButtonProps) {
+  const { submit, status, errorId, accountNotFound } = useGoogleLogin();
   const navigate = useNavigate();
 
   const isLoading = status === "loading";
+
+  useEffect(() => {
+    if (accountNotFound) onAccountNotFound?.(accountNotFound);
+  }, [accountNotFound, onAccountNotFound]);
 
   const handleCredential = async (credential: string) => {
     if (mode === "register") {

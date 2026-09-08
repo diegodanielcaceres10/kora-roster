@@ -1,8 +1,9 @@
 import { useCallback, useState } from "react";
-import { googleAuth } from "../account.api";
+import { googleLogin } from "../account.api";
 import { ApiError } from "../../../lib/http/httpClient";
 import { authStorage } from "../../../lib/auth/authStorage";
 import { useAccount } from "../AccountContext";
+import type { GoogleAccountNotFoundProfile } from "../account.types";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -19,23 +20,37 @@ function toErrorMessageId(err: unknown): string {
   }
 }
 
-export function useGoogleAuth() {
+function extractNotFoundProfile(err: unknown): GoogleAccountNotFoundProfile | null {
+  if (!(err instanceof ApiError) || err.code !== "GOOGLE_ACCOUNT_NOT_FOUND") return null;
+  const body = err.body as { errors?: { googleProfile?: GoogleAccountNotFoundProfile } } | undefined;
+  return body?.errors?.googleProfile ?? null;
+}
+
+export function useGoogleLogin() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorId, setErrorId] = useState<string | null>(null);
+  const [accountNotFound, setAccountNotFound] = useState<GoogleAccountNotFoundProfile | null>(null);
   const { setAccount } = useAccount();
 
   const submit = useCallback(
     async (idToken: string) => {
       setStatus("loading");
       setErrorId(null);
+      setAccountNotFound(null);
 
       try {
-        const result = await googleAuth({ idToken, acceptedTerms: true });
+        const result = await googleLogin({ idToken });
         authStorage.setTokens(result.accessToken, result.refreshToken);
         setAccount(result.user);
         setStatus("success");
         return result;
       } catch (err) {
+        const notFoundProfile = extractNotFoundProfile(err);
+        if (notFoundProfile) {
+          setAccountNotFound(notFoundProfile);
+          setStatus("idle");
+          return null;
+        }
         setErrorId(toErrorMessageId(err));
         setStatus("error");
         return null;
@@ -44,5 +59,5 @@ export function useGoogleAuth() {
     [setAccount],
   );
 
-  return { submit, status, errorId };
+  return { submit, status, errorId, accountNotFound };
 }
