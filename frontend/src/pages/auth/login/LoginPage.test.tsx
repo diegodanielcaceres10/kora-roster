@@ -5,11 +5,9 @@ import { IntlProvider } from "react-intl";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { LoginPage } from "./LoginPage";
 import { useLogin } from "../../../features/account/hooks/useLogin";
-import { useGoogleAuth } from "../../../features/account/hooks/useGoogleAuth";
 import messages from "../../../i18n/locales/en-US.json";
 
 vi.mock("../../../features/account/hooks/useLogin");
-vi.mock("../../../features/account/hooks/useGoogleAuth");
 vi.mock("../../../features/account/components/GoogleAuthButton", () => ({ GoogleAuthButton: () => null }));
 
 function renderPage() {
@@ -31,7 +29,6 @@ describe("LoginPage", () => {
   beforeEach(() => {
     submit.mockReset();
     vi.mocked(useLogin).mockReturnValue({ submit, status: "idle", errorId: null });
-    vi.mocked(useGoogleAuth).mockReturnValue({ submit: vi.fn(), status: "idle", errorId: null });
   });
 
   it("submits the entered email and password", async () => {

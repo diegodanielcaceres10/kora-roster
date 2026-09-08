@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { httpClient } from "../../lib/http/httpClient";
 import { LOCALE_STORAGE_KEY } from "../../i18n/config";
-import { checkApiHealth, forgotPassword, getMe, googleAuth, loginAccount, logoutAccount, registerAccount, setPassword } from "./account.api";
+import { checkApiHealth, forgotPassword, getMe, googleLogin, googleRegister, loginAccount, logoutAccount, registerAccount, setPassword } from "./account.api";
 
 vi.mock("../../lib/http/httpClient", () => ({
   httpClient: {
@@ -61,10 +61,24 @@ describe("account.api", () => {
     expect(httpClient.post).toHaveBeenCalledWith("/auth/logout", { refreshToken: "refresh-123" });
   });
 
-  it("googleAuth posts to /auth/google with the current API language attached", () => {
-    googleAuth({ idToken: "id-token", acceptedTerms: true });
+  it("googleLogin posts to /google/login with the current API language attached", () => {
+    googleLogin({ idToken: "id-token" });
 
-    expect(httpClient.post).toHaveBeenCalledWith("/auth/google", { idToken: "id-token", acceptedTerms: true, lang: "pt" });
+    expect(httpClient.post).toHaveBeenCalledWith("/google/login", { idToken: "id-token", lang: "pt" });
+  });
+
+  it("googleRegister posts to /google/register with the current API language attached", () => {
+    googleRegister({ idToken: "id-token", email: "a@b.com", name: "Ana", lastname: "Lima", acceptedTerms: true, marketingConsent: false });
+
+    expect(httpClient.post).toHaveBeenCalledWith("/google/register", {
+      idToken: "id-token",
+      email: "a@b.com",
+      name: "Ana",
+      lastname: "Lima",
+      acceptedTerms: true,
+      marketingConsent: false,
+      lang: "pt",
+    });
   });
 
   it("checkApiHealth requests /health without auth", () => {

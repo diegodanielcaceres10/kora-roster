@@ -5,11 +5,11 @@ import { IntlProvider } from "react-intl";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RegisterPage } from "./RegisterPage";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
-import { useGoogleAuth } from "../../../features/account/hooks/useGoogleAuth";
+import { useGoogleRegister } from "../../../features/account/hooks/useGoogleRegister";
 import messages from "../../../i18n/locales/en-US.json";
 
 vi.mock("../../../features/account/hooks/useRegisterAccount");
-vi.mock("../../../features/account/hooks/useGoogleAuth");
+vi.mock("../../../features/account/hooks/useGoogleRegister");
 vi.mock("../../../features/account/components/GoogleAuthButton", () => ({ GoogleAuthButton: () => null }));
 
 function renderPage() {
@@ -28,7 +28,7 @@ describe("RegisterPage", () => {
   beforeEach(() => {
     submit.mockReset();
     vi.mocked(useRegisterAccount).mockReturnValue({ submit, status: "idle", account: null, errorId: null });
-    vi.mocked(useGoogleAuth).mockReturnValue({ submit: vi.fn(), status: "idle", errorId: null });
+    vi.mocked(useGoogleRegister).mockReturnValue({ submit: vi.fn(), status: "idle", errorId: null });
   });
 
   it("keeps the submit button disabled until the terms checkbox is accepted", async () => {
@@ -98,7 +98,7 @@ describe("RegisterPage", () => {
   });
 
   it("shows the Google success variant when the Google sign-up succeeded instead", () => {
-    vi.mocked(useGoogleAuth).mockReturnValue({ submit: vi.fn(), status: "success", errorId: null });
+    vi.mocked(useGoogleRegister).mockReturnValue({ submit: vi.fn(), status: "success", errorId: null });
 
     renderPage();
 
