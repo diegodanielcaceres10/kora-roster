@@ -43,22 +43,12 @@ export interface GoogleLoginPayload {
   idToken: string;
 }
 
-export interface GoogleRegisterPayload {
+export interface GoogleRegisterPayload extends RegisterAccountPayload {
   idToken: string;
-  name: string;
-  lastname: string;
-  marketingConsent: boolean;
 }
 
 export interface GoogleAuthResponse extends LoginResponse {
   linkedAccount?: boolean;
-}
-
-export interface GoogleAccountNotFoundProfile {
-  email: string;
-  name: string;
-  lastname: string;
-  idToken: string;
 }
 
 export interface ApiHealth {

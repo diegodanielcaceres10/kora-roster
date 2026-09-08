@@ -5,10 +5,9 @@ import styles from "./RegisterPage.module.scss";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
 import { useGoogleRegister } from "../../../features/account/hooks/useGoogleRegister";
 import { GoogleAuthButton, type GoogleProfile } from "../../../features/account/components/GoogleAuthButton";
-import type { GoogleAccountNotFoundProfile } from "../../../features/account/account.types";
 
 interface RegisterLocationState {
-  googleProfile?: GoogleAccountNotFoundProfile;
+  googleProfile?: GoogleProfile;
 }
 
 export function RegisterPage() {
@@ -57,7 +56,7 @@ export function RegisterPage() {
     if (isLoading || !acceptedTerms) return;
 
     if (googleProfile) {
-      submitGoogle({ idToken: googleProfile.idToken, name, lastname, marketingConsent });
+      submitGoogle({ idToken: googleProfile.idToken, email, name, lastname, acceptedTerms, marketingConsent });
       return;
     }
 

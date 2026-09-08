@@ -1,10 +1,8 @@
-import { useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
 import { useGoogleLogin } from "../hooks/useGoogleLogin";
 import { decodeJwtPayload } from "../../../lib/auth/jwt";
-import type { GoogleAccountNotFoundProfile } from "../account.types";
 import styles from "./GoogleAuthButton.module.scss";
 
 export interface GoogleProfile {
@@ -19,7 +17,7 @@ interface GoogleAuthButtonProps {
   text?: "signin_with" | "signup_with" | "continue_with";
   redirectTo?: string;
   onRegisterProfile?: (profile: GoogleProfile) => void;
-  onAccountNotFound?: (profile: GoogleAccountNotFoundProfile) => void;
+  onAccountNotFound?: (profile: GoogleProfile) => void;
 }
 
 interface GoogleIdTokenClaims {
@@ -29,14 +27,10 @@ interface GoogleIdTokenClaims {
 }
 
 export function GoogleAuthButton({ mode, text = "continue_with", redirectTo = "/", onRegisterProfile, onAccountNotFound }: GoogleAuthButtonProps) {
-  const { submit, status, errorId, accountNotFound } = useGoogleLogin();
+  const { submit, status, errorId } = useGoogleLogin();
   const navigate = useNavigate();
 
   const isLoading = status === "loading";
-
-  useEffect(() => {
-    if (accountNotFound) onAccountNotFound?.(accountNotFound);
-  }, [accountNotFound, onAccountNotFound]);
 
   const handleCredential = async (credential: string) => {
     if (mode === "register") {
@@ -51,7 +45,21 @@ export function GoogleAuthButton({ mode, text = "continue_with", redirectTo = "/
     }
 
     const result = await submit(credential);
-    if (result) navigate(redirectTo);
+
+    if (result.status === "success") {
+      navigate(redirectTo);
+      return;
+    }
+
+    if (result.status === "not_found") {
+      const claims = decodeJwtPayload<GoogleIdTokenClaims>(credential);
+      onAccountNotFound?.({
+        idToken: credential,
+        email: claims?.email ?? "",
+        name: claims?.given_name ?? "",
+        lastname: claims?.family_name ?? "",
+      });
+    }
   };
 
   return (

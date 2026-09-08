@@ -3,8 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./LoginPage.module.scss";
 import { useLogin } from "../../../features/account/hooks/useLogin";
-import { GoogleAuthButton } from "../../../features/account/components/GoogleAuthButton";
-import type { GoogleAccountNotFoundProfile } from "../../../features/account/account.types";
+import { GoogleAuthButton, type GoogleProfile } from "../../../features/account/components/GoogleAuthButton";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
@@ -23,7 +22,7 @@ export function LoginPage() {
     if (result) navigate("/");
   };
 
-  const handleGoogleAccountNotFound = (profile: GoogleAccountNotFoundProfile) => {
+  const handleGoogleAccountNotFound = (profile: GoogleProfile) => {
     navigate("/register", { state: { googleProfile: profile } });
   };
 
