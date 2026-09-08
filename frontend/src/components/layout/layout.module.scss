@@ -1,8 +1,10 @@
 .layout {
   width: 100%;
   min-height: 100vh;
-  background: url("../../assets/illustrations/kora-back.webp");
-  background-size: 500px;
+  background: url("../../assets/illustrations/kora-back.png");
+  background-color: var(--kora-ink);
+  background-blend-mode: color-dodge;
+  background-size: 600px;
   background-repeat: repeat;
   color: var(--kora-chalk);
   display: flex;
