@@ -1,5 +1,5 @@
 import { useIntl } from "react-intl";
-import styles from "./service-unavailable.module.scss";
+import styles from "./ServiceUnavailable.module.scss";
 
 interface ServiceUnavailableProps {
   message?: string;

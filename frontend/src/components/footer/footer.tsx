@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
-import styles from "./footer.module.scss";
+import styles from "./Footer.module.scss";
 
 export function Footer() {
   return (
