@@ -62,9 +62,9 @@ describe("account.api", () => {
   });
 
   it("googleAuth posts to /auth/google with the current API language attached", () => {
-    googleAuth({ idToken: "id-token" });
+    googleAuth({ idToken: "id-token", acceptedTerms: true });
 
-    expect(httpClient.post).toHaveBeenCalledWith("/auth/google", { idToken: "id-token", lang: "pt" });
+    expect(httpClient.post).toHaveBeenCalledWith("/auth/google", { idToken: "id-token", acceptedTerms: true, lang: "pt" });
   });
 
   it("checkApiHealth requests /health without auth", () => {

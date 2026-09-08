@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./RegisterPage.module.scss";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
 import { useGoogleAuth } from "../../../features/account/hooks/useGoogleAuth";
-import { GoogleAuthButton } from "../../../features/account/components/GoogleAuthButton";
+import { GoogleAuthButton, type GoogleProfile } from "../../../features/account/components/GoogleAuthButton";
 
 export function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -12,17 +12,37 @@ export function RegisterPage() {
   const [lastname, setLastname] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [marketingConsent, setmarketingConsent] = useState(false);
+  const [googleProfile, setGoogleProfile] = useState<GoogleProfile | null>(null);
   const { submit, status, errorId } = useRegisterAccount();
-  const { status: googleStatus } = useGoogleAuth();
+  const { submit: submitGoogle, status: googleStatus, errorId: googleErrorId } = useGoogleAuth();
   const intl = useIntl();
 
   const isLoading = status === "loading" || googleStatus === "loading";
   const isSuccess = status === "success" || googleStatus === "success";
 
+  const handleGoogleProfile = (profile: GoogleProfile) => {
+    setGoogleProfile(profile);
+    setEmail(profile.email);
+    setName(profile.name);
+    setLastname(profile.lastname);
+  };
+
+  const handleCancelGoogle = () => {
+    setGoogleProfile(null);
+    setEmail("");
+    setName("");
+    setLastname("");
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isLoading) return;
     if (isLoading || !acceptedTerms) return;
+
+    if (googleProfile) {
+      submitGoogle(googleProfile.idToken);
+      return;
+    }
+
     submit({ email, name, lastname, acceptedTerms, marketingConsent });
   };
 
@@ -51,22 +71,37 @@ export function RegisterPage() {
               <label className={styles.register__label} htmlFor="name">
                 <FormattedMessage id="register.nameLabel" />
               </label>
-              <input id="name" name="name" type="text" placeholder="Diego" value={name} onChange={(event) => setName(event.target.value)} disabled={isLoading} required />
+              <input id="name" name="name" type="text" placeholder="Diego" value={name} onChange={(event) => setName(event.target.value)} disabled={isLoading || !!googleProfile} required />
             </div>
 
             <div className={styles.register__field}>
               <label className={styles.register__label} htmlFor="lastname">
                 <FormattedMessage id="register.lastnameLabel" />
               </label>
-              <input id="lastname" name="lastname" type="text" placeholder="Caceres" value={lastname} onChange={(event) => setLastname(event.target.value)} disabled={isLoading} required />
+              <input id="lastname" name="lastname" type="text" placeholder="Caceres" value={lastname} onChange={(event) => setLastname(event.target.value)} disabled={isLoading || !!googleProfile} required />
             </div>
 
             <div className={styles.register__field}>
               <label className={styles.register__label} htmlFor="email">
                 <FormattedMessage id="register.emailLabel" />
               </label>
-              <input id="email" name="email" type="email" placeholder={intl.formatMessage({ id: "register.emailPlaceholder" })} value={email} onChange={(event) => setEmail(event.target.value)} disabled={isLoading} required />
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder={intl.formatMessage({ id: "register.emailPlaceholder" })}
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                disabled={isLoading || !!googleProfile}
+                required
+              />
             </div>
+
+            {googleProfile && (
+              <button type="button" className={styles.register__inlineLink} onClick={handleCancelGoogle} disabled={isLoading}>
+                <FormattedMessage id="register.googleCancel" />
+              </button>
+            )}
 
             <div className={styles.register__checkboxes}>
               <label className={styles.register__checkboxField}>
@@ -105,13 +140,13 @@ export function RegisterPage() {
               </span>
             </button>
 
-            <GoogleAuthButton text="continue_with" redirectTo="/" />
+            {!googleProfile && <GoogleAuthButton mode="register" text="continue_with" onRegisterProfile={handleGoogleProfile} />}
 
-            {status === "error" && errorId && (
+            {(status === "error" && errorId) || (googleStatus === "error" && googleErrorId) ? (
               <p className={styles.register__error} role="alert">
-                <FormattedMessage id={errorId} />
+                <FormattedMessage id={errorId ?? googleErrorId ?? ""} />
               </p>
-            )}
+            ) : null}
           </form>
         )}
       </div>

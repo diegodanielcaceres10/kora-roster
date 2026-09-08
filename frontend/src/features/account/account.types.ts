@@ -41,6 +41,7 @@ export type Me = Account;
 
 export interface GoogleAuthPayload {
   idToken: string;
+  acceptedTerms: true;
 }
 
 export interface GoogleAuthResponse extends LoginResponse {

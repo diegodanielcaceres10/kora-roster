@@ -53,7 +53,7 @@ describe("useGoogleAuth", () => {
       await result.current.googleAuth.submit("id-token-123");
     });
 
-    expect(accountApi.googleAuth).toHaveBeenCalledWith({ idToken: "id-token-123" });
+    expect(accountApi.googleAuth).toHaveBeenCalledWith({ idToken: "id-token-123", acceptedTerms: true });
     expect(result.current.googleAuth.status).toBe("success");
     expect(authStorage.getAccessToken()).toBe("access-1");
     expect(result.current.account.account).toEqual(fakeUser);

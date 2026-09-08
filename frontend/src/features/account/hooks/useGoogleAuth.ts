@@ -30,7 +30,7 @@ export function useGoogleAuth() {
       setErrorId(null);
 
       try {
-        const result = await googleAuth({ idToken });
+        const result = await googleAuth({ idToken, acceptedTerms: true });
         authStorage.setTokens(result.accessToken, result.refreshToken);
         setAccount(result.user);
         setStatus("success");

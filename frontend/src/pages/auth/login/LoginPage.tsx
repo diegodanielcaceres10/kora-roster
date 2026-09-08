@@ -71,7 +71,7 @@ export function LoginPage() {
             </span>
           </button>
 
-          <GoogleAuthButton text="continue_with" redirectTo="/" />
+          <GoogleAuthButton mode="login" text="continue_with" redirectTo="/" />
 
           {status === "error" && errorId && (
             <p className={styles.login__error} role="alert">

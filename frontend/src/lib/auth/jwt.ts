@@ -9,16 +9,21 @@ function base64UrlDecode(segment: string): string {
   return atob(padded);
 }
 
-/** Returns the token's expiry as epoch-ms, or null if it couldn't be read. */
-export function getJwtExpiry(token: string): number | null {
+/** Decodes a JWT's payload without verifying its signature. Returns null if it can't be parsed. */
+export function decodeJwtPayload<T>(token: string): T | null {
   try {
     const payload = token.split(".")[1];
     if (!payload) return null;
-    const { exp } = JSON.parse(base64UrlDecode(payload)) as { exp?: number };
-    return typeof exp === "number" ? exp * 1000 : null;
+    return JSON.parse(base64UrlDecode(payload)) as T;
   } catch {
     return null;
   }
+}
+
+/** Returns the token's expiry as epoch-ms, or null if it couldn't be read. */
+export function getJwtExpiry(token: string): number | null {
+  const { exp } = decodeJwtPayload<{ exp?: number }>(token) ?? {};
+  return typeof exp === "number" ? exp * 1000 : null;
 }
 
 /**

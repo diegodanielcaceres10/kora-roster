@@ -195,6 +195,7 @@
   "register.emailLabel": "Email",
   "register.emailPlaceholder": "vos@email.com",
   "register.termsCheckbox": "Leí y acepto los <terms>Términos y Condiciones</terms> y la <privacy>Política de Privacidad</privacy>.",
+  "register.googleCancel": "Usar otro email",
   "register.marketingCheckbox": "Quiero recibir novedades y comunicaciones de marketing de Kora por email (opcional).",
   "register.submitButton": "Crear cuenta",
   "register.submittingButton": "Creando cuenta...",
