@@ -4,6 +4,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./LoginPage.module.scss";
 import { useLogin } from "../../../features/account/hooks/useLogin";
 import { GoogleAuthButton, type GoogleProfile } from "../../../features/account/components/GoogleAuthButton";
+import { Button } from "../../../shared/components/Button/Button";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
@@ -51,7 +52,7 @@ export function LoginPage() {
               <FormattedMessage id="login.passwordLabel" />
             </label>
             <input id="password" name="password" type={showConfirmPassword ? "text" : "password"} placeholder="••••••" value={password} onChange={(event) => setPassword(event.target.value)} disabled={isLoading} required />
-            <button
+            <Button
               type="button"
               className={styles.login__toggleVisibility}
               onClick={() => setShowConfirmPassword((prev) => !prev)}
@@ -61,15 +62,15 @@ export function LoginPage() {
               tabIndex={-1}
             >
               {showConfirmPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i>}
-            </button>
+            </Button>
           </div>
 
-          <button type="submit" className={styles.login__submit} disabled={isLoading}>
+          <Button type="submit" className={styles.login__submit} disabled={isLoading}>
             {isLoading && <span className={styles.login__spinner} aria-hidden="true" />}
             <span>
               <FormattedMessage id={isLoading ? "login.submittingButton" : "login.submitButton"} />
             </span>
-          </button>
+          </Button>
 
           <GoogleAuthButton mode="login" text="continue_with" redirectTo="/" onAccountNotFound={handleGoogleAccountNotFound} />
 

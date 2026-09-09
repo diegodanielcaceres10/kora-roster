@@ -4,6 +4,7 @@ import styles from "./MePage.module.scss";
 import { useAccount } from "../../features/account/AccountContext";
 import { authStorage } from "../../lib/auth/authStorage";
 import { logoutAccount } from "../../features/account/account.api";
+import { Button } from "../../shared/components/Button/Button";
 
 const STATUS_LABEL_ID: Record<string, string> = {
   ACTIVE: "me.status.active",
@@ -92,9 +93,9 @@ export function MePage() {
           </div>
         </dl>
 
-        <button type="button" className={styles.me__logout} onClick={handleLogout}>
+        <Button type="button" className={styles.me__logout} onClick={handleLogout}>
           <FormattedMessage id="me.logout" />
-        </button>
+        </Button>
       </div>
     </section>
   );

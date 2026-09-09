@@ -3,6 +3,7 @@ import { useIntl } from "react-intl";
 import { LOCALE_LABELS, SUPPORTED_LOCALES, type AppLocale } from "../../../i18n/config";
 import { useLocale } from "../../../i18n/LocaleContext";
 import styles from "./LanguageSwitcher.module.scss";
+import { Button } from "../Button/Button";
 
 const LOCALE_FLAGS: Record<AppLocale, string> = {
   "es-419": "🇪🇸",
@@ -61,7 +62,7 @@ export function LanguageSwitcher() {
 
   return (
     <div ref={containerRef} className={styles.languageSwitcher}>
-      <button
+      <Button
         ref={buttonRef}
         type="button"
         className={styles.languageSwitcher__trigger}
@@ -79,7 +80,7 @@ export function LanguageSwitcher() {
         <span className={styles.languageSwitcher__label}>{currentLabel}</span>
 
         <i className="fa-solid fa-caret-down"></i>
-      </button>
+      </Button>
 
       {open && (
         <div
@@ -93,7 +94,7 @@ export function LanguageSwitcher() {
             const selected = code === locale;
 
             return (
-              <button key={code} type="button" role="menuitemradio" aria-checked={selected} className={`${styles.languageSwitcher__option} ${selected ? styles["languageSwitcher__option--selected"] : ""}`} onClick={() => handleSelect(code)}>
+              <Button key={code} type="button" role="menuitemradio" aria-checked={selected} className={`${styles.languageSwitcher__option} ${selected ? styles["languageSwitcher__option--selected"] : ""}`} onClick={() => handleSelect(code)}>
                 <span className={styles.languageSwitcher__optionFlag} aria-hidden="true">
                   {LOCALE_FLAGS[code]}
                 </span>
@@ -101,7 +102,7 @@ export function LanguageSwitcher() {
                 <span className={styles.languageSwitcher__optionLabel}>{LOCALE_LABELS[code]}</span>
 
                 {selected && <i className="fa-solid fa-check"></i>}
-              </button>
+              </Button>
             );
           })}
         </div>

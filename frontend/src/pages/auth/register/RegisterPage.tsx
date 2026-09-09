@@ -5,6 +5,7 @@ import styles from "./RegisterPage.module.scss";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
 import { useGoogleRegister } from "../../../features/account/hooks/useGoogleRegister";
 import { GoogleAuthButton, type GoogleProfile } from "../../../features/account/components/GoogleAuthButton";
+import { Button } from "../../../shared/components/Button/Button";
 
 interface RegisterLocationState {
   googleProfile?: GoogleProfile;
@@ -106,9 +107,9 @@ export function RegisterPage() {
             </div>
 
             {googleProfile && (
-              <button type="button" className={styles.register__inlineLink} onClick={handleCancelGoogle} disabled={isLoading}>
+              <Button type="button" className={styles.register__inlineLink} onClick={handleCancelGoogle} disabled={isLoading}>
                 <FormattedMessage id="register.googleCancel" />
-              </button>
+              </Button>
             )}
 
             <div className={styles.register__checkboxes}>
@@ -141,12 +142,12 @@ export function RegisterPage() {
               </label>
             </div>
 
-            <button type="submit" className={styles.register__submit} disabled={isLoading || !acceptedTerms}>
+            <Button type="submit" className={styles.register__submit} disabled={isLoading || !acceptedTerms}>
               {isLoading && <span className={styles.register__spinner} aria-hidden="true" />}
               <span>
                 <FormattedMessage id={isLoading ? "register.submittingButton" : "register.submitButton"} />
               </span>
-            </button>
+            </Button>
 
             {!googleProfile && <GoogleAuthButton mode="register" text="continue_with" onRegisterProfile={handleGoogleProfile} />}
 

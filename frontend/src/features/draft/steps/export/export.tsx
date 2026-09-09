@@ -4,6 +4,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import type { DraftConfig } from "../../draft.types";
 import { Image } from "./ExportImagePreview/ExportImagePreview";
 import styles from "./export.module.scss";
+import { Button } from "../../../../shared/components/Button/Button";
 
 interface StepExportProps {
   config: DraftConfig;
@@ -163,35 +164,35 @@ export function StepExport({ config, onBack, onReset }: StepExportProps) {
             <FormattedMessage id="export.shareSection.title" />
           </p>
           <div className={styles.export__shareActions}>
-            <button type="button" className={[styles.export__shareButton, styles["export__shareButton--whatsapp"]].join(" ")} onClick={handleShareWhatsApp} disabled={isExporting}>
+            <Button type="button" className={[styles.export__shareButton, styles["export__shareButton--whatsapp"]].join(" ")} onClick={handleShareWhatsApp} disabled={isExporting}>
               <span>
                 <i className="fa-brands fa-whatsapp"></i>
               </span>
               <FormattedMessage id="export.shareButton.whatsapp" />
-            </button>
-            <button type="button" className={styles.export__shareButton} onClick={handleCopyPlainText}>
+            </Button>
+            <Button type="button" className={styles.export__shareButton} onClick={handleCopyPlainText}>
               <span>
                 <i className="fa-solid fa-clipboard-list"></i>
               </span>
               <FormattedMessage id="export.shareButton.copyText" />
-            </button>
-            <button type="button" className={styles.export__shareButton} onClick={handleDownload} disabled={isExporting}>
+            </Button>
+            <Button type="button" className={styles.export__shareButton} onClick={handleDownload} disabled={isExporting}>
               <span>
                 <i className="fa-solid fa-download"></i>
               </span>
               <FormattedMessage id="export.shareButton.download" />
-            </button>
+            </Button>
           </div>
         </section>
 
         <div className={styles.export__actions}>
-          <button type="button" className={styles.export__secondaryButton} onClick={onBack}>
+          <Button type="button" className={styles.export__secondaryButton} onClick={onBack}>
             <i className="fa-solid fa-arrow-left"></i>
             <FormattedMessage id="export.actions.back" />
-          </button>
-          <button type="button" className={styles.export__primaryButton} onClick={onReset}>
+          </Button>
+          <Button type="button" className={styles.export__primaryButton} onClick={onReset}>
             <FormattedMessage id="export.actions.newDraw" />
-          </button>
+          </Button>
         </div>
       </div>
     </section>

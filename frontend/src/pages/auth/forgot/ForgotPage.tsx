@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./ForgotPage.module.scss";
 import { useForgotPassword } from "../../../features/account/hooks/useForgotPassword";
+import { Button } from "../../../shared/components/Button/Button";
 
 export function ForgotPage() {
   const [email, setEmail] = useState("");
@@ -52,12 +53,12 @@ export function ForgotPage() {
               <input id="email" name="email" type="email" placeholder={intl.formatMessage({ id: "login.emailPlaceholder" })} value={email} onChange={(event) => setEmail(event.target.value)} disabled={isLoading} required />
             </div>
 
-            <button type="submit" className={styles.forgot__submit} disabled={isLoading}>
+            <Button type="submit" className={styles.forgot__submit} disabled={isLoading}>
               {isLoading && <span className={styles.forgot__spinner} aria-hidden="true" />}
               <span>
                 <FormattedMessage id={isLoading ? "forgot.submittingButton" : "forgot.submitButton"} />
               </span>
-            </button>
+            </Button>
 
             {status === "error" && errorId && (
               <p className={styles.forgot__error} role="alert">

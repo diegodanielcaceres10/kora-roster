@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./FAQPage.module.scss";
+import { Button } from "../../shared/components/Button/Button";
 
 const FAQ_ITEMS = [
   { id: "free", questionId: "faq.items.free.question", answerId: "faq.items.free.answer" },
@@ -35,10 +36,10 @@ export function FAQPage() {
 
             return (
               <div key={id} className={[styles.faq__item, isOpen ? styles["faq__item--open"] : ""].join(" ")}>
-                <button type="button" className={styles.faq__question} aria-expanded={isOpen} aria-controls={answerElementId} onClick={() => setOpenIndex(isOpen ? null : i)}>
+                <Button type="button" className={styles.faq__question} aria-expanded={isOpen} aria-controls={answerElementId} onClick={() => setOpenIndex(isOpen ? null : i)}>
                   <span>{question}</span>
                   <i className={["fa-solid fa-angle-down", styles.faq__chevron, isOpen ? styles["faq__chevron--open"] : ""].join(" ")}></i>
-                </button>
+                </Button>
 
                 <div id={answerElementId} className={[styles.faq__answerWrapper, isOpen ? styles["faq__answerWrapper--open"] : ""].join(" ")}>
                   <div className={styles.faq__answerInner}>

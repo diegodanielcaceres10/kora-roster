@@ -5,6 +5,7 @@ import styles from "./welcome.module.scss";
 import koraRosterLogo from "../../../../assets/logo/kora-roster-logo.webp";
 import koraRosterWelcome from "../../../../assets/illustrations/kora-welcome.webp";
 import { parsePastedNames, type ParsedPlayerName } from "../../utils/parsePastedNames";
+import { Button } from "../../../../shared/components/Button/Button";
 
 const QUICK_TEAM_COUNT = 2;
 const MIN_PLAYERS_QUICK = 6;
@@ -70,18 +71,18 @@ export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {
 
         {!isQuickMode && (
           <div className={styles.welcome__actions}>
-            <button type="button" className={styles.welcome__primaryButton} onClick={() => setIsQuickMode((prev) => !prev)} aria-expanded={isQuickMode}>
+            <Button type="button" className={styles.welcome__primaryButton} onClick={() => setIsQuickMode((prev) => !prev)} aria-expanded={isQuickMode}>
               <i className="fa-solid fa-bolt"></i>
               <FormattedMessage id="welcome.actions.quickFriendly" />
-            </button>
-            <button type="button" className={styles.welcome__quickButton} onClick={onStart}>
+            </Button>
+            <Button type="button" className={styles.welcome__quickButton} onClick={onStart}>
               <i className="fa-solid fa-user-group"></i>
               <FormattedMessage id="welcome.actions.primary" />
-            </button>
-            <button type="button" className={styles.welcome__secondaryButton} onClick={() => navigate("/tutorial")}>
+            </Button>
+            <Button type="button" className={styles.welcome__secondaryButton} onClick={() => navigate("/tutorial")}>
               <i className="fa-solid fa-circle-info"></i>
               <FormattedMessage id="welcome.actions.secondary" />
-            </button>
+            </Button>
           </div>
         )}
 
@@ -118,12 +119,12 @@ export function StepWelcome({ onStart, onQuickFriendly }: StepWelcomeProps) {
                 )}
               </span>
               <div className={styles.welcome__quickActions}>
-                <button type="button" onClick={() => setIsQuickMode(false)}>
+                <Button type="button" onClick={() => setIsQuickMode(false)}>
                   <FormattedMessage id="welcome.quick.cancel" />
-                </button>
-                <button type="submit" disabled={validation.status !== "valid"}>
+                </Button>
+                <Button type="submit" disabled={validation.status !== "valid"}>
                   <FormattedMessage id="welcome.quick.submit" />
-                </button>
+                </Button>
               </div>
             </div>
           </form>

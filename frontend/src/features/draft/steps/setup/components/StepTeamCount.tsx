@@ -1,6 +1,7 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import { MIN_TEAMS, MAX_TEAMS, TEAM_COUNT_OPTIONS } from "../../../draft.constants";
 import styles from "../setup.module.scss";
+import { Button } from "../../../../../shared/components/Button/Button";
 
 interface StepTeamCountProps {
   teamCount: number;
@@ -28,14 +29,14 @@ export function StepTeamCount({ teamCount, onChange, onNext, onBack }: StepTeamC
 
       <div className={styles.setup__chips}>
         {TEAM_COUNT_OPTIONS.map((option) => (
-          <button key={option} type="button" className={[styles.setup__chip, option === teamCount ? styles["setup__chip--active"] : ""].join(" ")} onClick={() => onChange(option)}>
+          <Button key={option} type="button" className={[styles.setup__chip, option === teamCount ? styles["setup__chip--active"] : ""].join(" ")} onClick={() => onChange(option)}>
             <span className={styles.setup__shirts}>
               {Array.from({ length: option }).map((_, i) => (
                 <i key={i} className="fa-solid fa-shirt"></i>
               ))}
             </span>
             <span className={styles.setup__number}>{option}</span>
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -44,15 +45,15 @@ export function StepTeamCount({ teamCount, onChange, onNext, onBack }: StepTeamC
       </p>
 
       <div className={styles.setup__stepperCard}>
-        <button type="button" className={styles.setup__button} onClick={decrement} disabled={teamCount <= MIN_TEAMS} aria-label={intl.formatMessage({ id: "setup.teamCount.decrementAriaLabel" })}>
+        <Button type="button" className={styles.setup__button} onClick={decrement} disabled={teamCount <= MIN_TEAMS} aria-label={intl.formatMessage({ id: "setup.teamCount.decrementAriaLabel" })}>
           <i className="fa-solid fa-minus"></i>
-        </button>
+        </Button>
         <span className={styles.setup__divider} aria-hidden="true" />
         <span className={styles.setup__value}>{teamCount}</span>
         <span className={styles.setup__divider} aria-hidden="true" />
-        <button type="button" className={styles.setup__button} onClick={increment} disabled={teamCount >= MAX_TEAMS} aria-label={intl.formatMessage({ id: "setup.teamCount.incrementAriaLabel" })}>
+        <Button type="button" className={styles.setup__button} onClick={increment} disabled={teamCount >= MAX_TEAMS} aria-label={intl.formatMessage({ id: "setup.teamCount.incrementAriaLabel" })}>
           <i className="fa-solid fa-plus"></i>
-        </button>
+        </Button>
       </div>
 
       <p className={styles.setup__helper}>
@@ -60,14 +61,14 @@ export function StepTeamCount({ teamCount, onChange, onNext, onBack }: StepTeamC
       </p>
 
       <div className={styles.setup__actions}>
-        <button type="button" className={styles.setup__secondaryButton} onClick={onBack}>
+        <Button type="button" className={styles.setup__secondaryButton} onClick={onBack}>
           <i className="fa-solid fa-arrow-left"></i>
           <FormattedMessage id="setup.actions.back" />
-        </button>
-        <button type="button" className={styles.setup__primaryButton} onClick={onNext}>
+        </Button>
+        <Button type="button" className={styles.setup__primaryButton} onClick={onNext}>
           <FormattedMessage id="setup.actions.next" />
           <i className="fa-solid fa-arrow-right"></i>
-        </button>
+        </Button>
       </div>
     </section>
   );

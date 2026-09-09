@@ -6,6 +6,7 @@ import kRosterLogo from "/favicon.png";
 import { useAccount } from "../../../features/account/AccountContext";
 import { useApiHealth } from "../../../features/account/hooks/useApiHealth";
 import { LanguageSwitcher } from "../LanguageSwitcher/LanguageSwitcher";
+import { Button } from "../Button/Button";
 
 const NAV_LINKS = [
   { id: "header.nav.home", to: "/" },
@@ -29,9 +30,9 @@ export function Header() {
     <header className={styles.nav}>
       <div className={styles.nav__content}>
         <div className={styles.nav__menu}>
-          <button type="button" aria-expanded={isMenuOpen} aria-label={isMenuOpen ? intl.formatMessage({ id: "header.menu.close" }) : intl.formatMessage({ id: "header.menu.open" })} onClick={() => setIsMenuOpen((open) => !open)}>
+          <Button type="button" aria-expanded={isMenuOpen} aria-label={isMenuOpen ? intl.formatMessage({ id: "header.menu.close" }) : intl.formatMessage({ id: "header.menu.open" })} onClick={() => setIsMenuOpen((open) => !open)}>
             {isMenuOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars-staggered"></i>}
-          </button>
+          </Button>
           <div className={styles.nav__logo}>
             <img src={kRosterLogo} alt="" />
           </div>

@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./SetPasswordPage.module.scss";
 import { useSetPassword } from "../../../features/account/hooks/useSetPassword";
+import { Button } from "../../../shared/components/Button/Button";
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -143,7 +144,7 @@ export function SetPasswordPage() {
                 <FormattedMessage id="setPassword.newPasswordLabel" />
               </label>
               <input id="password" name="password" type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(event) => setPassword(event.target.value)} disabled={isLoading} minLength={MIN_PASSWORD_LENGTH} required />
-              <button
+              <Button
                 type="button"
                 className={styles.setPassword__toggleVisibility}
                 onClick={() => setShowPassword((prev) => !prev)}
@@ -153,7 +154,7 @@ export function SetPasswordPage() {
                 tabIndex={-1}
               >
                 {showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i>}
-              </button>
+              </Button>
             </div>
 
             <div className={styles.setPassword__field}>
@@ -161,7 +162,7 @@ export function SetPasswordPage() {
                 <FormattedMessage id="setPassword.confirmPasswordLabel" />
               </label>
               <input id="confirmPassword" name="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="••••••••" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} disabled={isLoading} minLength={MIN_PASSWORD_LENGTH} required />
-              <button
+              <Button
                 type="button"
                 className={styles.setPassword__toggleVisibility}
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
@@ -171,7 +172,7 @@ export function SetPasswordPage() {
                 tabIndex={-1}
               >
                 {showConfirmPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i>}
-              </button>
+              </Button>
             </div>
 
             <ul className={styles.setPassword__rules}>
@@ -185,12 +186,12 @@ export function SetPasswordPage() {
               ))}
             </ul>
 
-            <button type="submit" className={styles.setPassword__submit} disabled={isLoading || !isPasswordValid}>
+            <Button type="submit" className={styles.setPassword__submit} disabled={isLoading || !isPasswordValid}>
               {isLoading && <span className={styles.setPassword__spinner} aria-hidden="true" />}
               <span>
                 <FormattedMessage id={isLoading ? "setPassword.submittingButton" : "setPassword.submitButton"} />
               </span>
-            </button>
+            </Button>
 
             {(mismatchError || (status === "error" && errorId)) && (
               <p className={styles.setPassword__error} role="alert">

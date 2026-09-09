@@ -2,6 +2,7 @@ import { useMemo, useState, type DragEvent } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import type { AssignmentMode, DraftConfig, Player, Team } from "../../draft.types";
 import styles from "./draw.module.scss";
+import { Button } from "../../../../shared/components/Button/Button";
 
 interface StepDrawProps {
   config: DraftConfig;
@@ -256,10 +257,10 @@ export function StepDraw({ config, setAssignmentMode, resetAssignments, assignPl
                 <FormattedMessage id="draw.header.description" />
               </p>
             </div>
-            <button type="button" className={styles.draw__automatic} onClick={handleDrawTeams}>
+            <Button type="button" className={styles.draw__automatic} onClick={handleDrawTeams}>
               <i className="fa-solid fa-shuffle"></i>
               <FormattedMessage id="draw.automaticButton" />
-            </button>
+            </Button>
             <div className={styles.draw__summary}>
               <span>
                 <i className="fa-solid fa-shirt"></i>
@@ -302,13 +303,13 @@ export function StepDraw({ config, setAssignmentMode, resetAssignments, assignPl
                 const roster = playersByTeam[team.id] ?? [];
                 const filled = roster.length === config.playersPerTeam;
                 return (
-                  <button key={team.id} type="button" className={[styles.draw__team, filled ? `custom-bib-${team.color}` : undefined, selectedTeam?.id === team.id ? styles["draw__team--active"] : ""].join(" ")} onClick={() => setSelectedTeamId(team.id)} onDragOver={(event) => handleDragOver(event, team.id)} onDragLeave={() => setDragOverZone(null)} onDrop={(event) => handleDropOnTeam(event, team)}>
+                  <Button key={team.id} type="button" className={[styles.draw__team, filled ? `custom-bib-${team.color}` : undefined, selectedTeam?.id === team.id ? styles["draw__team--active"] : ""].join(" ")} onClick={() => setSelectedTeamId(team.id)} onDragOver={(event) => handleDragOver(event, team.id)} onDragLeave={() => setDragOverZone(null)} onDrop={(event) => handleDropOnTeam(event, team)}>
                     {filled ? <i className="fa-solid fa-shirt"></i> : <i className="fa-solid fa-triangle-exclamation"></i>}
                     <span>{team.name}</span>
                     <strong>
                       {roster.length}/{config.playersPerTeam}
                     </strong>
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -383,17 +384,17 @@ export function StepDraw({ config, setAssignmentMode, resetAssignments, assignPl
               })}
             </div>
             <div className={styles.draw__actions}>
-              <button type="button" className={styles.draw__secondaryButton} onClick={onBack}>
+              <Button type="button" className={styles.draw__secondaryButton} onClick={onBack}>
                 <i className="fa-solid fa-arrow-left"></i>
                 <FormattedMessage id="draw.actions.back" />
-              </button>
-              <button type="button" className={styles.draw__ghostButton} onClick={handleResetAssignments} disabled={assignedCount === 0}>
+              </Button>
+              <Button type="button" className={styles.draw__ghostButton} onClick={handleResetAssignments} disabled={assignedCount === 0}>
                 <FormattedMessage id="draw.actions.reset" />
-              </button>
-              <button type="button" className={styles.draw__primaryButton} onClick={onNext} disabled={!allAssigned}>
+              </Button>
+              <Button type="button" className={styles.draw__primaryButton} onClick={onNext} disabled={!allAssigned}>
                 <FormattedMessage id="draw.actions.next" />
                 <i className="fa-solid fa-arrow-right"></i>
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -409,9 +410,9 @@ export function StepDraw({ config, setAssignmentMode, resetAssignments, assignPl
                   <FormattedMessage id="draw.modal.spotTitle" values={{ number: spotModal.spotIndex + 1 }} />
                 </h2>
               </div>
-              <button type="button" className={styles.draw__modalClose} aria-label={intl.formatMessage({ id: "draw.modal.closeAriaLabel" })} onClick={() => setSpotModal(null)}>
+              <Button type="button" className={styles.draw__modalClose} aria-label={intl.formatMessage({ id: "draw.modal.closeAriaLabel" })} onClick={() => setSpotModal(null)}>
                 <i className="fa-solid fa-xmark"></i>
-              </button>
+              </Button>
             </div>
 
             {spotModalPlayer ? (
@@ -420,9 +421,9 @@ export function StepDraw({ config, setAssignmentMode, resetAssignments, assignPl
                   <i className={spotModalPlayer.isGoalkeeper ? "fa-solid fa-mitten" : "fa-solid fa-shirt"}></i>
                 </span>
                 <strong>{spotModalPlayer.name}</strong>
-                <button type="button" className={styles.draw__unassignButton} aria-label={intl.formatMessage({ id: "draw.modal.unassignAriaLabel" }, { name: spotModalPlayer.name })} onClick={handleUnassignFromModal}>
+                <Button type="button" className={styles.draw__unassignButton} aria-label={intl.formatMessage({ id: "draw.modal.unassignAriaLabel" }, { name: spotModalPlayer.name })} onClick={handleUnassignFromModal}>
                   <i className="fa-solid fa-xmark"></i>
-                </button>
+                </Button>
               </div>
             ) : (
               <div className={styles.draw__modalListWrapper}>
@@ -433,12 +434,12 @@ export function StepDraw({ config, setAssignmentMode, resetAssignments, assignPl
                   <ul className={[styles.draw__modalPlayerList, "custom_scroll"].join(" ")}>
                     {assignableModalPlayers.map((player) => (
                       <li key={player.id}>
-                        <button type="button" className={[styles.draw__modalPlayerButton, player.isGoalkeeper ? styles["draw__modalPlayerButton--keeper"] : ""].join(" ")} onClick={() => handleAssignFromModal(player.id)}>
+                        <Button type="button" className={[styles.draw__modalPlayerButton, player.isGoalkeeper ? styles["draw__modalPlayerButton--keeper"] : ""].join(" ")} onClick={() => handleAssignFromModal(player.id)}>
                           <span>
                             <i className={player.isGoalkeeper ? "fa-solid fa-mitten" : "fa-solid fa-shirt"}></i>
                           </span>
                           <strong>{player.name}</strong>
-                        </button>
+                        </Button>
                       </li>
                     ))}
                   </ul>
