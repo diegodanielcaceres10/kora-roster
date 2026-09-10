@@ -81,9 +81,9 @@ describe("account.api", () => {
     });
   });
 
-  it("checkApiHealth requests /health without auth", () => {
+  it("checkApiHealth requests /health/ready without auth", () => {
     checkApiHealth();
 
-    expect(httpClient.get).toHaveBeenCalledWith("/health");
+    expect(httpClient.get).toHaveBeenCalledWith("/health/ready");
   });
 });

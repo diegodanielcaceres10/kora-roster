@@ -35,5 +35,5 @@ export function googleRegister(payload: GoogleRegisterPayload) {
 }
 
 export function checkApiHealth() {
-  return httpClient.get<ApiHealth>("/health");
+  return httpClient.get<ApiHealth>("/health/ready");
 }
