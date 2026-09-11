@@ -33,7 +33,9 @@ describe("useGoogleRegister", () => {
     googleRegister.mockResolvedValueOnce(response);
     const { result } = renderHook(() => useGoogleRegister());
     let outcome;
-    await act(async () => { outcome = await result.current.submit(payload); });
+    await act(async () => {
+      outcome = await result.current.submit(payload);
+    });
     expect(outcome).toEqual(response);
     expect(result.current.status).toBe("success");
     expect(authStorage.getAccessToken()).toBe("at");
@@ -45,7 +47,9 @@ describe("useGoogleRegister", () => {
   it("maps EMAIL_TAKEN to the register-specific errorId", async () => {
     googleRegister.mockRejectedValueOnce(new ApiError(409, "Email already taken", "EMAIL_TAKEN", {}));
     const { result } = renderHook(() => useGoogleRegister());
-    await act(async () => { await result.current.submit(payload); });
+    await act(async () => {
+      await result.current.submit(payload);
+    });
     expect(result.current.status).toBe("error");
     expect(result.current.errorId).toBe("register.error.emailTaken");
   });
@@ -56,14 +60,18 @@ describe("useGoogleRegister", () => {
   ])("maps ApiError code %s to errorId %s", async (code, expectedId) => {
     googleRegister.mockRejectedValueOnce(new ApiError(400, "failed", code, {}));
     const { result } = renderHook(() => useGoogleRegister());
-    await act(async () => { await result.current.submit(payload); });
+    await act(async () => {
+      await result.current.submit(payload);
+    });
     expect(result.current.errorId).toBe(expectedId);
   });
 
   it("maps a non-ApiError failure to a generic errorId", async () => {
     googleRegister.mockRejectedValueOnce(new Error("network down"));
     const { result } = renderHook(() => useGoogleRegister());
-    await act(async () => { await result.current.submit(payload); });
+    await act(async () => {
+      await result.current.submit(payload);
+    });
     expect(result.current.errorId).toBe("googleAuth.error.generic");
   });
 });

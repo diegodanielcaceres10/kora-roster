@@ -22,7 +22,9 @@ describe("useGoogleLogin", () => {
     googleLogin.mockResolvedValueOnce(response);
     const { result } = renderHook(() => useGoogleLogin());
     let outcome;
-    await act(async () => { outcome = await result.current.submit("id-token"); });
+    await act(async () => {
+      outcome = await result.current.submit("id-token");
+    });
     expect(outcome).toEqual({ status: "success", data: response });
     expect(result.current.status).toBe("success");
     expect(result.current.errorId).toBeNull();
@@ -36,7 +38,9 @@ describe("useGoogleLogin", () => {
     googleLogin.mockRejectedValueOnce(new ApiError(404, "No account found", "GOOGLE_ACCOUNT_NOT_FOUND", {}));
     const { result } = renderHook(() => useGoogleLogin());
     let outcome;
-    await act(async () => { outcome = await result.current.submit("id-token"); });
+    await act(async () => {
+      outcome = await result.current.submit("id-token");
+    });
     expect(outcome).toEqual({ status: "not_found" });
     expect(result.current.status).toBe("idle");
     expect(result.current.errorId).toBeNull();
@@ -49,7 +53,9 @@ describe("useGoogleLogin", () => {
   ])("maps ApiError code %s to errorId %s", async (code, expectedId) => {
     googleLogin.mockRejectedValueOnce(new ApiError(400, "failed", code, {}));
     const { result } = renderHook(() => useGoogleLogin());
-    await act(async () => { await result.current.submit("id-token"); });
+    await act(async () => {
+      await result.current.submit("id-token");
+    });
     expect(result.current.status).toBe("error");
     expect(result.current.errorId).toBe(expectedId);
   });
@@ -57,7 +63,9 @@ describe("useGoogleLogin", () => {
   it("maps a non-ApiError failure to a generic errorId", async () => {
     googleLogin.mockRejectedValueOnce(new Error("network down"));
     const { result } = renderHook(() => useGoogleLogin());
-    await act(async () => { await result.current.submit("id-token"); });
+    await act(async () => {
+      await result.current.submit("id-token");
+    });
     expect(result.current.errorId).toBe("googleAuth.error.generic");
   });
 });
