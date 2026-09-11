@@ -32,7 +32,7 @@ describe("RegisterPage", () => {
     vi.mocked(useRegisterAccount).mockReturnValue({ submit, status: "idle", account: null, errorId: null });
     vi.mocked(useGoogleRegister).mockReturnValue({ submit: vi.fn(), status: "idle", errorId: null });
     vi.mocked(useCurrentTerms).mockReturnValue({
-      terms: { product: "roster", version: "2026-08-24", lang: "en", updatedAt: "2026-08-24", intro: "", sections: [] },
+      terms: { product: "roster", document: "terms", version: "2026-08-24", lang: "en", updatedAt: "2026-08-24", intro: "", sections: [] },
       isLoading: false,
       hasError: false,
     });

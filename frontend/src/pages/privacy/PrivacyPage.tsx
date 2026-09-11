@@ -1,7 +1,11 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./PrivacyPage.module.scss";
+import { useCurrentTerms } from "../../features/terms/hooks/useCurrentTerms";
 
 export function PrivacyPage() {
+  const { locale } = useIntl();
+  const { terms, isLoading, hasError } = useCurrentTerms("privacy");
+
   return (
     <section className={styles.privacy}>
       <div className={styles.privacy__container}>
@@ -12,71 +16,21 @@ export function PrivacyPage() {
           <h1 className={styles.privacy__title}>
             <FormattedMessage id="footer.links.privacy" />
           </h1>
-          <p className={styles.privacy__updated}>
-            <FormattedMessage id="terms.updated" />
-          </p>
+          <p className={styles.privacy__updated}>{isLoading ? <FormattedMessage id="terms.updated" /> : terms ? `${new Intl.DateTimeFormat(locale).format(new Date(terms.updatedAt))} · v${terms.version}` : null}</p>
         </header>
 
         <div className={styles.privacy__body}>
-          <p>
-            <FormattedMessage id="privacy.intro" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="privacy.section1.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="privacy.section1.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="privacy.section2.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="privacy.section2.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="privacy.section3.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="privacy.section3.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="privacy.section4.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="privacy.section4.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="privacy.section5.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="privacy.section5.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="privacy.section6.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="privacy.section6.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="privacy.section7.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="privacy.section7.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="privacy.section8.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="privacy.section8.body" />
-          </p>
+          {hasError ? null : terms ? (
+            <>
+              <p>{terms.intro}</p>
+              {terms.sections.map((section) => (
+                <section key={section.title}>
+                  <h2>{section.title}</h2>
+                  <p>{section.body}</p>
+                </section>
+              ))}
+            </>
+          ) : null}
         </div>
       </div>
     </section>

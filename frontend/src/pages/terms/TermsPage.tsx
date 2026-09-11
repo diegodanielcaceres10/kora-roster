@@ -4,7 +4,7 @@ import { useCurrentTerms } from "../../features/terms/hooks/useCurrentTerms";
 
 export function TermsPage() {
   const { locale } = useIntl();
-  const { terms, isLoading } = useCurrentTerms();
+  const { terms, isLoading, hasError } = useCurrentTerms("terms");
 
   return (
     <section className={styles.terms}>
@@ -16,11 +16,11 @@ export function TermsPage() {
           <h1 className={styles.terms__title}>
             <FormattedMessage id="footer.links.terms" />
           </h1>
-          <p className={styles.terms__updated}>{isLoading ? <FormattedMessage id="terms.updated" /> : terms ? `${new Intl.DateTimeFormat(locale).format(new Date(terms.updatedAt))} · v${terms.version}` : <FormattedMessage id="terms.updated" />}</p>
+          <p className={styles.terms__updated}>{isLoading ? <FormattedMessage id="terms.updated" /> : terms ? `${new Intl.DateTimeFormat(locale).format(new Date(terms.updatedAt))} · v${terms.version}` : null}</p>
         </header>
 
         <div className={styles.terms__body}>
-          {terms ? (
+          {hasError ? null : terms ? (
             <>
               <p>{terms.intro}</p>
               {terms.sections.map((section) => (

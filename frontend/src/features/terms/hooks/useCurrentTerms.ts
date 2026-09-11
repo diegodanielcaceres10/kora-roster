@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { toApiLang, type ApiLang } from "../../../i18n/apiLang";
 import { useIntl } from "react-intl";
-import { getTerms } from "../terms.api";
-import type { TermsResponse } from "../terms.types";
+import { getLegalDocument } from "../terms.api";
+import type { LegalDocument, LegalDocumentType } from "../terms.types";
 
-export function useCurrentTerms() {
+export function useCurrentTerms(document: LegalDocumentType = "terms") {
   const { locale } = useIntl();
   const lang = toApiLang(locale as Parameters<typeof toApiLang>[0]);
-  const [terms, setTerms] = useState<TermsResponse | null>(null);
+  const [terms, setTerms] = useState<LegalDocument | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
@@ -17,9 +17,9 @@ export function useCurrentTerms() {
     setHasError(false);
     setTerms(null);
 
-    getTerms(lang as ApiLang)
-      .then((currentTerms) => {
-        if (!cancelled) setTerms(currentTerms);
+    getLegalDocument(document, lang as ApiLang)
+      .then((currentDocument) => {
+        if (!cancelled) setTerms(currentDocument);
       })
       .catch(() => {
         if (!cancelled) setHasError(true);
@@ -31,7 +31,7 @@ export function useCurrentTerms() {
     return () => {
       cancelled = true;
     };
-  }, [lang]);
+  }, [document, lang]);
 
   return { terms, isLoading, hasError };
 }
