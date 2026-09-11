@@ -1,10 +1,10 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./TermsPage.module.scss";
-import { useCurrentTerms } from "../../features/terms/hooks/useCurrentTerms";
+import { useCurrentLegalDocument } from "../../features/legal/hooks/useCurrentLegalDocument";
 
 export function TermsPage() {
   const { locale } = useIntl();
-  const { terms, isLoading, hasError } = useCurrentTerms("terms");
+  const { legalDocument, isLoading, hasError } = useCurrentLegalDocument("terms");
 
   return (
     <section className={styles.terms}>
@@ -16,14 +16,14 @@ export function TermsPage() {
           <h1 className={styles.terms__title}>
             <FormattedMessage id="footer.links.terms" />
           </h1>
-          <p className={styles.terms__updated}>{isLoading ? <FormattedMessage id="terms.updated" /> : terms ? `${new Intl.DateTimeFormat(locale).format(new Date(terms.updatedAt))} · v${terms.version}` : null}</p>
+          <p className={styles.terms__updated}>{isLoading ? <FormattedMessage id="terms.updated" /> : legalDocument ? `${new Intl.DateTimeFormat(locale).format(new Date(legalDocument.updatedAt))} · v${legalDocument.version}` : null}</p>
         </header>
 
         <div className={styles.terms__body}>
-          {hasError ? null : terms ? (
+          {hasError ? null : legalDocument ? (
             <>
-              <p>{terms.intro}</p>
-              {terms.sections.map((section) => (
+              <p>{legalDocument.intro}</p>
+              {legalDocument.sections.map((section) => (
                 <section key={section.title}>
                   <h2>{section.title}</h2>
                   <p>{section.body}</p>

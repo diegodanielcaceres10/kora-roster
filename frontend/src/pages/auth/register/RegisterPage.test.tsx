@@ -6,12 +6,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RegisterPage } from "./RegisterPage";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
 import { useGoogleRegister } from "../../../features/account/hooks/useGoogleRegister";
-import { useCurrentTerms } from "../../../features/terms/hooks/useCurrentTerms";
+import { useCurrentLegalDocument } from "../../../features/legal/hooks/useCurrentLegalDocument";
 import messages from "../../../i18n/locales/en-US.json";
 
 vi.mock("../../../features/account/hooks/useRegisterAccount");
 vi.mock("../../../features/account/hooks/useGoogleRegister");
-vi.mock("../../../features/terms/hooks/useCurrentTerms");
+vi.mock("../../../features/legal/hooks/useCurrentLegalDocument");
 vi.mock("../../../features/account/components/GoogleAuthButton", () => ({ GoogleAuthButton: () => null }));
 
 function renderPage() {
@@ -31,8 +31,8 @@ describe("RegisterPage", () => {
     submit.mockReset();
     vi.mocked(useRegisterAccount).mockReturnValue({ submit, status: "idle", account: null, errorId: null });
     vi.mocked(useGoogleRegister).mockReturnValue({ submit: vi.fn(), status: "idle", errorId: null });
-    vi.mocked(useCurrentTerms).mockReturnValue({
-      terms: { product: "roster", document: "terms", version: "2026-08-24", lang: "en", updatedAt: "2026-08-24", intro: "", sections: [] },
+    vi.mocked(useCurrentLegalDocument).mockReturnValue({
+      legalDocument: { product: "roster", document: "terms", version: "2026-08-24", lang: "en", updatedAt: "2026-08-24", intro: "", sections: [] },
       isLoading: false,
       hasError: false,
     });

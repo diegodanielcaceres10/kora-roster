@@ -1,10 +1,10 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./PrivacyPage.module.scss";
-import { useCurrentTerms } from "../../features/terms/hooks/useCurrentTerms";
+import { useCurrentLegalDocument } from "../../features/legal/hooks/useCurrentLegalDocument";
 
 export function PrivacyPage() {
   const { locale } = useIntl();
-  const { terms, isLoading, hasError } = useCurrentTerms("privacy");
+  const { legalDocument, isLoading, hasError } = useCurrentLegalDocument("privacy");
 
   return (
     <section className={styles.privacy}>
@@ -16,14 +16,14 @@ export function PrivacyPage() {
           <h1 className={styles.privacy__title}>
             <FormattedMessage id="footer.links.privacy" />
           </h1>
-          <p className={styles.privacy__updated}>{isLoading ? <FormattedMessage id="terms.updated" /> : terms ? `${new Intl.DateTimeFormat(locale).format(new Date(terms.updatedAt))} · v${terms.version}` : null}</p>
+          <p className={styles.privacy__updated}>{isLoading ? <FormattedMessage id="terms.updated" /> : legalDocument ? `${new Intl.DateTimeFormat(locale).format(new Date(legalDocument.updatedAt))} · v${legalDocument.version}` : null}</p>
         </header>
 
         <div className={styles.privacy__body}>
-          {hasError ? null : terms ? (
+          {hasError ? null : legalDocument ? (
             <>
-              <p>{terms.intro}</p>
-              {terms.sections.map((section) => (
+              <p>{legalDocument.intro}</p>
+              {legalDocument.sections.map((section) => (
                 <section key={section.title}>
                   <h2>{section.title}</h2>
                   <p>{section.body}</p>

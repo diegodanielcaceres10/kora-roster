@@ -2,7 +2,7 @@ import type { ApiLang } from "../../i18n/apiLang";
 
 export type LegalDocumentType = "terms" | "privacy";
 
-export interface TermsSection {
+export interface LegalDocumentSection {
   title: string;
   body: string;
 }
@@ -14,7 +14,5 @@ export interface LegalDocument {
   lang: ApiLang;
   updatedAt: string;
   intro: string;
-  sections: TermsSection[];
+  sections: LegalDocumentSection[];
 }
-
-export type TermsResponse = LegalDocument;
