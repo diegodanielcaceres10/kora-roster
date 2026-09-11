@@ -3,8 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./RegisterPage.module.scss";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
-import { useGoogleRegister } from "../../../features/account/hooks/useGoogleRegister";
-import { GoogleAuthButton, type GoogleProfile } from "../../../features/account/components/GoogleAuthButton";
+import { useGoogleRegister } from "../../../features/auth/google/hooks/useGoogleRegister";
+import { GoogleAuthButton, type GoogleProfile } from "../../../features/auth/google/components/GoogleAuthButton";
 import { Button } from "../../../shared/components/Button/Button";
 import { useCurrentLegalDocument } from "../../../features/legal/hooks/useCurrentLegalDocument";
 

@@ -40,18 +40,6 @@ export interface SetPasswordPayload {
 
 export type Me = Account;
 
-export interface GoogleLoginPayload {
-  idToken: string;
-}
-
-export interface GoogleRegisterPayload extends RegisterAccountPayload {
-  idToken: string;
-}
-
-export interface GoogleAuthResponse extends LoginResponse {
-  linkedAccount?: boolean;
-}
-
 export interface ApiHealth {
   status: string;
   env: string;

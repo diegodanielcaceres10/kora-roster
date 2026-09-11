@@ -5,14 +5,14 @@ import { IntlProvider } from "react-intl";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RegisterPage } from "./RegisterPage";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
-import { useGoogleRegister } from "../../../features/account/hooks/useGoogleRegister";
+import { useGoogleRegister } from "../../../features/auth/google/hooks/useGoogleRegister";
 import { useCurrentLegalDocument } from "../../../features/legal/hooks/useCurrentLegalDocument";
 import messages from "../../../i18n/locales/en-US.json";
 
 vi.mock("../../../features/account/hooks/useRegisterAccount");
-vi.mock("../../../features/account/hooks/useGoogleRegister");
+vi.mock("../../../features/auth/google/hooks/useGoogleRegister");
 vi.mock("../../../features/legal/hooks/useCurrentLegalDocument");
-vi.mock("../../../features/account/components/GoogleAuthButton", () => ({ GoogleAuthButton: () => null }));
+vi.mock("../../../features/auth/google/components/GoogleAuthButton", () => ({ GoogleAuthButton: () => null }));
 
 function renderPage() {
   return render(

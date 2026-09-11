@@ -2,15 +2,11 @@ import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
 import { useGoogleLogin } from "../hooks/useGoogleLogin";
-import { decodeJwtPayload } from "../../../lib/auth/jwt";
+import { decodeJwtPayload } from "../../../../lib/auth/jwt";
+import type { GoogleProfile } from "../google.types";
 import styles from "./GoogleAuthButton.module.scss";
 
-export interface GoogleProfile {
-  idToken: string;
-  email: string;
-  name: string;
-  lastname: string;
-}
+export type { GoogleProfile } from "../google.types";
 
 interface GoogleAuthButtonProps {
   mode: "login" | "register";

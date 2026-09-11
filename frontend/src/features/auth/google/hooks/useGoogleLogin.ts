@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import { googleLogin } from "../account.api";
-import { ApiError } from "../../../lib/http/httpClient";
-import { authStorage } from "../../../lib/auth/authStorage";
-import { useAccount } from "../AccountContext";
-import type { GoogleAuthResponse } from "../account.types";
+import { googleLogin } from "../google.api";
+import { ApiError } from "../../../../lib/http/httpClient";
+import { authStorage } from "../../../../lib/auth/authStorage";
+import { useAccount } from "../../../account/AccountContext";
+import type { GoogleAuthResponse } from "../google.types";
 
 type Status = "idle" | "loading" | "success" | "error";
 

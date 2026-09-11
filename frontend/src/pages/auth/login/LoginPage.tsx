@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./LoginPage.module.scss";
 import { useLogin } from "../../../features/account/hooks/useLogin";
-import { GoogleAuthButton, type GoogleProfile } from "../../../features/account/components/GoogleAuthButton";
+import { GoogleAuthButton, type GoogleProfile } from "../../../features/auth/google/components/GoogleAuthButton";
 import { Button } from "../../../shared/components/Button/Button";
 
 export function LoginPage() {
