@@ -17,6 +17,7 @@ const payload: GoogleRegisterPayload = {
   name: "Diego",
   lastname: "Caceres",
   acceptedTerms: true,
+  termsVersion: "2026-08-24",
   marketingConsent: false,
 };
 

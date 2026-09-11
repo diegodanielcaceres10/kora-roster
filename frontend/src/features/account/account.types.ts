@@ -14,6 +14,7 @@ export interface RegisterAccountPayload {
   name: string;
   lastname: string;
   acceptedTerms: boolean;
+  termsVersion: string;
   marketingConsent: boolean;
 }
 

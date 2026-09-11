@@ -6,6 +6,7 @@ import { useRegisterAccount } from "../../../features/account/hooks/useRegisterA
 import { useGoogleRegister } from "../../../features/account/hooks/useGoogleRegister";
 import { GoogleAuthButton, type GoogleProfile } from "../../../features/account/components/GoogleAuthButton";
 import { Button } from "../../../shared/components/Button/Button";
+import { useCurrentTerms } from "../../../features/terms/hooks/useCurrentTerms";
 
 interface RegisterLocationState {
   googleProfile?: GoogleProfile;
@@ -20,6 +21,7 @@ export function RegisterPage() {
   const [googleProfile, setGoogleProfile] = useState<GoogleProfile | null>(null);
   const { submit, status, errorId } = useRegisterAccount();
   const { submit: submitGoogle, status: googleStatus, errorId: googleErrorId } = useGoogleRegister();
+  const { terms, isLoading: isTermsLoading } = useCurrentTerms();
   const intl = useIntl();
   const location = useLocation();
 
@@ -54,14 +56,14 @@ export function RegisterPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isLoading || !acceptedTerms) return;
+    if (isLoading || isTermsLoading || !terms || !acceptedTerms) return;
 
     if (googleProfile) {
-      submitGoogle({ idToken: googleProfile.idToken, email, name, lastname, acceptedTerms, marketingConsent });
+      submitGoogle({ idToken: googleProfile.idToken, email, name, lastname, acceptedTerms, termsVersion: terms.version, marketingConsent });
       return;
     }
 
-    submit({ email, name, lastname, acceptedTerms, marketingConsent });
+    submit({ email, name, lastname, acceptedTerms, termsVersion: terms.version, marketingConsent });
   };
 
   return (
@@ -142,7 +144,7 @@ export function RegisterPage() {
               </label>
             </div>
 
-            <Button type="submit" className={styles.register__submit} disabled={isLoading || !acceptedTerms}>
+            <Button type="submit" className={styles.register__submit} disabled={isLoading || isTermsLoading || !terms || !acceptedTerms}>
               {isLoading && <span className={styles.register__spinner} aria-hidden="true" />}
               <span>
                 <FormattedMessage id={isLoading ? "register.submittingButton" : "register.submitButton"} />

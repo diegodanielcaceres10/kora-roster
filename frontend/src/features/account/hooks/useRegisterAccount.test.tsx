@@ -11,6 +11,7 @@ const payload = {
   name: "Ana",
   lastname: "Lima",
   acceptedTerms: true,
+  termsVersion: "2026-08-24",
   marketingConsent: false,
 };
 

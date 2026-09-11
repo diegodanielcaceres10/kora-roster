@@ -1,7 +1,11 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import styles from "./TermsPage.module.scss";
+import { useCurrentTerms } from "../../features/terms/hooks/useCurrentTerms";
 
 export function TermsPage() {
+  const { locale } = useIntl();
+  const { terms, isLoading } = useCurrentTerms();
+
   return (
     <section className={styles.terms}>
       <div className={styles.terms__container}>
@@ -12,71 +16,21 @@ export function TermsPage() {
           <h1 className={styles.terms__title}>
             <FormattedMessage id="footer.links.terms" />
           </h1>
-          <p className={styles.terms__updated}>
-            <FormattedMessage id="terms.updated" />
-          </p>
+          <p className={styles.terms__updated}>{isLoading ? <FormattedMessage id="terms.updated" /> : terms ? `${new Intl.DateTimeFormat(locale).format(new Date(terms.updatedAt))} · v${terms.version}` : <FormattedMessage id="terms.updated" />}</p>
         </header>
 
         <div className={styles.terms__body}>
-          <p>
-            <FormattedMessage id="terms.intro" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="terms.section1.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="terms.section1.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="terms.section2.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="terms.section2.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="terms.section3.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="terms.section3.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="terms.section4.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="terms.section4.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="terms.section5.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="terms.section5.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="terms.section6.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="terms.section6.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="terms.section7.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="terms.section7.body" />
-          </p>
-
-          <h2>
-            <FormattedMessage id="terms.section8.title" />
-          </h2>
-          <p>
-            <FormattedMessage id="terms.section8.body" />
-          </p>
+          {terms ? (
+            <>
+              <p>{terms.intro}</p>
+              {terms.sections.map((section) => (
+                <section key={section.title}>
+                  <h2>{section.title}</h2>
+                  <p>{section.body}</p>
+                </section>
+              ))}
+            </>
+          ) : null}
         </div>
       </div>
     </section>

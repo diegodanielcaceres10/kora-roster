@@ -19,13 +19,14 @@ describe("account.api", () => {
   });
 
   it("registerAccount posts to /auth/register with the current API language attached", () => {
-    registerAccount({ email: "a@b.com", name: "Ana", lastname: "Lima", acceptedTerms: true, marketingConsent: false });
+    registerAccount({ email: "a@b.com", name: "Ana", lastname: "Lima", acceptedTerms: true, termsVersion: "2026-08-24", marketingConsent: false });
 
     expect(httpClient.post).toHaveBeenCalledWith("/auth/register", {
       email: "a@b.com",
       name: "Ana",
       lastname: "Lima",
       acceptedTerms: true,
+      termsVersion: "2026-08-24",
       marketingConsent: false,
       lang: "pt",
     });
@@ -68,7 +69,7 @@ describe("account.api", () => {
   });
 
   it("googleRegister posts to /google/register with the current API language attached", () => {
-    googleRegister({ idToken: "id-token", email: "a@b.com", name: "Ana", lastname: "Lima", acceptedTerms: true, marketingConsent: false });
+    googleRegister({ idToken: "id-token", email: "a@b.com", name: "Ana", lastname: "Lima", acceptedTerms: true, termsVersion: "2026-08-24", marketingConsent: false });
 
     expect(httpClient.post).toHaveBeenCalledWith("/google/register", {
       idToken: "id-token",
@@ -76,6 +77,7 @@ describe("account.api", () => {
       name: "Ana",
       lastname: "Lima",
       acceptedTerms: true,
+      termsVersion: "2026-08-24",
       marketingConsent: false,
       lang: "pt",
     });

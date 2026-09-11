@@ -6,10 +6,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RegisterPage } from "./RegisterPage";
 import { useRegisterAccount } from "../../../features/account/hooks/useRegisterAccount";
 import { useGoogleRegister } from "../../../features/account/hooks/useGoogleRegister";
+import { useCurrentTerms } from "../../../features/terms/hooks/useCurrentTerms";
 import messages from "../../../i18n/locales/en-US.json";
 
 vi.mock("../../../features/account/hooks/useRegisterAccount");
 vi.mock("../../../features/account/hooks/useGoogleRegister");
+vi.mock("../../../features/terms/hooks/useCurrentTerms");
 vi.mock("../../../features/account/components/GoogleAuthButton", () => ({ GoogleAuthButton: () => null }));
 
 function renderPage() {
@@ -29,6 +31,11 @@ describe("RegisterPage", () => {
     submit.mockReset();
     vi.mocked(useRegisterAccount).mockReturnValue({ submit, status: "idle", account: null, errorId: null });
     vi.mocked(useGoogleRegister).mockReturnValue({ submit: vi.fn(), status: "idle", errorId: null });
+    vi.mocked(useCurrentTerms).mockReturnValue({
+      terms: { product: "roster", version: "2026-08-24", lang: "en", updatedAt: "2026-08-24", intro: "", sections: [] },
+      isLoading: false,
+      hasError: false,
+    });
   });
 
   it("keeps the submit button disabled until the terms checkbox is accepted", async () => {
@@ -62,6 +69,7 @@ describe("RegisterPage", () => {
       name: "Ana",
       lastname: "Lima",
       acceptedTerms: true,
+      termsVersion: "2026-08-24",
       marketingConsent: false,
     });
   });
